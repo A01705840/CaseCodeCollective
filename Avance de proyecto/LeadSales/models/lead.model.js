@@ -5,7 +5,22 @@ module.exports = class Version {
     constructor(mi_idVersion, mi_iduser, mi_fecha, mi_nombreVersion) {
         this.IDVersion = mi_idVersion;
         this.IDUser = mi_iduser;
-        this.FechaCreacion = mi_fecha;
         this.NombreVersion = mi_nombreVersion;
+    }
+
+    save() {
+        return new Date(mi_fecha)
+        .then((password_cifrado) => {
+            return db.execute(
+            `INSERT INTO version (IDVersion, IDUser, FechaCreacion, NombreVersion) 
+                VALUES (?, ?, ?, ?)`,
+            [this.IDVersion, this.IDUser, this.FechaCreacion, this.NombreVersion]);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    }
+        static fetchOne(NombreVersion) {
+            return db.execute('Select * from usuario WHERE NombreVersion = ?', [NombreVersion]);
     }
 }
