@@ -5,13 +5,8 @@ const usuariosController= require('../controllers/usuarios.controller');
 
 router.get('/login', usuariosController.get_login);
 
-router.get('/signup', (req, res, next) => {
-    res.render('signup');
-});
+router.get('/signup', usuariosController.get_signup);
 
-router.post('/signup', (req, res, next) => {
-    console.log(req.body);
-    res.redirect('/');
-});
+//router.post('/signup', usuariosController.post_signup);
 
 module.exports = router;
