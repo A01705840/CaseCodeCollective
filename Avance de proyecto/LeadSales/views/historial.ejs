@@ -1,0 +1,77 @@
+<%- include('includes/head.ejs', {username: username}) %>
+<h2>Hola</h2>
+
+<div class="p-4 sm:ml-20 sm:mr-10 font-sans">
+    <h1>Historial</h1><br>
+    <div class="flex flex-col justify-right p-4 border-2 border-gray-200 rounded-lg dark:border-gray-700 bg-slate-200">
+        <div class="inline-flex justify-between items-center">
+            <div class="flex space-x-2">
+                <button class="bg-white hover:bg-indigo-600 py-2 px-4 rounded-full">Texto genérico 1</button>
+                <button class="bg-white hover:bg-indigo-600 py-2 px-4 rounded-full">Texto genérico 2</button>
+            </div>
+        </div>
+        <div class="flex justify-center sm:mt-4 p-1 border-1 border-gray-200 rounded-lg dark:border-gray-200 bg-white">
+            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            Version
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            No. Version
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Usuario
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Fecha de Importación
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            Marzo 2024
+                        </th>
+                        <td class="px-6 py-4">
+                            5
+                        </td>
+                        <td class="px-6 py-4">
+                            majosc03
+                        </td>
+                        <td class="px-6 py-4">
+                            2024-03-30
+                        </td>
+                    </tr>
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            Febrero 2024 - Completo
+                        </th>
+                        <td class="px-6 py-4">
+                            4
+                        </td>
+                        <td class="px-6 py-4">
+                            kevin123
+                        </td>
+                        <td class="px-6 py-4">
+                            2024-02-28
+                        </td>
+                    </tr>
+                    <tr class="bg-white dark:bg-gray-800">
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            Febrero 2024 - Medio Tiempo
+                        </th>
+                        <td class="px-6 py-4">
+                            3
+                        </td>
+                        <td class="px-6 py-4">
+                            galo2024
+                        </td>
+                        <td class="px-6 py-4">
+                            2024-02-15
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>        
+</div>
