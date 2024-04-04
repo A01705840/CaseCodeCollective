@@ -15,6 +15,16 @@ exports.get_signup = (req, res, next) => {
 };
 
 exports.post_signup = (req, res, next) => {
-    console.log(req.body);
-    res.redirect('/');
+    const nuevo_usuario = new Usuario(
+        req.body.username, req.body.name, req.body.password
+    );
+    nuevo_usuario.save()
+        .then(() => {
+            res.redirect('/usuario/login');
+        })
+        .catch((error) => {
+            console.log(error);
+            req.sesion.error = 'Nombre de usuario ya existe';
+            res.redirect('/usuario/signup');
+        });
 };
