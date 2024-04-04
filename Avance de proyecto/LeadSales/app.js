@@ -1,15 +1,17 @@
 const express = require('express');
+const router = express.Router();
+
 const app = express();
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
-const session = require('express-session');
+/* const session = require('express-session');
 app.use(session({
   secret: 'mi string secreto que debe ser un string aleatorio muy largo, no como éste', 
   resave: false, //La sesión no se guardará en cada petición, sino sólo se guardará si algo cambió 
   saveUninitialized: false, //Asegura que no se guarde una sesión para una petición que no lo necesita
-}));
+})); */
 
 
 // Configura Express para servir archivos estáticos desde el directorio 'public'
@@ -36,10 +38,15 @@ app.use('/Usuario', rutasUsuarios);
 const rutasLeads = require('./routes/leads.routes');
 app.use('/Lead', rutasLeads);
 
+const rutasSignup = require('./routes/usuarios.routes');
+app.use('/Signup', rutasUsuarios);
+
 app.use((request, response, next) => {
   response.status(404);
-  response.render(path.join(__dirname, 'views', '404.ejs'),{username: request.session.username || '', }); //Manda la respuesta
+  response.render(path.join(__dirname, 'views', '404.ejs')); //Manda la respuesta
 });
+
+module.exports = router;
 
 
 app.listen(3000);
