@@ -12,3 +12,18 @@ exports.get_root = (request, response, next) => {
         registro: false,
     });
 };
+
+exports.get_historial = (req, res, next) => {
+    Lead.fetchAll()
+        .then(([rows, fieldData]) => {
+            res.render('historial', {
+                registro: true,
+                leads: rows,
+                username: req.session.username || '',
+                permisos: req.session.permisos || [],
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+}
