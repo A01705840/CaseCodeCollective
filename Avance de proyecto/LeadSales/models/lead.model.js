@@ -19,7 +19,18 @@ module.exports = class Version {
         .catch((error) => {
             console.log(error);
         });
+
     }
+        static fetchAll() {
+            return db.execute('Select * from tropa')
+        }
+        static fetch(id) {
+            if (id) {
+                return this.fetchOne(id);
+            } else {
+                return this.fetchAll();
+            }
+        }
         static fetchOne(NombreVersion) {
             return db.execute('Select * from usuario WHERE NombreVersion = ?', [NombreVersion]);
     }
