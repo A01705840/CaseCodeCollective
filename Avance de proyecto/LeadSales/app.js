@@ -39,7 +39,7 @@ const rutasLeads = require('./routes/leads.routes');
 app.use('/Lead', rutasLeads);
 
 const rutasSignup = require('./routes/usuarios.routes');
-app.use('/', rutasSignup);
+app.use('/Usuario', rutasSignup);
 
 app.use((request, response, next) => {
   response.status(404);

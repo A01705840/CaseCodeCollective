@@ -1,7 +1,7 @@
 const Lead = require('../models/lead.model');
 
 exports.get_analitica = (request, response, next) => {
-    response.render('analitica', {
+    response.render('index', {
         username: request.session.username || '',
         registro: false,
     });
