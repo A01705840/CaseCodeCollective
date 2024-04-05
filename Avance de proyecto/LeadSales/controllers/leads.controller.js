@@ -18,7 +18,7 @@ exports.get_historial = (req, res, next) => {
         .then(([rows, fieldData]) => {
             res.render('historial', {
                 registro: true,
-                leads: rows,
+                versiones: rows,
                 username: req.session.username || '',
                 permisos: req.session.permisos || [],
             });

@@ -30,47 +30,21 @@
                 </thead>
                 <tbody>
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <% for (let version of versiones) { %>
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            Marzo 2024
+                            <%= version.NombreVersion %>
                         </th>
                         <td class="px-6 py-4">
-                            5
+                            <%= version.IDVersion %>
                         </td>
                         <td class="px-6 py-4">
-                            majosc03
+                            <%= version.IDUsuario %>
                         </td>
                         <td class="px-6 py-4">
-                            2024-03-30
+                            <%= version.FechaCreacion %>
                         </td>
                     </tr>
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            Febrero 2024 - Completo
-                        </th>
-                        <td class="px-6 py-4">
-                            4
-                        </td>
-                        <td class="px-6 py-4">
-                            kevin123
-                        </td>
-                        <td class="px-6 py-4">
-                            2024-02-28
-                        </td>
-                    </tr>
-                    <tr class="bg-white dark:bg-gray-800">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            Febrero 2024 - Medio Tiempo
-                        </th>
-                        <td class="px-6 py-4">
-                            3
-                        </td>
-                        <td class="px-6 py-4">
-                            galo2024
-                        </td>
-                        <td class="px-6 py-4">
-                            2024-02-15
-                        </td>
-                    </tr>
+                    <% } %>
                 </tbody>
             </table>
         </div>        
