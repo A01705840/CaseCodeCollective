@@ -14,7 +14,7 @@ exports.get_root = (request, response, next) => {
 };
 
 exports.get_historial = (req, res, next) => {
-    Lead.fetchAll()
+    Lead.fetch(req.params.IDVersion)
         .then(([rows, fieldData]) => {
             res.render('historial', {
                 registro: true,
