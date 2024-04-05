@@ -13,12 +13,14 @@ exports.get_root = (request, response, next) => {
     });
 };
 
-exports.get_historial = (req, res, next) => {
-    Lead.fetch(req.params.IDVersion)
-        .then(([rows, fieldData]) => {
-            res.render('historial', {
+exports.get_leads = (req, res, next)  => {
+    Lead.fetch(req.params.IDLead)
+        .then(([rows,fieldData]) => {
+            //console.log(NombreLead);
+            console.log(rows.length); 
+            res.render ('leads', {
                 registro: true,
-                versiones: rows,
+                leads: rows,
                 username: req.session.username || '',
                 permisos: req.session.permisos || [],
             });
@@ -26,4 +28,5 @@ exports.get_historial = (req, res, next) => {
         .catch((error) => {
             console.log(error);
         });
+
 }
