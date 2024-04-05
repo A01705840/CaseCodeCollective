@@ -22,7 +22,7 @@ module.exports = class Version {
 
     }
         static fetchAll() {
-            return db.execute('Select * from tropa')
+            return db.execute('Select * from version')
         }
         static fetch(id) {
             if (id) {
