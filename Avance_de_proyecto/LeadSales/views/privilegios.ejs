@@ -1,0 +1,28 @@
+<%- include('includes/head.ejs', {username: username}) %>
+
+<div class="overflow-x-auto flex justify-center items-center h-screen">
+    <table style="width: 50%;" class="divide-y divide-gray-200">
+      <thead class="bg-gray-50">
+        <tr>
+          <th scope="col" class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            Función
+          </th>
+          <% for (let i = 0; i < maxRoles; i++) { %>
+            <th scope="col" class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Rol <%= i + 1 %>
+            </th>
+          <% } %>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200">
+        <% for (let descripcion in funcionesRoles) { %>
+          <tr>
+            <td><%= descripcion %></td>
+            <% for (let i = 0; i < maxRoles; i++) { %>
+              <td><%= funcionesRoles[descripcion].includes('Rol' + (i + 1)) ? 'Rol' + (i + 1) : '' %></td>
+            <% } %>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+</div>
