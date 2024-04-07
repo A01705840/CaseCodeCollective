@@ -6,6 +6,7 @@ const app = express();
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
+
 const session = require('express-session');
 app.use(session({
   secret: 'mi string secreto que debe ser un string aleatorio muy largo, no como éste', 
@@ -21,6 +22,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 //Body parser 
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({extended: false}));
+
 
 //Middleware
 app.use((request, response, next) => {

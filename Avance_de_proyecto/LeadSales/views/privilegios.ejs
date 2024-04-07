@@ -1,30 +1,73 @@
 <%- include('includes/head.ejs', {username: username}) %>
 
 <div class="overflow-x-auto flex justify-center items-center h-screen">
-    <table style="width: 50%; margin: 20px auto; border: 1px solid #ddd; border-radius: 30px;" class="divide-y divide-gray-200">
-      <thead class="bg-gray-50">
-        <tr>
-          <th scope="col" class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-            Privilegios
-          </th>
-          <% for (let i = 0; i < maxRoles; i++) { %>
-            <th scope="col" class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              <%= nombresRoles[i] %>
-            </th>
-          <% } %>
-        </tr>
-      </thead>
-      <tbody class="bg-white divide-y divide-gray-200">
-        <% for (let descripcion in funcionesRoles) { %>
-          <tr>
-            <td><%= descripcion %></td>
-            <% for (let i = 0; i < maxRoles; i++) { %>
-              <td style="text-align: center;">
-                <input type="checkbox" style="width: 20px; height: 20px; margin-right: 50%;" <%= funcionesRoles[descripcion].includes(nombresRoles[i]) ? 'checked' : '' %> disabled>
-              </td>
+    <div style="background-color: white; width: 50%; height: 835px; margin: 20px auto 20px; padding: 40px 40px; border: 1px solid #ddd; position: relative;">
+        <button style="color: black; border: none; padding: 10px 20px; text-align: center; text-decoration: none; display: inline-block; font-size: 30px; margin: 0; cursor: pointer; position: absolute; top: 10px; right: 20px; transition: background-color 0.3s ease; border-radius: 50%;">X</button>
+        <img src="/uploads/privilege.png" alt="Imagen no encontrada" style="width: 150px; height: 150px; display: block; margin: 0 auto;">
+        <h1 class="text-4xl font-bold dark:text-ellipsis" style="text-align: center; margin: 10px auto 20px;">Privilegios por Rol</h1>
+        <div class="overflow-y-scroll" style="width: 100%; margin: 40px auto; border: 1px solid #ddd; border-radius: 30px; max-height: 500px;">
+            <table style="width: 100%;" class="divide-y divide-gray-200">
+            <thead class="bg-gray-50 sticky top-0">
+                <tr>
+                <th scope="col" class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Privilegios
+                </th>
+                <% for (let i = 0; i < maxRoles; i++) { %>
+                    <th scope="col" class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <%= nombresRoles[i] %>
+                    </th>
+                <% } %>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                <% let counter = 1; %>
+                <% for (let descripcion in funcionesRoles) { %>
+                <tr>
+                    <td class="p-3 text-sm font-semibold tracking-wide text-left"><%= counter %>. <%= descripcion %></td>
+                <% for (let i = 0; i < maxRoles; i++) { %>
+                    <td style="text-align: center;">
+                        <input type="checkbox" style="width: 20px; height: 20px; margin-right: 50%;" <%= funcionesRoles[descripcion].includes(nombresRoles[i]) ? 'checked' : '' %> disabled>
+                    </td>
+                <% } %>
+                </tr>
+                <% counter++; %>
             <% } %>
-          </tr>
-        <% } %>
-      </tbody>
-    </table>
+            </tbody>
+            </table>
+        </div>
+        <button style="background-color: #007BFF; color: white; border: none; padding: 10px 20px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 40px auto 0px; cursor: pointer; position: absolute; bottom: 5px; right: 40px; transition: background-color 0.3s ease; border-radius: 10px;">Guardar cambios</button>
+    </div>
 </div>
+
+<script>
+    const button = document.querySelector('button');
+    button.addEventListener('mouseover', function() {
+        this.style.backgroundColor = '#0056b3';
+    });
+    button.addEventListener('mouseout', function() {
+        this.style.backgroundColor = '#007BFF';
+    });
+</script>
+
+<style>
+    /* Estilos para la barra de desplazamiento en navegadores webkit (como Chrome y Safari) */
+    ::-webkit-scrollbar {
+        width: 10px; /* Ancho de la barra de desplazamiento */
+        
+    }
+
+    /* Estilo de la barra de desplazamiento */
+    ::-webkit-scrollbar-thumb {
+        background-color: #8888887b; /* Color de fondo de la barra de desplazamiento */
+        border-radius: 5px; /* Redondeado de los bordes de la barra de desplazamiento */
+    
+    }
+
+    /* Estilo del riel de la barra de desplazamiento */
+    ::-webkit-scrollbar-track {
+        background-color: #f1f1f1; /* Color del riel de la barra de desplazamiento */
+        border-radius: 5px; /* Redondeado de los bordes de la barra de desplazamiento */
+        height: 40px;
+    }
+    
+</style>

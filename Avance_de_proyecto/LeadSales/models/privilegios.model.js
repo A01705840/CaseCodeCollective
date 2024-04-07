@@ -14,9 +14,9 @@ module.exports = class Privilegios {
             FROM rol_adquiere_funcion r
             JOIN funcion f ON r.IDFuncion = f.IDFuncion
             JOIN rol ro ON r.IDRol = ro.IDRol
+            ORDER BY r .IDFuncion ASC, r.IDRol ASC;
         `)
         .then(([data]) => {
-            console.log(data);
             return data;
         });
     }

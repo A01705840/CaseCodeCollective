@@ -19,9 +19,9 @@ exports.get_privilegios = (req, res, next) => {
             // Calcular maxRoles
             let maxRoles = rolesUnicos.size;
 
-            // Convertir rolesUnicos a un array y ordenarlo
-            let nombresRoles = Array.from(rolesUnicos).sort();
-
+            // Convertir rolesUnicos a un array e invertirlo
+            let nombresRoles = Array.from(rolesUnicos).reverse();
+            console.log(nombresRoles);
             // Renderizar la vista con el objeto funcionesRoles, maxRoles y nombresRoles
             res.render('privilegios', {
                 username: req.session.username || '',
