@@ -27,3 +27,9 @@ exports.get_historial = (req, res, next) => {
             console.log(error);
         });
 }
+
+exports.post_historial = (req, res, next) => {
+    console.log(req.body);
+    console.log(req.file);
+    res.redirect('/lead/historial');
+};
