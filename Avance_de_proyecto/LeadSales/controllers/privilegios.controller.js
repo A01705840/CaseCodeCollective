@@ -15,18 +15,19 @@ exports.get_privilegios = (req, res, next) => {
                 funcionesRoles[item.Descripcion].push(item.TipoRol);
                 rolesUnicos.add(item.TipoRol);
             });
-            console.log(funcionesRoles);
 
             // Calcular maxRoles
             let maxRoles = rolesUnicos.size;
-            console.log(maxRoles);
 
+            // Convertir rolesUnicos a un array y ordenarlo
+            let nombresRoles = Array.from(rolesUnicos).sort();
 
-            // Renderizar la vista con el objeto funcionesRoles y maxRoles
+            // Renderizar la vista con el objeto funcionesRoles, maxRoles y nombresRoles
             res.render('privilegios', {
                 username: req.session.username || '',
                 funcionesRoles: funcionesRoles,
-                maxRoles: maxRoles
+                maxRoles: maxRoles,
+                nombresRoles: nombresRoles
             });
         })
         .catch(error => {
