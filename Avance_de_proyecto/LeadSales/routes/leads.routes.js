@@ -9,6 +9,7 @@ router.get('/Analitica', LeadsController.get_analitica);
 router.get('/', LeadsController.get_root);
 router.get('/Historial', VersionController.get_historial);
 router.get('/Leads', LeadsController.get_leads);
+router.post('/eliminar/', LeadsController.post_eliminar);
 
 
 module.exports = router;

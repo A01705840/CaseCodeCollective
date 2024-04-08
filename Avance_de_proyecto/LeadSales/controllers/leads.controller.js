@@ -30,3 +30,16 @@ exports.get_leads = (req, res, next)  => {
         });
 
 }
+
+exports.post_eliminar_lead = (req, res, next) => {
+    console.log('post-eliminar');
+    Lead.eliminar(request.body.id)
+    .then(() => {
+        return Lead.fetchAll();
+
+    }).then(([leads, fieldData]) => {
+        return response.status(200).json({leads: leads});
+    }).catch((error) => {
+        console.log(error);
+    });
+}
