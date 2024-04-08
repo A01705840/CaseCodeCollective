@@ -3,9 +3,10 @@ const router = express.Router();
 
 const app = express();
 
+app.use(express.json());
+
 app.set('view engine', 'ejs');
 app.set('views', 'views');
-
 
 const session = require('express-session');
 app.use(session({
