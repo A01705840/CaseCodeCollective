@@ -39,7 +39,7 @@ document.getElementById('save-changes').addEventListener('click', function() {
     .then((willSave) => {
         if (willSave) {
             console.log("llamando a ruta /privilegios/ con método POST");
-            //console.log(JSON.stringify(changes));
+            console.log(JSON.stringify(changes));
             fetch('/privilegios/', {
                 method: 'POST',
                 headers: {

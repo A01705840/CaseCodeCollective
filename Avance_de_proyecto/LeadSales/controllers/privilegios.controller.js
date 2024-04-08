@@ -15,7 +15,7 @@ exports.get_privilegios = (req, res, next) => {
                 funcionesRoles[item.Descripcion].push(item.TipoRol);
                 rolesUnicos.add(item.TipoRol);
             });
-
+            console.log(funcionesRoles);
             // Calcular maxRoles
             let maxRoles = rolesUnicos.size;
 
@@ -35,11 +35,11 @@ exports.get_privilegios = (req, res, next) => {
         });
 };
 
-exports.post_privilegios = function(req, res) {
+exports.post_privilegios = function(req, res, next) {
     console.log("post_privilegios");
     var changes = req.body;
     var promises = [];
-    //console.log(changes);
+    console.log(changes);
     
     // Primero, elimina todos los privilegios existentes para cada rol.
     var roles = [...new Set(changes.map(change => change.role))];

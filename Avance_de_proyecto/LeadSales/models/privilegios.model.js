@@ -9,11 +9,7 @@ module.exports = class Privilegios {
 
     static fetchAll() {
         return db.execute(`
-            SELECT r.IDRol, r.IDFuncion, f.Descripcion, ro.TipoRol
-            FROM rol_adquiere_funcion r
-            JOIN funcion f ON r.IDFuncion = f.IDFuncion
-            JOIN rol ro ON r.IDRol = ro.IDRol
-            ORDER BY r .IDFuncion ASC, r.IDRol ASC;
+            SELECT r.IDRol, r.IDFuncion, f.Descripcion, ro.TipoRol FROM rol_adquiere_funcion r JOIN funcion f ON r.IDFuncion = f.IDFuncion JOIN rol ro ON r.IDRol = ro.IDRol ORDER BY r .IDFuncion ASC, r.IDRol ASC;
         `)
         .then(([data]) => {
             return data;
@@ -29,6 +25,8 @@ module.exports = class Privilegios {
     }
 
     static insertarPrivilegio(IDRol, IDFuncion) {
+         IDRol = Number(IDRol);
+         IDFuncion = Number(IDFuncion);
         var query = `
             INSERT INTO rol_adquiere_funcion (IDRol, IDFuncion)
             VALUES (?, ?)
