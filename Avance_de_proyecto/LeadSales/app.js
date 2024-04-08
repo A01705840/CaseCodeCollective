@@ -34,6 +34,24 @@ app.use((request, response, next) => {
 const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
+const multer = require('multer');
+
+//
+const csv = require('fast-csv');
+
+//fileStorage: Es nuestra constante de configuración para manejar el almacenamiento
+const fileStorage = multer.diskStorage({
+    destination: (request, file, callback) => {
+        //'public/uploads': Es el directorio del servidor donde se subirán los archivos 
+        callback(null, 'public/uploads');
+    },
+    filename: (request, file, callback) => {
+        //aquí configuramos el nombre que queremos que tenga el archivo en el servidor, 
+        //para que no haya problema si se suben 2 archivos con el mismo nombre concatenamos el timestamp
+        callback(null, file.originalname);
+    },
+});
+app.use(multer({ storage: fileStorage }).single('csv')); 
 
 const rutasUsuarios = require('./routes/usuarios.routes');
 app.use('/Usuario', rutasUsuarios);
