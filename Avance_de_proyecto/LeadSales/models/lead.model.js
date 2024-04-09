@@ -42,5 +42,8 @@ module.exports = class Lead {
     }
     static fetchOne(NombreLead) {
         return db.execute('Select * FROM usuario WHERE NombreLead = ?', [NombreLead]);
-}
+    }
+    static detele(id) {
+        return db.execute('DELETE FROM lead WHERE IDLead = ?', [id]);
+    }
 }

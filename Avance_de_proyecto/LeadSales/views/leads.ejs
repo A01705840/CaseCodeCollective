@@ -60,4 +60,67 @@
         </div>
     </div>
 </body>
+<script>
+    const eliminar = (id) => {
+            const csrf = document.getElementById('_csrf').value;
+            fetch('/eliminar', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'csrf-token': csrf,
+                },
+                body: JSON.stringify({id: id})
+            }).then((result) => {
+                return result.json()
+            }).then((data) => {
+                let html = '';
+                html += `
+                <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+                            <th scope="col" class="px-6 py-3">Lead</th>
+                            <th scope="col" class="px-6 py-3">Fecha</th>
+                            <th scope="col" class="px-6 py-3">Creador</th>
+                            <th scope="col" class="px-6 py-3">Eliminar</th>
+                            <th scope="col" class="px-6 py-3">Modificar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">`;
+                for (let lead of leads) {
+                    html += `<th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                ${lead.NombreLead }
+                            </th>
+                            <td class="px-6 py-4">
+                                ${lead.FechaPrimerMensaje}
+                            </td>
+                            <td class="px-6 py-4">
+                                ${lead.asignado_a}
+                            </td>
+                            <td class="px-6 py-4 text-center">
+                                <button onclick="eliminar('${libro.id}')" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-4 rounded">
+                                    Eliminar
+                                </button>
+                            </td>
+                            <td class="px-6 py-4 text-center">
+                                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded">
+                                    Modificar
+                                </button>
+                            </td>`;
+                        }
+                        html += `
+                        </tr>
+                    </tbody>
+                </table>`;
+                document.getElementById('busqueda_ajax').innerHTML = html;
+                document.getElementById('notification').innerHTML = `
+                <div class="notification is-primary">
+                    <button class="delete"></button>
+                    El Leads fue eliminado.
+                </div>`;
+            }).catch((err) => {
+                console.log(err)
+            })
+        }
+</script>
 </html>

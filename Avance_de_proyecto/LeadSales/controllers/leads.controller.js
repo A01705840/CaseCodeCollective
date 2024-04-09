@@ -33,7 +33,7 @@ exports.get_leads = (req, res, next)  => {
 
 exports.post_eliminar_lead = (req, res, next) => {
     console.log('post-eliminar');
-    Lead.eliminar(request.body.id)
+    Lead.delete(request.body.IDLead)
     .then(() => {
         return Lead.fetchAll();
 
