@@ -1,33 +1,38 @@
 const privilegios = require('../models/privilegios.model');
 
 exports.get_privilegios = (req, res, next) => {
-    privilegios.fetchAll()
+    // Obtener el idRol de la solicitud
+    let idRol = req.params.idRol;
+
+
+    privilegios.fetchAll(idRol)
         .then(data => {
-            // Crear un objeto para almacenar las funciones y roles
+           // Crear un objeto para almacenar las funciones y roles
             let funcionesRoles = {};
-            let rolesUnicos = new Set();
+            //console.log("idRol:",idRol);
 
-            // Iterar sobre los datos y agregar cada funcion y rol al objeto
+            // Iterar sobre los datos y agregar cada funcion, rol y sus IDs al objeto
             data.forEach(item => {
+                //console.log(`Descripcion: ${item.Descripcion}, IDFuncion: ${item.IDFuncion}, IDRol: ${item.IDRol}, TipoRol: ${item.TipoRol}`);
                 if (!funcionesRoles[item.Descripcion]) {
-                    funcionesRoles[item.Descripcion] = [];
+                    funcionesRoles[item.Descripcion] = {id: item.IDFuncion, roles: []};
                 }
-                funcionesRoles[item.Descripcion].push(item.TipoRol);
-                rolesUnicos.add(item.TipoRol);
+                // Si el rol tiene esta función, agregar el ID del rol y el nombre del rol al objeto
+                if (item.IDRol) {
+                funcionesRoles[item.Descripcion].roles.push({id: item.IDRol, nombre: item.TipoRol});
+                }
             });
-            console.log(funcionesRoles);
-            // Calcular maxRoles
-            let maxRoles = rolesUnicos.size;
-
-            // Convertir rolesUnicos a un array e invertirlo
-            let nombresRoles = Array.from(rolesUnicos).reverse();
-            console.log(nombresRoles);
+        
+            //console.log("funcionesRoles:",funcionesRoles);
+            // Obtener el nombre del rol
+            let nombreRol = data.find(item => item.TipoRol !== null)?.TipoRol;
+        
+    
             // Renderizar la vista con el objeto funcionesRoles, maxRoles y nombresRoles
             res.render('privilegios', {
                 username: req.session.username || '',
                 funcionesRoles: funcionesRoles,
-                maxRoles: maxRoles,
-                nombresRoles: nombresRoles
+                nombreRol: nombreRol,
             });
         })
         .catch(error => {
@@ -35,36 +40,24 @@ exports.get_privilegios = (req, res, next) => {
         });
 };
 
-exports.post_privilegios = function(req, res, next) {
-    console.log("post_privilegios");
+exports.post_privilegios = async function(req, res, next) {
     var changes = req.body;
-    var promises = [];
-    console.log(changes);
-    
-    // Primero, elimina todos los privilegios existentes para cada rol.
-    var roles = [...new Set(changes.map(change => change.role))];
-    console.log("eliminando privilegios de los roles:");
-    console.log(changes.map(change => change.role));
-    roles.forEach(function(role) {
-        promises.push(privilegios.eliminarPrivilegios(role));
-    });
 
-    // Luego, inserta los nuevos privilegios.
-    changes.forEach(function(change) {
-        console.log("insertando privilegio:");
-        console.log();
-        if (change.checked) {
-            console.log(change.role);
-            promises.push(privilegios.insertarPrivilegio(change.role, change.privilege));
-        }
-    });
-
-    Promise.all(promises)
-        .then(() => {
-            res.json({ message: 'Cambios guardados' });
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-            res.status(500).json({ message: 'Error al guardar los cambios' });
-        });
+    console.log("post privilegios");
+    //console.log(changes);
+    try {
+        //Crear un array de objetos privilegio
+        let privilegiosArray = changes.privileges.map(privilege => ({
+            roleID: changes.roleID,
+            privilegeID: privilege.privilegeID,
+            checked: privilege.checked
+        }));
+            //console.log(`roleID: ${roleID}, privilegeID: ${privilegeID}, checked: ${checked}`);
+            await privilegios.actualizarPrivilegios(privilegiosArray);
+        
+        res.json({message: 'Cambios guardados correctamente'});
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ message: 'Error al guardar los cambios' });
+    }
 };

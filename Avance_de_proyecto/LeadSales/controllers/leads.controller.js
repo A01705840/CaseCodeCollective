@@ -31,7 +31,7 @@ exports.get_leads = (req, res, next)  => {
 
 }
 
-exports.post_eliminar_lead = (req, res, next) => {
+exports.post_eliminar = (req, res, next) => {
     console.log('post-eliminar');
     Lead.eliminar(request.body.id)
     .then(() => {
