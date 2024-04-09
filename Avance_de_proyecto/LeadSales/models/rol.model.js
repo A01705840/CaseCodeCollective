@@ -35,7 +35,7 @@ module.exports = class Rol {
 
 
     static fetchAll() {
-        return db.execute('Select * FROM rol')
+        return db.execute('Select * FROM rol ORDER BY IDRol ASC')
     }
     static fetch(id) {
         if (id) {

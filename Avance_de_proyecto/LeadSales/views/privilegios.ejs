@@ -23,7 +23,7 @@
                     <!-- Se verifica si el rol tiene el privilegio asignado -->
                     let shouldCheck = funcionesRoles[descripcion].roles.some(role => role.nombre && role.nombre === nombreRol);
                 %>
-                    <tr>
+                    <tr class="hover:bg-gray-100">
                         <td class="p-3 text-sm font-semibold tracking-wide text-left"><%= funcionesRoles[descripcion].id %>. <%= descripcion %></td>
                         <td style="text-align: center;">
                             <input type="checkbox" class="privilege-checkbox"
