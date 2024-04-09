@@ -5,17 +5,17 @@ exports.post_eliminar = (request, response, next) => {
     Rol.delete(request.body.IDRol)
         .then(([rows,fieldData]) => {
             Console.log("Registro eliminado exitosamente")
-            response.redirect ('/eliminar');
+            response.redirect ('/consultas');
         }).catch((error) => {
             console.log(error)
-            response.redirect ('/eliminar');
+            response.redirect ('/consultas');
         })
 };
 
 exports.get_mostrarRoles = (req, res, next) => {
     Rol.fetchAll()
         .then(([rows, fieldData]) => {
-            res.render('EliminarRol', {
+            res.render('Rol', {
                 registro: true,
                 rol: rows,
                 username: req.session.username || '',
