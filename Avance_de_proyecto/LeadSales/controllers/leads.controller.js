@@ -1,3 +1,5 @@
+const { request } = require('express');
+
 const Lead = require('../models/lead.model');
 
 exports.get_analitica = (request, response, next) => {
@@ -13,16 +15,17 @@ exports.get_root = (request, response, next) => {
     });
 };
 
-exports.get_leads = (req, res, next)  => {
-    Lead.fetch(req.params.IDLead)
+exports.get_leads = (request, res, next)  => {
+    Lead.fetch(request.params.IDLead)
         .then(([rows,fieldData]) => {
             //console.log(NombreLead);
             console.log(rows.length); 
             res.render ('leads', {
+                csrfToken: request.csrfToken,
                 registro: true,
                 leads: rows,
-                username: req.session.username || '',
-                permisos: req.session.permisos || [],
+                username: request.session.username || '',
+                permisos: request.session.permisos || [],
             });
         })
         .catch((error) => {
@@ -31,16 +34,16 @@ exports.get_leads = (req, res, next)  => {
 
 }
 
-exports.post_eliminar_lead = (req, res, next) => {
+exports.post_eliminar_lead = (request, response, next) => {
     console.log('post-eliminar');
-    Lead.delete(request.body.IDLead)
+    Lead.eliminar(request.body.IDLead)
     .then(() => {
         return Lead.fetchAll();
-        console.log('Eliminado');
-
+        
     }).then(([leads, fieldData]) => {
         return response.status(200).json({leads: leads});
     }).catch((error) => {
         console.log(error);
     });
+    console.log('Eliminado');
 }
