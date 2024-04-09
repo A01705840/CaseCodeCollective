@@ -56,14 +56,18 @@ app.use(multer({ storage: fileStorage }).single('csv'));
 const rutasUsuarios = require('./routes/usuarios.routes');
 app.use('/Usuario', rutasUsuarios);
 
-const rutasRoles = require('./routes/privilegios.routes');
-app.use('/privilegios', rutasRoles);
+const rutasSignup = require('./routes/usuarios.routes');
+app.use('/Usuario', rutasSignup);
+
+const rutasPrivilegios= require('./routes/privilegios.routes');
+app.use('/privilegios', rutasPrivilegios);
+
+const rutasRoles = require('./routes/roles.routes');
+app.use('/Roles', rutasRoles);
 
 const rutasLeads = require('./routes/leads.routes');
 app.use('/Lead', rutasLeads);
 
-const rutasSignup = require('./routes/usuarios.routes');
-app.use('/Usuario', rutasSignup);
 
 app.use((request, response, next) => {
   response.status(404);
