@@ -3,7 +3,7 @@ const { request } = require('express');
 const Lead = require('../models/lead.model');
 
 exports.get_analitica = (request, response, next) => {
-    response.render('index', {
+    response.render('analitica', {
         username: request.session.username || '',
         registro: false,
     });
@@ -45,5 +45,15 @@ exports.post_eliminar_lead = (request, response, next) => {
     }).catch((error) => {
         console.log(error);
     });
-    console.log('Eliminado');
 }
+
+exports.get_fechas = () => {
+    console.log('');
+    Lead
+}
+
+exports.postAnalitica = (req, res) => {
+    const nDayss = req.body.nDays; // Obtiene del cuerpo de la peticion, valor que haya en NDays
+    const data =  Lead.fetchByDate(nDayss);
+    res.send(data);
+};

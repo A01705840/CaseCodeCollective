@@ -16,5 +16,6 @@ router.post('/Historial', VersionController.post_historial);
 router.get('/Leads', LeadsController.get_leads);
 router.post('/Leads/eliminar', LeadsController.post_eliminar_lead);
 
+router.post('/Analitica', LeadsController.postAnalitica);
 
 module.exports = router;
