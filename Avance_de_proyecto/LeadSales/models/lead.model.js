@@ -28,6 +28,12 @@ module.exports = class Lead {
                 console.log(error);
             });
         }
+
+    static guardar_nuevo(mi_asignado_a,mi_telefono,mi_nombreLead,mi_FechaPrimerMensaje,mi_Embudo,mi_Etapa,mi_Status,mi_Archivado,mi_CreadoManual){
+        return db.execute(`INSERT INTO leads (asignado_a, Telefono, NombreLead, FechaPrimerMensaje, Embudo, Etapa, Status, Archivado, CreadoManual) 
+        VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ? )`,
+        [mi_asignado_a,mi_telefono,mi_nombreLead,mi_FechaPrimerMensaje,mi_Embudo,mi_Etapa,mi_Status,mi_Archivado,mi_CreadoManual])
+    }    
     static fetchAll() {
         console.log(db.execute('SELECT * FROM leads'))
         return db.execute('SELECT * FROM leads')

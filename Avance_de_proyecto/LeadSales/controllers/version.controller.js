@@ -6,6 +6,26 @@ const csv = require('fast-csv');
 const fs = require('fs');
 const { fileLoader } = require('ejs');
 
+
+function convertirFecha(fecha) {
+    // Dividir la fecha en día, mes y año
+    var partes = fecha.split('/');
+    var dia = partes[0];
+    var mes = partes[1];
+    var año = partes[2];
+
+    // Agregar ceros iniciales si el día o el mes tienen un solo dígito
+    if (dia.length === 1) {
+        dia = '0' + dia;
+    }
+    if (mes.length === 1) {
+        mes = '0' + mes;
+    }
+
+    // Devolver la fecha en el nuevo formato
+    return año + '-' + mes + '-' + dia;
+}
+
 exports.get_historial = (req, res, next) => {
     Version.fetch(req.params.IDVersion)
     Version.fetch(req.params.IDUser)
@@ -24,39 +44,44 @@ exports.get_historial = (req, res, next) => {
 }
 
 exports.post_historial = async (req, res, next) => {
-    console.log(req.body);
-    console.log(req.file);
-
     let fileRows = [];
     let fila = 0;
     try {
-    await  csv.parseFile(req.file.path)
-        .on("data", function (data) {
-           if(fila>0){
-            fileRows.push(data); // push each row
-            fileRows=fileRows.pop();
-            console.log("Asignado a "+fileRows[17]);
-            Usuario.guardar_nuevo(fileRows[17]).then(() => {
-                // Éxito al guardar el nuevo usuario
-            }).catch(error => {
-                console.log(error);
+        csv.parseFile(req.file.path)
+            .on("data",async function (data) {
+                if (fila > 0) {
+                    try {
+                        fileRows.push(data); 
+                        let rowData =fileRows.pop();
+                        if(rowData[21]=="TRUE"){
+                            rowData[21]=1;
+                        }
+                        if(rowData[21]=="FALSE"){
+                            rowData[21]=0;
+                        }if(rowData[20]=="Si"){
+                            rowData[20]=1;
+                        }
+                        if(rowData[20]=="No"){
+                            rowData[20]=0;
+                        }
+                        rowData[9] = convertirFecha(rowData[9]);
+                        await Usuario.guardar_nuevo(rowData[17]);
+                        await Lead.guardar_nuevo(rowData[17], rowData[0], rowData[1], rowData[9], rowData[18], rowData[19], rowData[15], rowData[20], rowData[21]);
+                    } catch (error) {
+                        console.log(error);
+                }    
+                }
+                fila++;
+            })
+            .on("end", async function () {
+                fs.unlinkSync(req.file.path);
+                console.log("Registros guardados exitosamente");
             });
-           } 
-           else{
-            fila++
-           }
-        })
-        .on("end", function () {
-            console.log(fileRows);
-            fs.unlinkSync(req.file.path); 
-        })
     } catch (error) {
         console.log(error);
     }
     res.redirect('/lead/historial');
-
 };
-
 exports.algo = (req, res, next) => {
     
     for(let i of conjunto)  {
