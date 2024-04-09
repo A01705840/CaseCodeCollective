@@ -12,6 +12,7 @@ exports.get_root = (request, response, next) => {
     response.render('home', {
         username: request.session.username || '',
         registro: false,
+        csrfToken: request.csrfToken,
     });
 };
 
