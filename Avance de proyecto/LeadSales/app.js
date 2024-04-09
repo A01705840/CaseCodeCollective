@@ -38,6 +38,9 @@ app.use('/Usuario', rutasUsuarios);
 const rutasLeads = require('./routes/leads.routes');
 app.use('/Lead', rutasLeads);
 
+const rutasRoles = require('./routes/roles.routes');
+app.use('/Roles', rutasRoles);
+
 const rutasSignup = require('./routes/usuarios.routes');
 app.use('/', rutasSignup);
 

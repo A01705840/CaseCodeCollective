@@ -1,0 +1,43 @@
+<%- include('includes/head.ejs', {username: username}) %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roles</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="flex flex-col items-center justify-center h-screen">
+    <div class="w-full max-w-md">
+      <div class="bg-white shadow-md rounded my-6">
+        <table class="text-left w-full border-collapse">
+          <thead>
+            <tr>
+              <th class="py-4 px-6 bg-gray-100 font-bold uppercase text-sm text-gray-600 border-b border-gray-200">Rol</th>
+              <th class="py-4 px-6 bg-gray-100 font-bold uppercase text-sm text-gray-600 border-b border-gray-200">Acciones</th>
+            </tr>
+          </thead>
+            </script>
+            <!-- Fin de simulación de datos -->
+            <% for (let ro of rol) { %>
+                <tr class="hover:bg-gray-200">
+                  <td class="py-4 px-6 border-b border-gray-200"><%= ro.IDRol %></td>
+                  <td class="py-4 px-6 border-b border-gray-200"><%= ro.TipoRol %></td>
+                  <td class="py-4 px-6 border-b border-gray-200">
+                    <form action = "/Roles/eliminar" method="POST">
+                    <input type="hidden" name="IDRol" value="<%= ro.IDRol %>">
+                    <button type="submit" class="px-4 py-2 text-white bg-red-500 border border-transparent rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                      Eliminar
+                    </button>
+                    </form>
+                  </td>
+                </tr>
+              <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
