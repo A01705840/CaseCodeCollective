@@ -36,6 +36,7 @@ exports.post_eliminar_lead = (req, res, next) => {
     Lead.delete(request.body.IDLead)
     .then(() => {
         return Lead.fetchAll();
+        console.log('Eliminado');
 
     }).then(([leads, fieldData]) => {
         return response.status(200).json({leads: leads});

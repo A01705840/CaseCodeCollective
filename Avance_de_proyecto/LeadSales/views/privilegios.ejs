@@ -26,14 +26,10 @@
                     <tr>
                         <td class="p-3 text-sm font-semibold tracking-wide text-left"><%= funcionesRoles[descripcion].id %>. <%= descripcion %></td>
                         <td style="text-align: center;">
-                            <input type="checkbox" class="privilege-checkbox" 
-                            <!--  explicando data-role: primero se obtiene el id del rol y luego se obtiene el id del primer rol que tenga el privilegio  -->
-                            <!-- si no existe un rol asignado al privilegio, se asigna un string vacío -->
+                            <input type="checkbox" class="privilege-checkbox"
                             data-role="<%= funcionesRoles[descripcion].roles && funcionesRoles[descripcion].roles[0] ? funcionesRoles[descripcion].roles[0].id : '' %>" 
-                            <!-- se asigna el id del privilegio -->
                             data-privilege="<%= funcionesRoles[descripcion].id %>"  
                             style="width: 20px; height: 20px; margin-right: 50%;" 
-                            <!-- se verifica si el rol tiene el privilegio asignado -->
                             <% if(shouldCheck) { %> checked <% } %>>
                         </td>
                     </tr>
