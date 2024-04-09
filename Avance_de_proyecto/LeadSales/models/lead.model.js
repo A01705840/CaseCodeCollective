@@ -46,4 +46,5 @@ module.exports = class Lead {
     static detele(id) {
         return db.execute('DELETE FROM lead WHERE IDLead = ?', [id]);
     }
+    
 }
