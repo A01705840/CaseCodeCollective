@@ -11,7 +11,7 @@ exports.get_privilegios = (req, res, next) => {
             let funcionesRoles = {};
             //console.log("idRol:",idRol);
 
-            // Iterar sobre los datos y agregar cada funcion, rol y sus IDs al objeto
+            // Iterar sobre los datos y agregar cada funcion, rol y sus IDs al objeto funcionesRoles
             data.forEach(item => {
                 //console.log(`Descripcion: ${item.Descripcion}, IDFuncion: ${item.IDFuncion}, IDRol: ${item.IDRol}, TipoRol: ${item.TipoRol}`);
                 if (!funcionesRoles[item.Descripcion]) {
@@ -23,7 +23,6 @@ exports.get_privilegios = (req, res, next) => {
                 }
             });
         
-            //console.log("funcionesRoles:",funcionesRoles);
             // Obtener el nombre del rol
             let nombreRol = data.find(item => item.TipoRol !== null)?.TipoRol;
         
@@ -43,8 +42,6 @@ exports.get_privilegios = (req, res, next) => {
 exports.post_privilegios = async function(req, res, next) {
     var changes = req.body;
 
-    console.log("post privilegios");
-    //console.log(changes);
     try {
         //Crear un array de objetos privilegio
         let privilegiosArray = changes.privileges.map(privilege => ({
@@ -52,7 +49,8 @@ exports.post_privilegios = async function(req, res, next) {
             privilegeID: privilege.privilegeID,
             checked: privilege.checked
         }));
-            //console.log(`roleID: ${roleID}, privilegeID: ${privilegeID}, checked: ${checked}`);
+            
+            //se llama a la funcion actualizarPrivilegios del modelo privilegios
             await privilegios.actualizarPrivilegios(privilegiosArray);
         
         res.json({message: 'Cambios guardados correctamente'});

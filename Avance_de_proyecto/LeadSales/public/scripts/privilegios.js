@@ -1,8 +1,12 @@
 window.onload = function() {
+    //se evita que el boton de guardar cambios se muestre al inicio
     document.getElementById('save-changes').style.display = 'none';
 
     var hasChanges = false;
 
+    //se obtienen todos los datos de los checkboxes
+    //se recorren todos los checkboxes y se les agrega un evento change
+    //para que se muestre el boton de guardar cambios
     var checkboxes = document.querySelectorAll('.privilege-checkbox');
     checkboxes.forEach(function(checkbox) {
         checkbox.addEventListener('change', function() {
@@ -10,12 +14,14 @@ window.onload = function() {
             document.getElementById('save-changes').style.display = 'block';
         });
     });
-
+    //se muestra un mensaje de confirmacion al guardar los cambios
     document.getElementById('save-changes').addEventListener('click', function() {
         var changes = {
             roleID: null,
             privileges: []
         };
+        //con la variable que habiamos creado anteriormente, se recorren todos los checkboxes
+        //y se obtienen los datos de los checkboxes
         checkboxes.forEach(function(checkbox) {
             let roleID = checkbox.getAttribute('data-role');
             let privilegeID = checkbox.getAttribute('data-privilege');
@@ -25,7 +31,7 @@ window.onload = function() {
             }
             changes.privileges.push({privilegeID, checked});
         });
-        //console.log(changes);
+        //se muestra un mensaje de confirmacion al guardar los cambios
         swal({
             title: '¿Estás seguro?',
             text: 'Los cambios se guardarán en la base de datos.',
@@ -35,7 +41,9 @@ window.onload = function() {
                 confirm: 'Sí, guardar cambios',
             },
             dangerMode: true,
-        }).then((isConfirm) => {
+             })
+            //si el usuario confirma, se envian los datos al servidor en formato JSON
+        .then((isConfirm) => {
             if (isConfirm) {
                 fetch('/privilegios/', {
                     method: 'POST',
