@@ -12,7 +12,7 @@ exports.get_root = (request, response, next) => {
     response.render('home', {
         username: request.session.username || '',
         registro: false,
-        csrfToken: request.csrfToken,
+        csrfToken: request.csrfToken(),
     });
 };
 
@@ -22,7 +22,7 @@ exports.get_leads = (request, res, next)  => {
             //console.log(NombreLead);
             console.log(rows.length); 
             res.render ('leads', {
-                csrfToken: request.csrfToken,
+                csrfToken: request.csrfToken(),
                 registro: true,
                 leads: rows,
                 username: request.session.username || '',

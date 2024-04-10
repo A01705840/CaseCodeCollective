@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-50 border dark:bg-gray-700">
+    
     <div class="p-20">
         <svg class="block w-full ps-10 p-2.5r size-40" width="119" height="47" viewBox="0 0 119 47" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g clip-path="url(#clip0_152_3482)">
@@ -19,9 +20,10 @@
                 </clipPath>
             </defs>
         </svg>        
-        <form class="max-w-sm mx-auto" method="POST">
+        <form action="/usuario/<% if (registro) { %>signup<% } else { %>login<% } %>" class="max-w-sm mx-auto" method="POST">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>" >
             <% if (registro) {%> 
-                <label for="email-address-icon" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your Email</label>
+                <label for="correo" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your Email</label>
                 <div class="relative mb-5">
                 <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
                     <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 16">
@@ -29,7 +31,7 @@
                     <path d="M11.241 9.817c-.36.275-.801.425-1.255.427-.428 0-.845-.138-1.187-.395L0 2.6V14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2.5l-8.759 7.317Z"/>
                     </svg>
                 </div>
-                <input type="text" id="email-address-icon" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="name@mail.com">
+                <input type="text" id="correo" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="name@mail.com">
                 </div>
                 <div class="mb-5">
                     <label for="username" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Username</label>
@@ -47,8 +49,8 @@
                     <input type="text" id="text" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" required />
                 </div>
                 <div class="mb-5">
-                    <label for="contraseña" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your password</label>
-                    <input type="password" id="contraseña" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" required />
+                    <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your password</label>
+                    <input type="password" id="password" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" required />
                 </div>
                 <div class="mb-5">
                     <label for="repeat-contraseña" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Repeat password</label>

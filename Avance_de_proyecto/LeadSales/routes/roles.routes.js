@@ -1,6 +1,8 @@
 const express = require('express');
 
 const router = express.Router();
+const isAuth = require('../util/isAuth');
+const canEdit = require('../util/canEdit');
 
 const rolesController= require('../controllers/roles.controller');
 

@@ -53,6 +53,11 @@ const fileStorage = multer.diskStorage({
 });
 app.use(multer({ storage: fileStorage }).single('csv')); 
 
+//Protección contra ataques de CSRF
+const csrf = require('csurf');
+const csrfProtection = csrf();
+app.use(csrfProtection);
+
 const rutasUsuarios = require('./routes/usuarios.routes');
 app.use('/Usuario', rutasUsuarios);
 
