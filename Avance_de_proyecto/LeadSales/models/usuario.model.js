@@ -11,17 +11,17 @@ module.exports = class Usuario {
     }
     //Este método servirá para guardar de manera persistente el nuevo objeto. 
     save() {
+        console.log(this.UserName, this.Correo, this.Nombre, this.Password)
         return bcrypt.hash(this.Password, 12)
         .then(async(password_cifrado) => {
             try {
                 await db.execute(
-                `INSERT INTO usuario (UserName, Correo, Nombre, Password) 
-                VALUES (?, ?, ?, ?)`, 
-                [this.username, this.correo, this.nombre, password_cifrado]);
+                `CALL registrar_usuario(?, ?, ?, ?)`, 
+                [this.UserName, this.Correo, this.Nombre, password_cifrado]);
             
             return db.execute(
-                'INSERT INTO usuario_tiene_rol (IDUsuario, IDRol) VALUES (IDUsuario, 2) WHERE UserName = ?', 
-                [this.username]
+                'CALL rol_default(?, NOW(), NOW())', 
+                [this.UserName]
                 );
             }catch(error) {
             console.log(error);
