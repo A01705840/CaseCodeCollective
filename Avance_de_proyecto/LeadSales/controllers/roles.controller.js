@@ -1,4 +1,5 @@
 const Rol = require('../models/rol.model');
+const privilegios = require('../models/privilegios.model');
 
 exports.post_eliminar = (request, response, next) => {
     console.log(request.body.IDRol)
@@ -27,15 +28,22 @@ exports.get_mostrarRoles = (req, res, next) => {
         });
 }
 
-
 exports.get_agregarRol = (req, res, next) => {
-    // Aquí puedes obtener los datos que necesitas pasar a la vista
-    // Por ejemplo, podrías obtener todos los privilegios disponibles para que el usuario pueda seleccionarlos al crear un nuevo rol
+    privilegios.fetchFunciones()
+        .then(data => {
+            // Crear un objeto para almacenar las funciones
+            let funciones = {};
 
-    Privilegio.fetchAll()
-        .then(([rows, fieldData]) => {
-            res.render('ruta/a/tu/vista', {
-                privilegios: rows,
+            // Iterar sobre los datos y agregar cada funcion y su ID al objeto funciones
+            data.forEach(item => {
+                if (!funciones[item.Descripcion]) {
+                    funciones[item.Descripcion] = {id: item.IDFuncion};
+                }
+            });
+
+            // Renderizar la vista con los datos
+            res.render('agregarRol', {
+                funciones: funciones,
                 username: req.session.username || '',
                 permisos: req.session.permisos || [],
             });
@@ -44,3 +52,15 @@ exports.get_agregarRol = (req, res, next) => {
             console.log(error);
         });
 };
+
+exports.post_agregarRol = (req, res, next) => {
+    //console.log(changes);
+    Rol.agregarRol(req, res)
+        .then(([rows, fieldData]) => {
+            res.json({message: 'Rol creado exitosamente'});
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            res.status(500).json({ message: 'Error al crear el rol' });
+        });
+}

@@ -47,4 +47,11 @@ module.exports = class Privilegios {
             }
         }
     }
+
+    static fetchFunciones() {
+        return db.execute('SELECT IDFuncion, Descripcion FROM funcion ORDER BY IDFuncion ASC')
+        .then(([data]) => {
+            return data;
+        });
+    }
 }
