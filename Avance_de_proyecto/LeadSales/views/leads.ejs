@@ -1,6 +1,6 @@
 <%- include('includes/head.ejs', {
     username: username,
-    permisos: permisos}) %>
+    funcion: funcion}) %>
 
     <% console.log('Hola') %>
     <input type="hidden" id="_csrf" name="_csrf" value="<%= csrfToken %>">
@@ -25,32 +25,46 @@
                             <th scope="col" class="px-6 py-3">Fecha</th>
                             <th scope="col" class="px-6 py-3">Creador</th>
                             <th scope="col" class="px-6 py-3">Modificar</th>
-                            <th scope="col" class="px-6 py-3">Eliminar</th>
-                        </tr>
-                    </thead>
-                    <tbody id="table_content">
-                        
-                        <tr >
-                        <% for (let lead of leads) { %>
-                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                <%= lead.NombreLead %>
-                            </th>
-                            <td class="px-6 py-4">
-                                <%= lead.FechaPrimerMensaje %>
-                            </td>
-                            <td class="px-6 py-4">
-                                <%= lead.asignado_a %>
-                            </td>
-                            <td class="px-6 py-4 text-center">
-                                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded">
-                                    Modificar
-                                </button>
-                            </td>
-                            <td class="px-6 py-4 text-center">
-                                <button onclick="eliminar(<%=lead.IDLead%>)" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-4 rounded">
-                                    Eliminar
-                                </button>
-                            </td>
+                            <% console.log(funcion) %>
+                            <% if (funcion && funcion.length) { %>
+                                <% for (let i = 0; i < funcion.length; i++) { %>
+                                    <% console.log(funcion[i].Descripcion + i) %>
+                                    <% if (funcion[i].Descripcion == 'Eliminar leads.') { %>
+                                        <th scope="col" class="px-6 py-3">Eliminar</th>
+                                    <% } %>
+                                <% } %>
+                            <% } %>
+                                </tr>
+                            </thead>
+                            <tbody id="table_content">
+                                
+                                <tr >
+                                    <% for (let lead of leads) { %>
+                                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            <%= lead.NombreLead %>
+                                        </th>
+                                        <td class="px-6 py-4">
+                                            <%= lead.FechaPrimerMensaje %>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <%= lead.asignado_a %>
+                                        </td>
+                                        <td class="px-6 py-4 text-center">
+                                            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded">
+                                                Modificar
+                                            </button>
+                                        </td>
+                                        <% if (funcion && funcion.length) { %>
+                                            <% for (let i = 0; i < funcion.length; i++) { %>
+                                                <% if (funcion[i].Descripcion == 'Eliminar leads.') { %>
+                                                    <td class="px-6 py-4 text-center">
+                                                        <button onclick="eliminar(<%=lead.IDLead%>)" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-4 rounded">
+                                                            Eliminar
+                                                        </button>
+                                                    </td>
+                                                <% } %>
+                                            <% } %>
+                                        <% } %>
                         </tr>
                         <% } %>
                         

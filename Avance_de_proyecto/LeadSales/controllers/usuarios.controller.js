@@ -17,16 +17,18 @@ exports.get_login = (request, response, next) => {
 exports.post_login = (request, response, next) => {
     Usuario.fetchOne(request.body.username)
     .then(([usuarios, fieldData]) => {
+        console.log(usuarios[0]);
         if (usuarios.length == 1) {
             const usuario = usuarios[0];
-                bcrypt.compare(request.body.password, usuario.password)
+            console.log(usuario.UserName)
+                bcrypt.compare(request.body.password, usuario.Password)
                     .then((doMatch) => {
                         if(doMatch) {
-                            Usuario.getPermisos(usuario.username)
-                                .then(([permisos, fieldData]) => {
-                                    console.log(permisos);
-                                    request.session.permisos = permisos;
-                                    request.session.username = usuario.nombre;
+                            Usuario.getPermisos(usuario.UserName)
+                                .then(([rows, fieldData]) => {
+                                    console.log(rows)
+                                    request.session.funcion = rows;
+                                    request.session.username = usuario.UserName;
                                     request.session.isLoggedIn = true;
                                     response.redirect('/');
                                 })

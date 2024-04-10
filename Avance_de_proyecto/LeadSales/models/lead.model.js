@@ -35,7 +35,7 @@ module.exports = class Lead {
         static fetch(id) {
         console.log(id)
         if (id) {
-            return this.fetchOne(id);
+            return this.fetchOneNombre(id);
         } else {
             return this.fetchAll();
         }
@@ -44,10 +44,20 @@ module.exports = class Lead {
         console.log(db.execute('SELECT * FROM leads GROUP BY ... WHERE DATE<8 AND DATE>90'))
         return await db.execute('SELECT * FROM leads GROUP BY ... WHERE DATE<8 AND DATE>90')
     }
-    static fetchOne(NombreLead) {
-        return db.execute('Select * FROM usuario WHERE NombreLead = ?', [NombreLead]);
+    
+    static fetchOneNombre(NombreLead) {
+        return db.execute('Select * FROM leads WHERE leads.NombreLead = ?', [NombreLead]);
     }
+
+    static fetchOneID(id) {
+        return db.execute('Select * FROM leads WHERE IDLead = ?', [id]);
+    }
+
     static eliminar(id) {
         return db.execute('DELETE FROM leads WHERE IDLead = ?', [id]);
+    }
+
+    static fetchfuncion(id) {
+        return db.execute('SELECT F.Descripcion FROM funcion as F, rol_adquiere_funcion as RAF, usuario_tiene_rol as UTR, usuario AS U WHERE F.IDFuncion = RAF.IDFuncion AND UTR.IDRol = raf.IDRol AND U.IDUsuario = UTR.IDUsuario AND U.UserName = ?', id)
     }
 }

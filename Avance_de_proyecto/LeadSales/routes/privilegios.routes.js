@@ -9,7 +9,7 @@ const PrivilegiosController = require('../controllers/privilegios.controller');
 
 
 router.get('/:IDRol', isAuth,  PrivilegiosController.get_privilegios);
-router.post('/', isAuth, PrivilegiosController.post_privilegios);
+router.post('/', PrivilegiosController.post_privilegios);
 
 
 module.exports = router;
