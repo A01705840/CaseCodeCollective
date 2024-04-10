@@ -1,23 +1,20 @@
-<%- include('includes/head.ejs', {username: username}) %>
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <!-- Inclusión de Tailwind CSS desde CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-</head>
-<body>
-    <div id = "notification"></div>
+<%- include('includes/head.ejs', {
+    username: username,
+    permisos: permisos}) %>
+    <% console.log('Hola') %>
+    <input type="hidden" id="_csrf" name="_csrf" value="<%= csrfToken %>">
+    
     <div class="p-4 sm:ml-20 sm:mr-10 font-sans">
-        <h1 class="text-2xl font-bold mb-4">Analítica</h1>
+        <h1 class="text-2xl font-bold mb-4">Leads</h1>
         <div class="flex flex-col justify-right p-4 border-2 border-gray-200 rounded-lg dark:border-gray-700 bg-slate-200">
             <div class="inline-flex justify-between items-center mb-4">
                 <div class="flex space-x-2">
                     <button class="bg-white hover:bg-indigo-600 text-indigo-600 hover:text-white py-2 px-4 rounded-full transition duration-300">Crear Lead</button>
                     <button class="bg-white hover:bg-indigo-600 text-indigo-600 hover:text-white py-2 px-4 rounded-full transition duration-300">Descargar Leads</button>
                 </div>
+
+                <div id = "notification"></div>
+
             </div>
             <div class="flex justify-center sm:mt-4 p-1 border-1 border-gray-200 rounded-lg dark:border-gray-200 bg-white">
                 <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -26,13 +23,14 @@
                             <th scope="col" class="px-6 py-3">Lead</th>
                             <th scope="col" class="px-6 py-3">Fecha</th>
                             <th scope="col" class="px-6 py-3">Creador</th>
-                            <th scope="col" class="px-6 py-3">Eliminar</th>
                             <th scope="col" class="px-6 py-3">Modificar</th>
+                            <th scope="col" class="px-6 py-3">Eliminar</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                            <% for (let lead of leads) { %>
+                    <tbody id="table_content">
+                        
+                        <tr >
+                        <% for (let lead of leads) { %>
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                 <%= lead.NombreLead %>
                             </th>
@@ -43,85 +41,80 @@
                                 <%= lead.asignado_a %>
                             </td>
                             <td class="px-6 py-4 text-center">
-                                <button onclick="eliminar('${lead.IDLead}')" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-4 rounded">
-                                    Eliminar
-                                </button>
-                            </td>
-                            <td class="px-6 py-4 text-center">
                                 <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded">
                                     Modificar
                                 </button>
                             </td>
+                            <td class="px-6 py-4 text-center">
+                                <button onclick="eliminar(<%=lead.IDLead%>)" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-4 rounded">
+                                    Eliminar
+                                </button>
+                            </td>
                         </tr>
                         <% } %>
+                        
                     </tbody>
 
                 </table>
             </div>
         </div>
     </div>
-</body>
-<script>
-        const eliminar = (id) => {
-        const csrf = document.getElementById('_csrf').value;
-        fetch('Lead/eliminar/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'csrf-token': csrf,
-            },
-            body: JSON.stringify({id: id})
-        }).then((result) => {
-            return result.json()
-        }).then((data) => {
-            let html = '';
-            html += `
-            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                    <tr>
-                        <th scope="col" class="px-6 py-3">Lead</th>
-                        <th scope="col" class="px-6 py-3">Fecha</th>
-                        <th scope="col" class="px-6 py-3">Creador</th>
-                        <th scope="col" class="px-6 py-3">Eliminar</th>
-                        <th scope="col" class="px-6 py-3">Modificar</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">`;
-            for (let lead of data.leads) {
-                html += `<th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            ${lead.NombreLead }
-                        </th>
-                        <td class="px-6 py-4">
-                            ${lead.FechaPrimerMensaje}
-                        </td>
-                        <td class="px-6 py-4">
-                            ${lead.asignado_a}
-                        </td>
-                        <td class="px-6 py-4 text-center">
-                            <button onclick="eliminar('${libro.id}')" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-4 rounded">
-                                Eliminar
-                            </button>
-                        </td>
-                        <td class="px-6 py-4 text-center">
-                            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded">
-                                Modificar
-                            </button>
-                        </td>`;
-                    }
-                    html += `
-                    </tr>
-                </tbody>
-            </table>`;
-            //document.getElementById('busqueda_ajax').innerHTML = html;
-            document.getElementById('notification').innerHTML = `
-            <div class="notification is-primary">
-                <button class="delete"></button>
-                El Leads fue eliminado.
-            </div>`;
-        }).catch((err) => {
-            console.log(err)
-        })
+    <script>
+    const click = () => {
+        console.log('click')
+    }
+    const eliminar = (IDLead) => {
+    const csrf = document.getElementById('_csrf').value;
+    fetch('Leads/eliminar', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'csrf-token': csrf,
+        },
+        body: JSON.stringify({IDLead: IDLead})
+    }).then((result) => {
+        return result.json()
+    }).then((data) => {
+        document.getElementById('notification').innerHTML = `
+        <div class="notification is-primary">
+            <button class="eliminar"></button>
+            El Leads fue eliminado.
+        </div>`;
+
+        let html = "";
+        for (let lead of data.leads) {
+            html += 
+            `<tr>`;
+            
+                html += 
+                `<th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    ${lead.NombreLead }
+                </th>
+                <td class="px-6 py-4">
+                    ${lead.FechaPrimerMensaje}
+                </td>
+                <td class="px-6 py-4">
+                    ${lead.asignado_a}
+                </td>
+                <td class="px-6 py-4 text-center">
+                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded">
+                        Modificar
+                    </button>
+                </td>
+                <td class="px-6 py-4 text-center">
+                    <button onclick="eliminar(${lead.IDLead})" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-4 rounded">
+                        Eliminar
+                    </button>
+                </td>
+            </tr>`;
         }
-</script>
+
+        document.getElementById('table_content').innerHTML = html;
+
+    }).catch((err) => {
+        console.log(err)
+    })
+    }
+    </script>
+</body>
 </html>
