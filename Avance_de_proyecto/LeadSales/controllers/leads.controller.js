@@ -45,13 +45,11 @@ exports.post_eliminar_lead = (req, res, next) => {
     });
 }
 
-exports.get_fechas = () => {
-    console.log('');
-    Lead
-}
 
 exports.postAnalitica = (req, res) => {
-    const nDayss = req.body.nDays; // Obtiene del cuerpo de la peticion, valor que haya en NDays
+    console.log
+    const nDayss = req.body.nDayss; // Obtiene del cuerpo de la peticion, valor que haya en NDays
+    console.log(nDayss);
     const data =  Lead.fetchByDate(nDayss);
     res.send(data);
 };

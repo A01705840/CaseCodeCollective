@@ -40,9 +40,9 @@ module.exports = class Lead {
             return this.fetchAll();
         }
     }
-    static async fetchByDate(nDays) {
-        console.log(db.execute('SELECT * FROM leads GROUP BY ... WHERE DATE<8 AND DATE>90'))
-        return await db.execute('SELECT * FROM leads GROUP BY ... WHERE DATE<8 AND DATE>90')
+    static async fetchByDate(nDayss) {
+        console.log(db.execute('SELECT * FROM version'))
+        return await db.execute('SELECT * FROM version')
     }
     static fetchOne(NombreLead) {
         return db.execute('Select * FROM usuario WHERE NombreLead = ?', [NombreLead]);
