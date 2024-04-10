@@ -1,0 +1,41 @@
+<%- include('includes/head.ejs', {username: username}) %>
+
+<div class="overflow-x-auto flex justify-center items-center h-screen">
+    <div style="background-color: white; width: 50%; height: 835px; margin: 20px auto 20px; padding: 40px 40px; border: 1px solid #ddd; position: relative;">
+        <button id="close-button" class="text-black hover:text-blue-700" style="border: none; padding: 10px 20px; text-align: center; text-decoration: none; display: inline-block; font-size: 30px; margin: 0; cursor: pointer; position: absolute; top: 10px; right: 20px; transition: background-color 0.3s ease; border-radius: 50%;">X</button>
+        <img src="/uploads/privilege.png" alt="Imagen no encontrada" style="width: 150px; height: 150px; display: block; margin: 0 auto;">
+        <h1 class="text-4xl font-bold dark:text-ellipsis" style="text-align: center; margin: 10px auto 20px;">Agregar Rol</h1>
+        <form action="/Roles/agregar" method="POST">
+            <label for="rolName" class="block text-gray-700 text-sm font-bold mb-2">Nombre del Rol:</label>
+            <input type="text" id="rolName" name="rolName" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+
+            <label for="privilegios" class="block text-gray-700 text-sm font-bold mb-2 mt-4">Privilegios:</label>
+            <!-- Aquí puedes agregar checkboxes para cada privilegio -->
+            <% for (let descripcion in funcionesRoles) { %>
+                <input type="checkbox" id="<%= funcionesRoles[descripcion].id %>" name="privilegios" value="<%= funcionesRoles[descripcion].id %>">
+                <label for="<%= funcionesRoles[descripcion].id %>" class="ml-2 text-gray-700 text-sm font-bold mb-2"><%= descripcion %></label>
+            <% } %>
+
+            <button type="submit" id="save-changes" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">
+                Guardar cambios
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.getElementById('close-button').addEventListener('click', function() {
+        window.location.href = '/Roles/consultas';
+    });
+
+    document.getElementById('save-changes').addEventListener('click', function() {
+        swal('Guardado', 'Los cambios se han guardado.', 'success')
+        .then(() => {
+            setTimeout(function() {
+                window.location.href = '/Roles/consultas';
+            }, 3000);
+        });
+    });
+</script>
+
+<%- include('includes/footer.ejs') %>

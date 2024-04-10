@@ -26,3 +26,21 @@ exports.get_mostrarRoles = (req, res, next) => {
             console.log(error);
         });
 }
+
+
+exports.get_agregarRol = (req, res, next) => {
+    // Aquí puedes obtener los datos que necesitas pasar a la vista
+    // Por ejemplo, podrías obtener todos los privilegios disponibles para que el usuario pueda seleccionarlos al crear un nuevo rol
+
+    Privilegio.fetchAll()
+        .then(([rows, fieldData]) => {
+            res.render('ruta/a/tu/vista', {
+                privilegios: rows,
+                username: req.session.username || '',
+                permisos: req.session.permisos || [],
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+};
