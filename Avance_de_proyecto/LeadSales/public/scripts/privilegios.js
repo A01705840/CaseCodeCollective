@@ -1,4 +1,5 @@
 window.onload = function() {
+    
     //se evita que el boton de guardar cambios se muestre al inicio
     document.getElementById('save-changes').style.display = 'none';
 
@@ -55,7 +56,10 @@ window.onload = function() {
                 //.then(console.log(JSON.stringify(changes)))
                 .then(response => response.json())
                 .then(data => {
-                    swal('Guardado', 'Los cambios se han guardado.', 'success');
+                    swal('Guardado', 'Los cambios se han guardado.', 'success')
+                    .then(() => {
+                        window.location.href = '/Roles/consultas';
+                    });
                 })
                 .catch((error) => {
                     console.error('Error:', error);
@@ -79,11 +83,11 @@ window.onload = function() {
             })
             .then((willLeave) => {
                 if (willLeave) {
-                    // Aquí puedes cerrar la ventana o hacer lo que necesites hacer cuando el usuario decide salir.
+                    window.location.href = '/Roles/consultas';
                 }
             });
         } else {
-            // Aquí puedes cerrar la ventana o hacer lo que necesites hacer cuando el usuario decide salir.
+            window.location.href = '/Roles/consultas';
         }
     });
 };

@@ -8,18 +8,36 @@ module.exports = class Rol {
 
     }
 
-    save() {
-        return toString(this.Embudo)
-        .then((IDRol) => {
-            return db.execute(
-            `INSERT INTO rol (IDRol, TipoRol) 
-                VALUES (?, ?)`,
-            [this.IDRol, this.TipoRol]);
-        })
-        .catch((error) => {
-            console.log(error);
-        });
-    }
+    static agregarRol(req, res) {
+        console.log("agregarRol");
+        console.log(req.body);
+        const nombreRol = req.body.nombreRol;
+        const privileges = req.body.privileges;
+    
+        // Insertar el nuevo rol en la tabla 'rol' y obtener el ID del rol insertado
+        db.execute('INSERT INTO rol (TipoRol) VALUES (?)', [nombreRol])
+            .then(([rows]) => {
+                const idRol = rows.insertId; // Obtener el ID del rol que acabamos de insertar
+    
+                // Para cada privilegio que esté marcado, insertar una nueva fila en la tabla 'rol_adquiere_funcion'
+                privileges.forEach(privilege => {
+                    if (privilege.checked) {
+                        db.execute(
+                            'INSERT INTO rol_adquiere_funcion (IDRol, IDFuncion) VALUES (?, ?)',
+                            [idRol, privilege.privilegeID]
+                        )
+                        .catch((error) => {
+                            console.log(error);
+                        });
+                    }
+                });
+    
+                res.redirect('/Roles/consultas');
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
 
     
     static delete(id) {
@@ -35,7 +53,7 @@ module.exports = class Rol {
 
 
     static fetchAll() {
-        return db.execute('Select * FROM rol')
+        return db.execute('Select * FROM rol ORDER BY IDRol ASC')
     }
     static fetch(id) {
         if (id) {
