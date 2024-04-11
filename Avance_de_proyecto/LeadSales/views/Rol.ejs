@@ -6,50 +6,57 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Roles</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-</head>
-<body>
+  </head>
+  <body>
   <div class="p-4 sm:ml-20 sm:mr-10 font-sans">
-    <h1 class="text-2xl font-bold mb-4">Roles</h1>
-    <div class="flex flex-col justify-right p-4 border-2 border-gray-200 rounded-lg dark:border-gray-700 bg-slate-200">
-        <div class="inline-flex justify-between items-center mb-4">
-            <div class="flex space-x-2">
-                <button class="bg-white hover:bg-indigo-600 text-indigo-600 hover:text-white py-2 px-4 rounded-full transition duration-300">Crear Lead</button>
-                <button class="bg-white hover:bg-indigo-600 text-indigo-600 hover:text-white py-2 px-4 rounded-full transition duration-300">Descargar Leads</button>
-            </div>
-        </div>
-  <div class="flex flex-col justify-right p-4 border-2 border-gray-200 rounded-lg dark:border-gray-700 bg-slate-200"></div>
-  <div class="flex flex-col items-center justify-center h-screen">
-    <div class="w-full max-w-md">
-      <div class="bg-white shadow-md rounded my-6">
-        <table class="text-left w-full border-collapse">
-          <thead>
-            <tr>
-              <th class="py-4 px-6 bg-gray-100 font-bold uppercase text-sm text-gray-600 border-b border-gray-200">Rol</th>
-              <th class="py-4 px-6 bg-gray-100 font-bold uppercase text-sm text-gray-600 border-b border-gray-200">Acciones</th>
-            </tr>
-          </thead>
-            </script>
+      <h1 class="mb-4 text-4xl font-bold leading-none tracking-tight text-ellipsis md:text-4xl lg:text-5xl ">Roles</h1>
+      <div class="flex flex-col justify-right p-4 border-2 border-gray-200 rounded-lg dark:border-gray-700 bg-slate-200">
+          <div class="inline-flex justify-between items-center mb-4">
+              <div class="flex space-x-2">
+                <a href="/Roles/agregar">
+                  <button class="bg-white hover:bg-indigo-600 text-indigo-600 hover:text-white py-2 px-4 rounded-full transition duration-300">Agregar Rol</button>
+              </a>
+              </div>
+          </div>
+          <div class="flex flex-col items-center justify-center h-screen">
+              <div class="w-full max-w-2x1 h-full">
+                  <div class="bg-white shadow-md rounded my-6">
+                      <table class="text-left w-full border-collapse">
+                          <thead>
+                          <tr>
+                              <th class="py-4 px-6 bg-gray-100 font-bold uppercase text-sm text-gray-600 border-b border-gray-200">Id</th>
+                              <th class="py-4 px-6 bg-gray-100 font-bold uppercase text-sm text-gray-600 border-b border-gray-200">Rol</th>
+                              <th class="py-4 px-6 bg-gray-100 font-bold uppercase text-sm text-gray-600 border-b border-gray-200">Modificar</th>
+                              <th class="py-4 px-6 bg-gray-100 font-bold uppercase text-sm text-gray-600 border-b border-gray-200">Eliminar</th>
+                          </tr>
+                          </thead>
             <!-- Fin de simulación de datos -->
             <% for (let ro of rol) { %>
                 <tr class="hover:bg-gray-200">
                   <td class="py-4 px-6 border-b border-gray-200"><%= ro.IDRol %></td>
                   <td class="py-4 px-6 border-b border-gray-200"><%= ro.TipoRol %></td>
                   <td class="py-4 px-6 border-b border-gray-200">
+                    <form action="/privilegios/<%= ro.IDRol %>" method="GET">
+                        <input type="hidden" name="IDRol" value="<%= ro.IDRol %>">
+                        <button type="submit" class="px-4 py-2 text-white font-bold bg-blue-500 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            Modificar
+                        </button>
+                    </form>
+                </td>
+                  <td class="py-4 px-6 border-b border-gray-200">
                     <form action = "/Roles/eliminar" method="POST">
                     <input type="hidden" name="IDRol" value="<%= ro.IDRol %>">
-                    <button type="submit" class="px-4 py-2 text-white bg-red-500 border border-transparent rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                    <button type="submit" class="px-4 py-2 text-white font-bold bg-red-500 border border-transparent rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
                       Eliminar
                     </button>
                     </form>
                   </td>
                 </tr>
               <% } %>
-          </tbody>
         </table>
       </div>
     </div>
   </div>
-</div>
 </div>
 </div>
 </body>
