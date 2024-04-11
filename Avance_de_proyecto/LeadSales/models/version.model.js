@@ -2,19 +2,22 @@ const db = require('../util/database');
 const bcrypt = require('bcryptjs');
 
 module.exports = class Version {
-    constructor(mi_idVersion, mi_iduser, mi_fecha, mi_nombreVersion) {
+    constructor(mi_idVersion, mi_idusuario, mi_fechacreacion, mi_nombreVersion) {
         this.IDVersion = mi_idVersion;
-        this.IDUser = mi_iduser;
+        this.IDUsuario = mi_idusuario;
+        this.FechaCreacion = mi_fechacreacion;
         this.NombreVersion = mi_nombreVersion;
+        
     }
 
     save() {
-        return new Date(mi_fecha)
+        return new Date(this.fecha)
         .then((password_cifrado) => {
             return db.execute(
-            `INSERT INTO version (IDVersion, IDUser, FechaCreacion, NombreVersion) 
+                // Exactly as the table looks
+            `INSERT INTO version (IDVersion, IDUsuario, FechaCreacion, NombreVersion) 
                 VALUES (?, ?, ?, ?)`,
-            [this.IDVersion, this.IDUser, this.FechaCreacion, this.NombreVersion]);
+            [this.IDVersion, this.IDUsuario, this.FechaCreacion, this.NombreVersion]);
         })
         .catch((error) => {
             console.log(error);
@@ -31,7 +34,7 @@ module.exports = class Version {
                 return this.fetchAll();
             }
         }
-        static fetchOne(NombreVersion) {
-            return db.execute('Select * from usuario WHERE NombreVersion = ?', [NombreVersion]);
+        static fetchOne(IDVersion) {
+            return db.execute('Select * from version WHERE IDVersion = ?', [IDVersion]);
     }
 }

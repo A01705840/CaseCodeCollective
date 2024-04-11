@@ -32,7 +32,7 @@ module.exports = class Lead {
             console.log(db.execute('SELECT * FROM leads'))
             return await db.execute('SELECT * FROM leads')
         }
-        static fetch(id) {
+    static fetch(id) {
         console.log(id)
         if (id) {
             return this.fetchOne(id);
@@ -40,14 +40,18 @@ module.exports = class Lead {
             return this.fetchAll();
         }
     }
-    static async fetchByDate(nDayss) {
-        console.log(db.execute('SELECT * FROM version'))
-        return await db.execute('SELECT * FROM version')
+
+    static async fetchByDate(fechas) {
+        console.log(db.execute ('SELECT FechaPrimerMensaje, COUNT(IDLead) AS SUMA_IDLead FROM leads WHERE FechaPrimerMensaje <= ? AND FechaPrimerMensaje >= ? GROUP BY FechaPrimerMensaje;', [fechas.fechaActual, fechas.fechaAnterior]))
+        return await db.execute ('SELECT FechaPrimerMensaje, COUNT(IDLead) AS SUMA_IDLead FROM leads GROUP BY FechaPrimerMensaje;')
     }
+    
     static fetchOne(NombreLead) {
         return db.execute('Select * FROM usuario WHERE NombreLead = ?', [NombreLead]);
     }
-    static detele(id) {
+    static delete(id) {
         return db.execute('DELETE FROM lead WHERE IDLead = ?', [id]);
     }
+
+    
 }

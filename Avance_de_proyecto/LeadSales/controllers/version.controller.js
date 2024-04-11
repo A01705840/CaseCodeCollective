@@ -1,6 +1,7 @@
 const Version = require('../models/version.model');
 const csv = require('fast-csv');
 const fs = require('fs');
+const { version } = require('os');
 
 exports.get_historial = (req, res, next) => {
     Version.fetch(req.params.IDVersion)
@@ -18,6 +19,7 @@ exports.get_historial = (req, res, next) => {
             console.log(error);
         });
 }
+
 
 exports.post_historial = (req, res, next) => {
     console.log(req.body);
@@ -37,3 +39,5 @@ exports.post_historial = (req, res, next) => {
     res.redirect('/lead/historial');
 
 };
+
+

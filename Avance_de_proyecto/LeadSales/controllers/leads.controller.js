@@ -1,11 +1,5 @@
 const Lead = require('../models/lead.model');
 
-exports.get_analitica = (request, response, next) => {
-    response.render('analitica', {
-        username: request.session.username || '',
-        registro: false,
-    });
-};
 exports.get_root = (request, response, next) => {
     response.render('home', {
         username: request.session.username || '',
@@ -46,10 +40,52 @@ exports.post_eliminar_lead = (req, res, next) => {
 }
 
 
-exports.postAnalitica = (req, res) => {
-    console.log
-    const nDayss = req.body.nDayss; // Obtiene del cuerpo de la peticion, valor que haya en NDays
-    console.log(nDayss);
-    const data =  Lead.fetchByDate(nDayss);
-    res.send(data);
+exports.get_analitica = async (req, res) => {
+    
+    // Lead.fetch(1)
+    //     .then(([data]) => {
+    //         console.log(data);
+    //         res.render('analitica', {
+    //             registro: true,
+    //             versiones: data,
+    //             username: req.session.username || '',
+    //             permisos: req.session.permisos || [],
+               
+    //         });
+    //     })
+    //     .catch((error) => {
+    //         console.log(error);
+    //     });
+
+    const nDays = req.body.nDays;
+    // const nDays = 70;
+
+    const dateActual = new Date(Date.now());
+    const milisecondsInDay = 24 * 60 * 60 * 1000;
+    const newDate = dateActual - ( nDays * milisecondsInDay )
+
+    const data = {
+        fechaActual : new Date(Date.now()),
+        fechaAnterior : new Date(newDate)
+    }
+    console.log(data)
+    const result = await Lead.fetchByDate(data);
+
+
+    //manejar la informacion, uso de ejemplo
+
+    const dataChart = []
+    res.send(result)
+};
+
+
+exports.postAnalitica = async (req, res) => {
+    try {
+        const nDays = req.body.nDays; // Obtiene del cuerpo de la peticion, valor que haya en NDays
+        const data = await Version.fetchByDate(nDays); // Espera a que se resuelva la promesa
+        res.send(data);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send("Error al obtener la analítica.");
+    }
 };

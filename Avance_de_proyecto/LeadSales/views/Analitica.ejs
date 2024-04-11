@@ -151,6 +151,7 @@ let chartData = function(){
         selectOption: function(index){
             this.selectedOption = index;
             this.date = this.options[index].value;
+            console.log(index, 'Este es el index');
             this.renderChart();
         },
         data: null,
@@ -162,10 +163,12 @@ let chartData = function(){
             //         this.data = res.dates;
             //         this.renderChart();
             //     })
-            fetch('/lead/analitica', {method: 'post'}) // Peticiones asincronas del cliente al server
+            fetch('/lead/analitica', {method: 'post', body: {
+                "nDayss": 30
+            }}) // Peticiones asincronas del cliente al server
                 .then(res => res.json())
                 .then(res => {
-                    this.data = res.dates;
+                    this.data = res.dataChart;
                     this.renderChart();
                 })
         },
