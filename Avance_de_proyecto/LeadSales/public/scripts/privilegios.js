@@ -1,4 +1,5 @@
 window.onload = function() {
+    
     //se evita que el boton de guardar cambios se muestre al inicio
     document.getElementById('save-changes').style.display = 'none';
 

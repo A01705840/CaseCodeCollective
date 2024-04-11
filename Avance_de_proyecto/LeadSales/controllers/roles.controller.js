@@ -6,10 +6,10 @@ exports.post_eliminar = (request, response, next) => {
     Rol.delete(request.body.IDRol)
         .then(([rows,fieldData]) => {
             Console.log("Registro eliminado exitosamente")
-            response.redirect ('/consultas');
+            response.redirect ('/Roles/consultas');
         }).catch((error) => {
             console.log(error)
-            response.redirect ('/consultas');
+            response.redirect ('/Roles/consultas');
         })
 };
 

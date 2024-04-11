@@ -1,4 +1,5 @@
 window.onload = function() {
+    let hasChanges = false;
     let checkboxes = document.querySelectorAll('.privilege-checkbox');
     let saveChangesButton = document.getElementById('save-changes');
 
@@ -22,7 +23,8 @@ window.onload = function() {
             nombreRol: nombreRol,
             privileges: []
         };
-        //console.log(changes);
+        // Recorrer todos los checkboxes y obtener los datos de los checkboxes
+        // y agregarlos al objeto changes
         checkboxes.forEach(function(checkbox) {
             let privilegeID = checkbox.getAttribute('data-privilege');
             let checked = checkbox.checked;
