@@ -15,7 +15,7 @@ router.get('/Historial', isAuth, VersionController.get_historial);
 router.post('/Historial', isAuth, VersionController.post_historial);
 
 router.get('/Leads', isAuth, LeadsController.get_leads);
-router.post('/Leads/eliminar', isAuth, canEliminarLeads, LeadsController.post_eliminar_lead);
+router.post('/eliminar', isAuth, canEliminarLeads, LeadsController.post_eliminar_lead);
 
 router.post('/Analitica', isAuth, LeadsController.postAnalitica);
 

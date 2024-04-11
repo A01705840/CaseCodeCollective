@@ -1,8 +1,6 @@
 <%- include('includes/head.ejs', {
     username: username,
     funcion: funcion}) %>
-
-    <% console.log('Hola') %>
     <input type="hidden" id="_csrf" name="_csrf" value="<%= csrfToken %>">
     
     <div class="p-4 sm:ml-20 sm:mr-10 font-sans">
@@ -25,7 +23,6 @@
                             <th scope="col" class="px-6 py-3">Fecha</th>
                             <th scope="col" class="px-6 py-3">Creador</th>
                             <th scope="col" class="px-6 py-3">Modificar</th>
-                            <% console.log(funcion) %>
                             <% if (funcion && funcion.length) { %>
                                 <% for (let i = 0; i < funcion.length; i++) { %>
                                     <% console.log(funcion[i].Descripcion + i) %>
@@ -34,39 +31,38 @@
                                     <% } %>
                                 <% } %>
                             <% } %>
-                                </tr>
-                            </thead>
-                            <tbody id="table_content">
-                                
-                                <tr >
-                                    <% for (let lead of leads) { %>
-                                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            <%= lead.NombreLead %>
-                                        </th>
-                                        <td class="px-6 py-4">
-                                            <%= lead.FechaPrimerMensaje %>
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            <%= lead.asignado_a %>
-                                        </td>
-                                        <td class="px-6 py-4 text-center">
-                                            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded">
-                                                Modificar
-                                            </button>
-                                        </td>
-                                        <% if (funcion && funcion.length) { %>
-                                            <% for (let i = 0; i < funcion.length; i++) { %>
-                                                <% if (funcion[i].Descripcion == 'Eliminar leads.') { %>
-                                                    <td class="px-6 py-4 text-center">
-                                                        <button onclick="eliminar(<%=lead.IDLead%>)" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-4 rounded">
-                                                            Eliminar
-                                                        </button>
-                                                    </td>
-                                                <% } %>
-                                            <% } %>
-                                        <% } %>
                         </tr>
-                        <% } %>
+                    </thead>
+                    <tbody id="table_content">      
+                        <tr>
+                            <% for (let lead of leads) { %>
+                                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    <%= lead.NombreLead %>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <%= lead.FechaPrimerMensaje %>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <%= lead.asignado_a %>
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded">
+                                        Modificar
+                                    </button>
+                                </td>
+                                <% if (funcion && funcion.length) { %>
+                                    <% for (let i = 0; i < funcion.length; i++) { %>
+                                        <% if (funcion[i].Descripcion == 'Eliminar leads.') { %>
+                                            <td class="px-6 py-4 text-center">
+                                                <button onclick="eliminar(<%=lead.IDLead%>)" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-4 rounded">
+                                                    Eliminar
+                                                </button>
+                                            </td>
+                                        <% } %>
+                                    <% } %>
+                                <% } %>
+                        </tr>
+                            <% } %>
                         
                     </tbody>
 
@@ -74,22 +70,30 @@
             </div>
         </div>
     </div>
+</body>
     <script>
-    const click = () => {
-        console.log('click')
-    }
     const eliminar = (IDLead) => {
     const csrf = document.getElementById('_csrf').value;
-    fetch('Leads/eliminar', {
+    const funcion = '<%= funcion %>';
+    //console.log(IDLead);
+    //console.log(request.session.funcion);
+    //console.log("ELIMINAR: " + eliminar);
+    fetch('/Lead/eliminar', {
         method: 'POST',
+        json: true,
         headers: {
             'Content-Type': 'application/json',
             'csrf-token': csrf,
         },
-        body: JSON.stringify({IDLead: IDLead})
-    }).then((result) => {
-        return result.json()
-    }).then((data) => {
+        body: JSON.stringify({IDLead: IDLead})})
+    // }).then((result) => {
+    //     console.log("JSON RESULT: " + JSON.stringify(result))
+    //     //console.log(JSON.stringify(result.json()))
+    //     // return result.json()
+    //     console.log('RESULTADOOOOOOOOOO')
+    // })
+    .then((data) => {
+        console.log("DATA: " + JSON.stringify(data))
         document.getElementById('notification').innerHTML = `
         <div class="notification is-primary">
             <button class="eliminar"></button>
@@ -99,11 +103,9 @@
         let html = "";
         for (let lead of data.leads) {
             html += 
-            `<tr>`;
-            
-                html += 
-                `<th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    ${lead.NombreLead }
+            `<tr>
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    ${lead.NombreLead}
                 </th>
                 <td class="px-6 py-4">
                     ${lead.FechaPrimerMensaje}
@@ -116,18 +118,24 @@
                         Modificar
                     </button>
                 </td>
+                <% if (funcion && funcion.length) { %>
+                    <% for (let i = 0; i < funcion.length; i++) { %>
+                        <% if (funcion[i].Descripcion == 'Eliminar leads.') { %>
                 <td class="px-6 py-4 text-center">
-                    <button onclick="eliminar(${lead.IDLead})" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-4 rounded">
+                    <button onclick="eliminar(lead.IDLead)" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-4 rounded">
                         Eliminar
                     </button>
                 </td>
+                        <% } %>
+                    <% } %>
+                <% } %>
             </tr>`;
-        }
+        };
 
         document.getElementById('table_content').innerHTML = html;
 
-    }).catch((err) => {
-        console.log(err)
+    }).catch((error) => {
+        console.log(error)
     })
     }
     </script>

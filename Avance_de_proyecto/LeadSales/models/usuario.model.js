@@ -30,7 +30,6 @@ module.exports = class Usuario {
     }
         static fetchOne(username) {
             return db.execute('Select * from usuario WHERE username = ?', [username]);
-            
         }
             
         static getPermisos(username) {

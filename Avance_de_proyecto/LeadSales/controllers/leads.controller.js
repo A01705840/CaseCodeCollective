@@ -61,58 +61,68 @@ exports.get_root = (request, response, next) => {
     });
 };
 
-exports.get_leads = (request, res, next)  => {
-    const error = request.session.error || '';
-    request.session.error = '';
-    Usuario.fetchOne(request.session.username)
-    .then(([usuarios, fieldData]) => {
+exports.get_leads = async (request, res, next) => {
+    try {
+        const error = request.session.error || '';
+        request.session.error = '';
+
+        const test = request.session;
+        // Obtener información del usuario
+        console.log('Leads Controllers: ' + JSON.stringify(test));
+        const [usuarios] = await Usuario.fetchOne(request.session.username);
         const usuario = usuarios[0];
-        console.log(usuario.UserName)
-        Usuario.getPermisos(usuario.UserName)
-            .then(([funciones, fieldData]) => {
-                console.log('FUNCION HERE')
-                console.log(funciones)
-                request.session.funcion = funciones;
-                request.session.username = usuario.Nombre;
-                request.session.isLoggedIn = true;
-                Lead.fetch(request.params.NombreLead)
-                .then(([rows,fieldData]) => {
-                    //console.log(NombreLead);
-                    console.log(request.session.username || 'dfsdf')
-                    res.render ('leads', {
-                        funcion: request.params.funcion,
-                        username: request.params.username,
-                        csrfToken: request.csrfToken(),
-                        registro: true,
-                        leads: rows,
-                        error: error
-                    });
-                    console.log('get-leads');
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }).catch((error) => {
+        console.log('Usuarios: ' +  JSON.stringify(usuarios));
+
+        // Obtener permisos del usuario
+        const [funciones] = await Usuario.getPermisos(usuario.UserName);
+        request.session.funcion = funciones;
+        request.session.username = usuario.UserName;
+        request.session.isLoggedIn = true;
+
+        // Obtener datos de leads
+        const [rows] = await Lead.fetch(request.params.NombreLead);
+
+        // Renderizar la vista 'leads' con todas las variables necesarias
+        res.render('leads', {
+            funcion: request.session.funcion || [],
+            username: request.session.username || '',
+            csrfToken: request.csrfToken(),
+            registro: true,
+            leads: rows,
+            error: error
+        });
+
+        console.log('get-leads');
+    } catch (error) {
         console.log(error);
-    })
+    }
+};
 
-}
 
-exports.post_eliminar_lead = (request, response, next) => {
-    console.log('post-eliminar');
-    Lead.eliminar(request.body.IDLead)
-    .then(() => {
-        return Lead.fetchAll();
+exports.post_eliminar_lead = async (request, response, next) => {
+    try {
+        const error = request.session.error || '';
+        request.session.error = '';
+
+        const [usuarios] = await Usuario.fetchOne(request.session.username);
+        const usuario = usuarios[0];
+        //console.log('Usuarios: ' +  JSON.stringify(usuarios));
+
+        const [funciones] = await Usuario.getPermisos(usuario.UserName);
+        request.session.funcion = funciones;
+        request.session.username = usuario.UserName;
+        request.session.NombreLead = request.body.NombreLead;
+        request.session.isLoggedIn = true;
+
         
-    }).then(([leads, fieldData]) => {
-        return response.status(200).json({leads: leads});
-    }).catch((error) => {
+        Lead.eliminar(request.body.IDLead);
+        
+        const [rows] = await Lead.fetch(request.session.NombreLead);
+        console.log("ROWS: " + JSON.stringify(rows));
+        return response.status(200).json({leads: rows});
+    } catch (error) {
         console.log(error);
-    });
+    }
 }
 
 exports.get_fechas = () => {

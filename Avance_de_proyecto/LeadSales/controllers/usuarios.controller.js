@@ -15,6 +15,7 @@ exports.get_login = (request, response, next) => {
 };
 
 exports.post_login = (request, response, next) => {
+    console.log('Usuarios Controller: ' + request.body.username);
     Usuario.fetchOne(request.body.username)
     .then(([usuarios, fieldData]) => {
         console.log(usuarios[0]);
