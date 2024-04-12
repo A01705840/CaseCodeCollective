@@ -7,6 +7,8 @@ exports.get_login = (request, response, next) => {
     });
 };
 
+// TODO: Implementar la función post_login con permisos
+
 exports.get_signup = (req, res, next) => {
     res.render('signup', {
         username: req.session.username || '',
