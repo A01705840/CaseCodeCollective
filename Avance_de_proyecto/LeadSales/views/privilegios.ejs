@@ -19,12 +19,15 @@
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
                 <!-- Se recorren los privilegios y se muestran en la tabla -->
-                <% for (let descripcion in funcionesRoles) { 
+                <% let cont=0;
+                for (let descripcion in funcionesRoles) { 
                     <!-- Se verifica si el rol tiene el privilegio asignado -->
+                    cont=cont+1;
+                    if(cont>2){
                     let shouldCheck = funcionesRoles[descripcion].roles.some(role => role.nombre && role.nombre === nombreRol);
                 %>
                     <tr>
-                        <td class="p-3 text-sm font-semibold tracking-wide text-left"><%= funcionesRoles[descripcion].id %>. <%= descripcion %></td>
+                        <td class="p-3 text-sm font-semibold tracking-wide text-left"><%= funcionesRoles[descripcion].id -2 %>. <%= descripcion %></td>
                         <td style="text-align: center;">
                             <input type="checkbox" class="privilege-checkbox" 
                             data-role="<%= funcionesRoles[descripcion].roles && funcionesRoles[descripcion].roles[0] ? funcionesRoles[descripcion].roles[0].id : '' %>" 
@@ -33,7 +36,7 @@
                             <% if(shouldCheck) { %> checked <% } %>>
                         </td>
                     </tr>
-                <% } %>
+                <% }} %>
             </tbody>
             </table>
         </div>

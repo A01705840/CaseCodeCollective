@@ -27,16 +27,20 @@
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     <!-- Se recorren los privilegios y se muestran en la tabla -->
-                    <% for (let descripcion in funciones) { %>
+                    <% let cont=0;
+                    for (let descripcion in funciones) {
+                        cont=cont+1;
+                        if(cont>2) { %>
                         <tr>
-                            <td class="p-3 text-sm font-semibold tracking-wide text-left"><%= funciones[descripcion].id %>. <%= descripcion %></td>
+                            <td class="p-3 text-sm font-semibold tracking-wide text-left"><%= funciones[descripcion].id -2 %>. <%= descripcion %></td>
                             <td style="text-align: center;">
                                 <input type="checkbox" class="privilege-checkbox" 
                                 data-privilege="<%= funciones[descripcion].id %>"  
                                 style="width: 20px; height: 20px; margin-right: 50%;">
                             </td>
                         </tr>
-                    <% } %>
+                <% }} %>
+
                 </tbody>
             </table>
             </div>

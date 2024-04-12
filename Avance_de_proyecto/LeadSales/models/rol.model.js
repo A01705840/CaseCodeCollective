@@ -7,6 +7,15 @@ module.exports = class Rol {
         this.TipoRol = mi_TipoRol;
 
     }
+    static fetchRolesWithUsers() {
+        return db.execute(`
+            SELECT utr.IDUsuario, utr.IDRol, utr.FechaUsuarioRolActualizacion, r.TipoRol, u.UserName
+            FROM usuario_tiene_rol utr
+            LEFT JOIN rol r ON utr.IDRol = r.IDRol
+            LEFT JOIN usuario u ON utr.IDUsuario = u.IDUsuario
+            ORDER BY utr.FechaUsuarioRolActualizacion ASC
+        `);
+    }
 
     static agregarRol(req, res) {
         console.log("agregarRol");
@@ -23,7 +32,7 @@ module.exports = class Rol {
                 privileges.forEach(privilege => {
                     if (privilege.checked) {
                         db.execute(
-                            'INSERT INTO rol_adquiere_funcion (IDRol, IDFuncion) VALUES (?, ?)',
+                            'INSERT INTO rol_adquiere_funcion (IDRol, IDFuncion, FechaRolFuncion) VALUES (?, ?, CURRENT_TIMESTAMP)',
                             [idRol, privilege.privilegeID]
                         )
                         .catch((error) => {
@@ -63,5 +72,17 @@ module.exports = class Rol {
         }
     }
     
-    
+    static cambiarRol(idUsuario, idRol) {
+        return db.execute(`
+            UPDATE usuario_tiene_rol
+            SET IDRol = ?, FechaUsuarioRolActualizacion = NOW()
+            WHERE IDUsuario = ?
+        `, [idRol, idUsuario])
+        .then(() => {
+            console.log('Rol cambiado con éxito');
+        }).catch((error) => {
+            console.log(error);
+        });
+    }
 }
+    

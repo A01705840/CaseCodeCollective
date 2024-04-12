@@ -26,8 +26,8 @@
                             <th scope="col" class="px-6 py-3">Lead</th>
                             <th scope="col" class="px-6 py-3">Fecha</th>
                             <th scope="col" class="px-6 py-3">Creador</th>
-                            <th scope="col" class="px-6 py-3">Eliminar</th>
                             <th scope="col" class="px-6 py-3">Modificar</th>
+                            <th scope="col" class="px-6 py-3">Eliminar</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -42,14 +42,14 @@
                             <td class="px-6 py-4">
                                 <%= lead.asignado_a %>
                             </td>
-                            <td class="px-6 py-4 text-center">
-                                <button onclick="eliminar('${lead.IDLead}')" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-4 rounded">
-                                    Eliminar
-                                </button>
-                            </td>
-                            <td class="px-6 py-4 text-center">
+                            <td class="px-6 py-4">
                                 <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded">
                                     Modificar
+                                </button>
+                            </td>
+                            <td class="px-6 py-4">
+                                <button onclick="eliminar('${lead.IDLead}')" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-4 rounded">
+                                    Eliminar
                                 </button>
                             </td>
                         </tr>

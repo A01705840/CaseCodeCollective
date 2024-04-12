@@ -1,0 +1,53 @@
+<%- include('includes/head.ejs', {username: username}) %>
+
+ 
+<div class="p-4 sm:ml-20 sm:mr-10 font-sans">
+  <div class="flex flex-col justify-right p-4 border-2 border-gray-200 rounded-lg dark:border-gray-700 bg-slate-200">
+      <div class="inline-flex justify-between items-center">
+          <h1 class=" text-4xl font-thin leading-none tracking-tight text-ellipsis md:text-4xl lg:text-5xl ">Mi Equipo</h1>
+          <div class="" style="padding-right: 90px;">
+              <a href="/Roles/agregar">
+                  <button class="bg-white hover:bg-indigo-600 text-black hover:text-white py-2 px-8 rounded-full transition duration-300">Roles</button>
+              </a>
+          </div>
+      </div>
+          <div class="flex flex-col items-center justify-center h-screen">
+              <div class="w-full max-w-2x1 h-full">
+                  <div class="bg-white shadow-md rounded my-6">
+                      <table class="text-left w-full border-collapse overflow-scroll">
+                          <thead>
+                          <tr>
+                              <th class="py-4 px-6 bg-gray-100 font-bold uppercase text-sm text-gray-600 border-b border-gray-200">Nombre del Usuario</th>
+                              <th class="py-4 px-6 bg-gray-100 font-bold uppercase text-sm text-gray-600 border-b border-gray-200">Rol</th>
+                              <th class="py-4 px-6 bg-gray-100 font-bold uppercase text-sm text-gray-600 border-b border-gray-200">Última actualización del Rol</th>
+                              <th class="py-4 px-6 bg-gray-100 font-bold uppercase text-sm text-gray-600 border-b border-gray-200">Editar</th>
+                          </tr>
+                          </thead>
+                          <tbody>
+                            <% data.forEach(function(item) { %>
+                                <tr class="hover:bg-gray-100">
+                                    <td class="py-4 px-6 border-b border-gray-200"><%= item.UserName %></td>
+                                    <td class="py-4 px-6 border-b border-gray-200">
+                                        <select id="rol-<%= item.IDUsuario %>" onchange="cambiarRol('<%= item.IDUsuario %>')">
+                                            <% roles.forEach(function(rol) { %>
+                                                <option value="<%= rol.IDRol %>" <%= rol.IDRol == item.IDRol ? 'selected' : '' %>><%= rol.TipoRol %></option>
+                                            <% }); %>
+                                        </select>
+                                    </td>
+                                    <td class="py-4 px-6 border-b border-gray-200"><%= item.FechaUsuarioRolActualizacion %></td>
+                                    <td class="py-4 px-6 border-b border-gray-200">
+                                        <a href="/Roles/editar/<%= item.IDUsuario %>">Editar</a>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script src="/scripts/equipo.js"></script>
+
+

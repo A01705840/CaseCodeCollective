@@ -64,3 +64,37 @@ exports.post_agregarRol = (req, res, next) => {
             res.status(500).json({ message: 'Error al crear el rol' });
         });
 }
+
+exports.get_equipo = (req, res, next) => {
+    Rol.fetchRolesWithUsers()
+        .then(([rows, fieldData]) => {
+            Rol.fetchAll()
+                .then(([roles, fieldData]) => {
+                    res.render('equipo', {
+                        username: req.session.username || '',
+                        permisos: req.session.permisos || [],
+                        data: rows,
+                        roles: roles
+                    });
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+}
+
+exports.post_cambiarRol = (req, res, next) => {
+    console.log(req.body);
+    const idUsuario = req.body.idUsuario;
+    const idRol = req.body.idRol;
+    Rol.cambiarRol(idUsuario, idRol)
+        .then(() => {
+            res.json({ message: 'Rol cambiado con éxito' });
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+}
