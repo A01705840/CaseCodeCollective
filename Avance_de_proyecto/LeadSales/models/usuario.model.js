@@ -9,7 +9,7 @@ module.exports = class Usuario {
         this.password = mi_password;
     }
     //Este método servirá para guardar de manera persistente el nuevo objeto. 
-    save() {
+    Ssave() {
         return bcrypt.hash(this.password, 12)
         .then((password_cifrado) => {
             return db.execute(
@@ -20,8 +20,9 @@ module.exports = class Usuario {
         .catch((error) => {
             console.log(error);
         });
-    }
-       static fetchOne(username) {
-        return db.execute('Select * from usuario WHERE username = ?', [username]);
+    }t
+    //Este método servirá para devolver los objetos del almacenamiento persistente.
+    static fetchOne(username) {
+    return db.execute('Select * from usuario WHERE username = ?', [username]);
     }
 }
