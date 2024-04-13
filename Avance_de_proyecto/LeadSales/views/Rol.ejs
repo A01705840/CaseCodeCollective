@@ -2,9 +2,9 @@
 
  
 <div class="p-4 sm:ml-20 sm:mr-10 font-sans">
-  <div class="flex flex-col justify-right p-4 border-2 border-gray-200 rounded-lg dark:border-gray-700 bg-slate-200">
+  <div class="flex flex-col justify-right p-4 border-2 border-gray-200 rounded-lg dark:border-gray-700 bg-slate-200" style="height:970px;" >
       <div class="inline-flex justify-between items-center">
-          <h1 class=" text-4xl font-thin leading-none tracking-tight text-ellipsis md:text-4xl lg:text-5xl ">Roles</h1>
+        <span style='font-size:30px;'>🎭 Roles</span>
           <div class="flex space-x-2">
               <a href="/Roles/agregar">
                   <button class="bg-white hover:bg-indigo-600 text-black hover:text-white py-2 px-4 rounded-full transition duration-300" >Agregar Rol</button>
@@ -13,24 +13,33 @@
       </div>
           <div class="flex flex-col items-center justify-center h-screen">
               <div class="w-full max-w-2x1 h-full">
-                  <div class="bg-white shadow-md rounded my-6">
+                  <div class="flex justify-center sm:mt-4 p-1 border-1 border-gray-200 rounded-lg dark:border-gray-200 bg-white">
                       <table class="text-left w-full border-collapse">
-                          <thead>
-                          <tr>
-                              <th class="py-4 px-6 bg-gray-100 font-bold uppercase text-sm text-gray-600 border-b border-gray-200">Id</th>
-                              <th class="py-4 px-6 bg-gray-100 font-bold uppercase text-sm text-gray-600 border-b border-gray-200">Rol</th>
-                              <th class="py-4 px-6 bg-gray-100 font-bold uppercase text-sm text-gray-600 border-b border-gray-200">Modificar</th>
-                              <th class="py-4 px-6 bg-gray-100 font-bold uppercase text-sm text-gray-600 border-b border-gray-200">Eliminar</th>
-                          </tr>
-                          </thead>
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">
+                                    Id
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Rol
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Modificar
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Eliminar
+                                </th>
+                            </tr>
+                        </thead>
             <!-- Fin de simulación de datos -->
+            <% let contador = 1; %>
             <% for (let ro of rol) { %>
                 <tr class="hover:bg-gray-200">
-                  <td class="py-4 px-6 border-b border-gray-200"><%= ro.IDRol %></td>
+                  <td class="py-4 px-6 border-b border-gray-200"><%= contador %></td>
                   <td class="py-4 px-6 border-b border-gray-200"><%= ro.TipoRol %></td>
                   <td class="py-4 px-6 border-b border-gray-200">
                     <form action="/privilegios/<%= ro.IDRol %>" method="GET">
-                        <input type="hidden" name="IDRol" value="<%= ro.IDRol %>">
+                      <input type="hidden" name="IDRol" value="<%= ro.IDRol %>">
                         <button type="submit" class="px-4 py-2 text-white font-bold bg-blue-500 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                             Modificar
                         </button>
@@ -43,6 +52,7 @@
                     </form>
                   </td>
                 </tr>
+                <% contador++; %>
               <% } %>
         </table>
       </div>

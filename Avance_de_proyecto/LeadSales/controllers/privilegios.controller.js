@@ -3,7 +3,7 @@ const privilegios = require('../models/privilegios.model');
 exports.get_privilegios = (req, res, next) => {
     // Obtener el idRol de la solicitud
     let idRol = req.params.idRol;
-
+    console.log("idRol:",idRol);
 
     privilegios.fetchAll(idRol)
         .then(data => {
