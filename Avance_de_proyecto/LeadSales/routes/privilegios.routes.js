@@ -8,7 +8,7 @@ const canEdit = require('../util/canEdit');
 const PrivilegiosController = require('../controllers/privilegios.controller');
 
 
-router.get('/:idRol', PrivilegiosController.get_privilegios);
+router.get('/:IDRol', PrivilegiosController.get_privilegios);
 router.post('/', PrivilegiosController.post_privilegios);
 
 
