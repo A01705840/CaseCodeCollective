@@ -36,7 +36,7 @@ const buscar = () => {
         let html = '';
         data.data.forEach(function(item) {
             html += `
-            <tr class="hover:bg-gray-100 py-4">
+            <tr class="hover:bg-gray-100" >
                 <td class="py-4 px-6 border-b border-gray-200" >${item.UserName}</td>
                 <td class="py-4 border-b border-gray-200" style="padding-right: 40px;">
                     <select id="rol-${item.IDUsuario}" onchange="cambiarRol('${item.IDUsuario}')" class="px-4 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
