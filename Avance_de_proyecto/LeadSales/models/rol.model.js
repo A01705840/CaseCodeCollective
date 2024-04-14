@@ -62,7 +62,7 @@ module.exports = class Rol {
 
     
     static delete(id) {
-        return db.execute('DELETE FROM rol_adquiere_funcion WHERE IDRol = ? ', [id]),db.execute('DELETE FROM usuario_tiene_rol WHERE IDRol = ? ', [id]),db.execute('UPDATE usuario_tiene_rol SET IDRol = 4 WHERE IDRol = ?;', [id])
+        return db.execute('DELETE FROM rol_adquiere_funcion WHERE IDRol = ? ', [id]),db.execute('UPDATE usuario_tiene_rol SET IDRol = 4, FechaUsuarioRolActualizacion = NOW() WHERE IDRol = ? ', [id])    
         .then(()=>{
             return  db.execute('DELETE FROM rol WHERE IDRol = ? ', [id])
         })

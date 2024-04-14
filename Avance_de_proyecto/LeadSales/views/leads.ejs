@@ -83,7 +83,7 @@
     
                         <div class="flex justify-end mt-6">
                             <button id="botonGuardar" class="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-pink-500 rounded-md hover:bg-pink-700 focus:outline-none focus:bg-gray-600" style="position: relative; left: 290px; bottom: 25px;">Guardar cambios</button>
-                            <button onclick="cerrarModal()" class="hover:text-black text-white" style="border: none; padding: 10px 20px; text-align: center; text-decoration: none; display: inline-block; font-size: 25px; margin: 0; cursor: pointer; position: absolute; top: 10px; right: 20px; transition: background-color 0.3s ease; border-radius: 50%;">X</button>
+                            <button type="button" onclick="cerrarModal()" class="hover:text-black text-white" style="border: none; padding: 10px 20px; text-align: center; text-decoration: none; display: inline-block; font-size: 25px; margin: 0; cursor: pointer; position: absolute; top: 10px; right: 20px; transition: background-color 0.3s ease; border-radius: 50%;">X</button>
                         </div>
                     </div>
                 </form>
@@ -235,13 +235,14 @@
 
         $('#modal').show();
     });
+    document.getElementById('botonGuardar').addEventListener('click', guardarCambios);
 }
 function cerrarModal() {
     $('#modal').hide();
 }
 
 function guardarCambios() {
-    document.getElementById('botonGuardar').addEventListener('click', function() {
+    
     // Recoge los datos del formulario
     var nombre = document.getElementById('nombre').value;
     var fecha = document.getElementById('fecha').value;
@@ -273,7 +274,6 @@ function guardarCambios() {
         // Redirige al usuario a la página de leads
         window.location.href = '/lead/Leads';
     });
-});
 }
 
     </script>
