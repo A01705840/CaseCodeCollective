@@ -4,6 +4,7 @@ const usuariosController= require('../controllers/usuarios.controller');
 
 const isAuth = require('../util/isAuth');
 
+router.get('/', usuariosController.get_login);
 
 router.get('/login', usuariosController.get_login);
 

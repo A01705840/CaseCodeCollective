@@ -60,6 +60,7 @@ app.use(multer({ storage: fileStorage }).single('csv'));
 
 const rutasUsuarios = require('./routes/usuarios.routes');
 app.use('/Usuario', rutasUsuarios);
+app.use('/', rutasUsuarios);
 
 const rutasSignup = require('./routes/usuarios.routes');
 app.use('/Usuario', rutasSignup);
