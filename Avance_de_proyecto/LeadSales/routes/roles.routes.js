@@ -5,11 +5,13 @@ const router = express.Router();
 const rolesController= require('../controllers/roles.controller');
 
 const isAuth = require('../util/isAuth');
+const canViewRoles = require('../util/canViewRoles');
 
-router.get('/consultas', isAuth, rolesController.get_mostrarRoles);
-router.post('/eliminar', isAuth,  rolesController.post_eliminar);
-router.get('/agregar', isAuth, rolesController.get_agregarRol);
-router.post('/agregar', isAuth, rolesController.post_agregarRol);
+
+router.get('/consultas', canViewRoles, isAuth, rolesController.get_mostrarRoles);
+router.post('/eliminar', canViewRoles,  isAuth,  rolesController.post_eliminar);
+router.get('/agregar', canViewRoles,  isAuth, rolesController.get_agregarRol);
+router.post('/agregar', canViewRoles,  isAuth, rolesController.post_agregarRol);
 router.get('/equipo', isAuth, rolesController.get_equipo);
 router.post('/cambiarRol', isAuth, rolesController.post_cambiarRol);
 router.get('/buscar/:q', isAuth, rolesController.get_buscar);

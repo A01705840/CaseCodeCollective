@@ -1,6 +1,6 @@
 <%- include('includes/head.ejs', {username: username, permisos: permisos}) %>
 
-<% for (permiso of permisos) {%>
+<% for (let permiso of permisos) {%>
   <% if (permiso == 'Consultar roles.') { %>
       <h2>ROLES</h2>
   <% } %>
