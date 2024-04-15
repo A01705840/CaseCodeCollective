@@ -1,10 +1,12 @@
 const Version = require('../models/version.model');
+const Version_almacena_leads = require('../models/version_almacena_leads.model');
 const Lead= require('../models/lead.model');
 const Usuario= require('../models/usuario.model');
 
 const csv = require('fast-csv');
 const fs = require('fs');
 const { fileLoader } = require('ejs');
+const { version } = require('os');
 
 
 function convertirFecha(fecha) {
@@ -26,7 +28,7 @@ function convertirFecha(fecha) {
     return año + '-' + mes + '-' + dia;
 }
 
-exports.get_historial = (req, res, next) => {
+exports.get_historial = async (req, res, next) => {
     Version.fetch(req.params.IDVersion)
     Version.fetch(req.params.IDUser)
         .then(([rows, fieldData]) => {
@@ -44,62 +46,70 @@ exports.get_historial = (req, res, next) => {
 }
 
 exports.post_historial = async (req, res, next) => {
-    let fileRows = [];
     let fila = 0;
-    try {
+    let primero;
+        await Version.guardar_nuevo(1, "Hola2");
         csv.parseFile(req.file.path)
-            .on("data",async function (data) {
-                if (fila > 0) {
+            .on("data", async function (rowData) {
+                if (fila > 1) {
                     try {
-                        fileRows.push(data); 
-                        let rowData =fileRows.pop();
-                        if(rowData[21]=="TRUE"){
-                            rowData[21]=1;
-                        }
-                        if(rowData[21]=="FALSE"){
-                            rowData[21]=0;
-                        }if(rowData[20]=="Si"){
-                            rowData[20]=1;
-                        }
-                        if(rowData[20]=="No"){
-                            rowData[20]=0;
+                        if (rowData[21] === "TRUE") {
+                            rowData[21] = 1;
+                        } else if (rowData[21] === "FALSE") {
+                            rowData[21] = 0;
+                        } else if (rowData[20] === "Si") {
+                            rowData[20] = 1;
+                        } else if (rowData[20] === "No") {
+                            rowData[20] = 0;
                         }
                         rowData[9] = convertirFecha(rowData[9]);
-                        await Usuario.guardar_nuevo(rowData[17]);
-                        await Lead.guardar_nuevo(rowData[17], rowData[0], rowData[1], rowData[9], rowData[18], rowData[19], rowData[15], rowData[20], rowData[21]);
+                        // Ejecutar ambas consultas y esperar a que se completen
+                        const [usuarioResult, leadResult] =await Promise.all([
+                            Usuario.guardar_nuevo(rowData[17]),
+                            Lead.guardar_nuevo(rowData[17], rowData[0], rowData[1], rowData[9], rowData[18], rowData[19], rowData[15], rowData[20], rowData[21]),
+                        ]);
                     } catch (error) {
                         console.log(error);
-                }    
+                    }
+                }
+                if(fila==1){
+                    fila++
+                    try {
+                        if (rowData[21] === "TRUE") {
+                            rowData[21] = 1;
+                        } else if (rowData[21] === "FALSE") {
+                            rowData[21] = 0;
+                        } else if (rowData[20] === "Si") {
+                            rowData[20] = 1;
+                        } else if (rowData[20] === "No") {
+                            rowData[20] = 0;
+                        }
+                        rowData[9] = convertirFecha(rowData[9]);
+
+                        // Ejecutar ambas consultas y esperar a que se completen
+                        const [usuarioResult, leadResult] =await Promise.all([
+                            Usuario.guardar_nuevo(rowData[17]),
+                            Lead.guardar_nuevo(rowData[17], rowData[0], rowData[1], rowData[9], rowData[18], rowData[19], rowData[15], rowData[20], rowData[21]),
+                            a= await Lead.max(),
+                            primero=a[0][0]['MAX(IDLead)'],
+                        ]);
+                    } catch (error) {
+                        console.log(error);
+                    }
                 }
                 fila++;
             })
             .on("end", async function () {
                 fs.unlinkSync(req.file.path);
+                const b= await Lead.max();
+                const ulitmo=b[0][0]['MAX(IDLead)']
+                for (let i = primero; i <= ulitmo; i++) {
+                    await Version_almacena_leads.guardar_nuevo_p(i);
+                }
                 console.log("Registros guardados exitosamente");
+            })
+            .on("error", function (error) {
+                console.log(error);
             });
-    } catch (error) {
-        console.log(error);
-    }
-    res.redirect('/lead/historial');
-};
-exports.algo = (req, res, next) => {
-    
-    for(let i of conjunto)  {
-        Modelo.getAlgo().then(([rows, fieldData]) => {
-        })
-    }
-    res.redirect('/lead/historial');
-};
-
-exports.algo = async (req, res, next) => {
-    
-    for(let i of conjunto)  {
-        try {
-            [rows, fieldData] = await Modelo.getAlgo();
-        } catch (error) {
-            
-        }      
-    }
-
     res.redirect('/lead/historial');
 };

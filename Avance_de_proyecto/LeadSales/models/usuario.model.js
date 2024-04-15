@@ -21,8 +21,8 @@ module.exports = class Usuario {
             console.log(error);
         });
     }
-    static guardar_nuevo(nombre_usuario){
-        return db.execute(
+    static async guardar_nuevo(nombre_usuario){
+        return await db.execute(
             `
             INSERT INTO usuario (Nombre) SELECT ?
             WHERE NOT EXISTS ( SELECT 1 FROM usuario WHERE Nombre = ? )
