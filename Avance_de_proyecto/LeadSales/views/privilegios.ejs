@@ -30,7 +30,9 @@
                         <td class="p-3 text-sm font-semibold tracking-wide text-left"><%= funcionesRoles[descripcion].id -2 %>. <%= descripcion %></td>
                         <td style="text-align: center;">
                             <input type="checkbox" class="privilege-checkbox" 
+                            // Se asigna el id del rol 
                             data-role="<%= funcionesRoles[descripcion].roles && funcionesRoles[descripcion].roles[0] ? funcionesRoles[descripcion].roles[0].id : '' %>" 
+                            // Se asigna el id del privilegio
                             data-privilege="<%= funcionesRoles[descripcion].id %>"  
                             style="width: 20px; height: 20px; margin-right: 50%;" 
                             <% if(shouldCheck) { %> checked <% } %>>
