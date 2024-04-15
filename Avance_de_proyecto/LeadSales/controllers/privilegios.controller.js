@@ -2,15 +2,15 @@ const privilegios = require('../models/privilegios.model');
 
 exports.get_privilegios = (req, res, next) => {
     // Obtener el idRol de la solicitud
-    let idRol = req.params.idRol;
-
+    let idRol = req.params.IDRol;
+    console.log("idRol:",idRol);
 
     privilegios.fetchAll(idRol)
         .then(data => {
            // Crear un objeto para almacenar las funciones y roles
             let funcionesRoles = {};
             //console.log("idRol:",idRol);
-
+            
             // Iterar sobre los datos y agregar cada funcion, rol y sus IDs al objeto funcionesRoles
             data.forEach(item => {
                 //console.log(`Descripcion: ${item.Descripcion}, IDFuncion: ${item.IDFuncion}, IDRol: ${item.IDRol}, TipoRol: ${item.TipoRol}`);
@@ -22,11 +22,11 @@ exports.get_privilegios = (req, res, next) => {
                 funcionesRoles[item.Descripcion].roles.push({id: item.IDRol, nombre: item.TipoRol});
                 }
             });
-        
+            
             // Obtener el nombre del rol
             let nombreRol = data.find(item => item.TipoRol !== null)?.TipoRol;
-        
-    
+            
+            
             // Renderizar la vista con el objeto funcionesRoles, maxRoles y nombresRoles
             res.render('privilegios', {
                 username: req.session.username || '',
@@ -41,7 +41,7 @@ exports.get_privilegios = (req, res, next) => {
 
 exports.post_privilegios = async function(req, res, next) {
     var changes = req.body;
-
+    
     try {
         //Crear un array de objetos privilegio
         let privilegiosArray = changes.privileges.map(privilege => ({
@@ -52,7 +52,7 @@ exports.post_privilegios = async function(req, res, next) {
             
             //se llama a la funcion actualizarPrivilegios del modelo privilegios
             await privilegios.actualizarPrivilegios(privilegiosArray);
-        
+
         res.json({message: 'Cambios guardados correctamente'});
     } catch (error) {
         console.error('Error:', error);

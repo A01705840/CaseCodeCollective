@@ -47,6 +47,15 @@ module.exports = class Lead {
     static fetchOne(NombreLead) {
         return db.execute('Select * FROM usuario WHERE NombreLead = ?', [NombreLead]);
     }
+    static fetchOneLeadbyid(id) {
+        return db.execute('Select * FROM leads WHERE IDLead = ?', [id]);
+    }
+
+    static update(data) {
+        return db.execute('UPDATE leads SET asignado_a = ?, Telefono = ?, NombreLead = ?, FechaPrimerMensaje = ?, Embudo = ?, Etapa = ?, Status = ?, Archivado = ?, CreadoManual = ? WHERE IDLead = ?',
+            [data.asignado_a, data.Telefono, data.NombreLead, data.FechaPrimerMensaje, data.Embudo, data.Etapa, data.Status, data.Archivado, data.CreadoManual, data.IDLead]);
+    }
+
     static eliminar(id) {
         return db.execute('DELETE FROM leads WHERE IDLead = ?', [id]);
     }

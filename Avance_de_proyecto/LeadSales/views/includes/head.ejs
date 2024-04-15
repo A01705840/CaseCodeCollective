@@ -7,6 +7,7 @@
   <!-- <link href=".src/output.css" rel="stylesheet"> -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   </head>
   <body>
   <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar" type="button" class="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600 bg-white border-r-2 border-gray-300">
@@ -69,7 +70,7 @@
               </a>
             </li>
             <li>
-              <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+              <a href="/Roles/equipo" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                 <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" width="20" height="15" viewBox="0 0 20 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M9.99998 4.16667C9.0795 4.16667 8.33331 4.91286 8.33331 5.83333C8.33331 6.75381 9.0795 7.5 9.99998 7.5C10.9205 7.5 11.6666 6.75381 11.6666 5.83333C11.6666 4.91286 10.9205 4.16667 9.99998 4.16667ZM6.66665 5.83333C6.66665 3.99238 8.15903 2.5 9.99998 2.5C11.8409 2.5 13.3333 3.99238 13.3333 5.83333C13.3333 7.67428 11.8409 9.16667 9.99998 9.16667C8.15903 9.16667 6.66665 7.67428 6.66665 5.83333ZM4.16665 7.5C3.70641 7.5 3.33331 7.8731 3.33331 8.33333C3.33331 8.79357 3.70641 9.16667 4.16665 9.16667C4.62688 9.16667 4.99998 8.79357 4.99998 8.33333C4.99998 7.8731 4.62688 7.5 4.16665 7.5ZM1.66665 8.33333C1.66665 6.95262 2.78593 5.83333 4.16665 5.83333C5.54736 5.83333 6.66665 6.95262 6.66665 8.33333C6.66665 9.71405 5.54736 10.8333 4.16665 10.8333C2.78593 10.8333 1.66665 9.71405 1.66665 8.33333ZM15.8333 7.5C15.3731 7.5 15 7.8731 15 8.33333C15 8.79357 15.3731 9.16667 15.8333 9.16667C16.2935 9.16667 16.6666 8.79357 16.6666 8.33333C16.6666 7.8731 16.2935 7.5 15.8333 7.5ZM13.3333 8.33333C13.3333 6.95262 14.4526 5.83333 15.8333 5.83333C17.214 5.83333 18.3333 6.95262 18.3333 8.33333C18.3333 9.71405 17.214 10.8333 15.8333 10.8333C14.4526 10.8333 13.3333 9.71405 13.3333 8.33333ZM9.99998 11.6667C8.59784 11.6667 7.39595 12.5327 6.90384 13.7621C6.75109 14.1437 6.66665 14.561 6.66665 15V15.8333H13.3333V15C13.3333 14.561 13.2489 14.1437 13.0961 13.7621C12.604 12.5327 11.4021 11.6667 9.99998 11.6667ZM15 15.8333H17.5V15C17.5 14.0795 16.7538 13.3333 15.8333 13.3333C15.4533 13.3333 15.103 13.4601 14.8222 13.6748C14.9382 14.0975 15 14.542 15 15V15.8333ZM14.1072 12.148C13.2045 10.8505 11.7022 10 9.99998 10C8.29773 10 6.79543 10.8505 5.89279 12.148C5.38949 11.8428 4.79856 11.6667 4.16665 11.6667C2.3257 11.6667 0.833313 13.1591 0.833313 15V16.6667C0.833313 17.1269 1.20641 17.5 1.66665 17.5H18.3333C18.7935 17.5 19.1666 17.1269 19.1666 16.6667V15C19.1666 13.1591 17.6743 11.6667 15.8333 11.6667C15.2014 11.6667 14.6105 11.8428 14.1072 12.148ZM5.17771 13.6748C4.89691 13.4601 4.5467 13.3333 4.16665 13.3333C3.24617 13.3333 2.49998 14.0795 2.49998 15V15.8333H4.99998V15C4.99998 14.542 5.06176 14.0975 5.17771 13.6748Z" fill="#4A5567"/>
                 </svg>                
@@ -81,14 +82,6 @@
             <br>
             <br>
             <br>
-            <li>
-              <a href="/usuario/signup" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"  width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path fill-rule="evenodd" clip-rule="evenodd" d="M16 8.66663C16 10.7884 15.1571 12.8232 13.6569 14.3235C12.1566 15.8238 10.1217 16.6666 8 16.6666C5.87827 16.6666 3.84344 15.8238 2.34315 14.3235C0.842855 12.8232 0 10.7884 0 8.66663C0 6.54489 0.842855 4.51006 2.34315 3.00977C3.84344 1.50948 5.87827 0.666626 8 0.666626C10.1217 0.666626 12.1566 1.50948 13.6569 3.00977C15.1571 4.51006 16 6.54489 16 8.66663ZM10 5.66663C10 6.19706 9.78929 6.70577 9.41421 7.08084C9.03914 7.45591 8.53043 7.66663 8 7.66663C7.46957 7.66663 6.96086 7.45591 6.58579 7.08084C6.21071 6.70577 6 6.19706 6 5.66663C6 5.13619 6.21071 4.62749 6.58579 4.25241C6.96086 3.87734 7.46957 3.66663 8 3.66663C8.53043 3.66663 9.03914 3.87734 9.41421 4.25241C9.78929 4.62749 10 5.13619 10 5.66663ZM8 9.66663C7.0426 9.66643 6.10528 9.94111 5.29942 10.458C4.49355 10.9749 3.85304 11.7124 3.454 12.5826C4.01668 13.2372 4.71427 13.7624 5.49894 14.1221C6.28362 14.4818 7.13681 14.6676 8 14.6666C8.86319 14.6676 9.71638 14.4818 10.5011 14.1221C11.2857 13.7624 11.9833 13.2372 12.546 12.5826C12.147 11.7124 11.5064 10.9749 10.7006 10.458C9.89472 9.94111 8.9574 9.66643 8 9.66663Z" fill="#4A5567"/>
-                </svg>
-                <span class="flex-1 ms-3 whitespace-nowrap">Sign up</span>
-              </a>
-            </li>
             <li>
               <a href="/usuario/logout" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                 <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"  width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">

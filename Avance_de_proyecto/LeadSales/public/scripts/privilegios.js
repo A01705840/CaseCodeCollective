@@ -21,6 +21,8 @@ window.onload = function() {
             roleID: null,
             privileges: []
         };
+        changes.privileges.push({privilegeID:'1', checked:true});
+        changes.privileges.push({privilegeID:'2', checked:true});
         //con la variable que habiamos creado anteriormente, se recorren todos los checkboxes
         //y se obtienen los datos de los checkboxes
         checkboxes.forEach(function(checkbox) {

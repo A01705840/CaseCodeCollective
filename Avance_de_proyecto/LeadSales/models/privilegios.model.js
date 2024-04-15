@@ -29,7 +29,15 @@ module.exports = class Privilegios {
         // Primero se obtiene el roleID de uno de los privilegios.
         // Asumimos que todos los privilegios tienen el mismo roleID.
         let roleID = privilegios[0].roleID;
-    
+        let rolfuncion = null;
+        await db.execute(`
+            SELECT FechaRolFuncion FROM rol_adquiere_funcion
+            WHERE IDRol = ?
+            GROUP BY FechaRolFuncion;
+        `, [roleID]).then(([data]) => {
+           rolfuncion = data;
+        });
+
         // Luego, elimina sólo los registros que corresponden a ese roleID.
         await db.execute(`
             DELETE FROM rol_adquiere_funcion
@@ -40,10 +48,8 @@ module.exports = class Privilegios {
         for (let privilegio of privilegios) {
             console.log(`Procesando privilegio: ${JSON.stringify(privilegio)}`);
             if (privilegio.checked) {
-                await db.execute(`
-                    INSERT INTO rol_adquiere_funcion (IDRol, IDFuncion)
-                    VALUES (?, ?)
-                `, [Number(privilegio.roleID), Number(privilegio.privilegeID)]);
+                await db.execute('INSERT INTO rol_adquiere_funcion (IDRol, IDFuncion, FechaRolFuncion, FechaRolFuncionActualizacion) VALUES (?, ?, ?, CURRENT_TIMESTAMP)',
+                [Number(privilegio.roleID), Number(privilegio.privilegeID), rolfuncion[0].FechaRolFuncion]);
             }
         }
     }
