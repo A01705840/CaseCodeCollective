@@ -51,15 +51,22 @@
 <!-- -------- -->
 
 <div class="p-4 sm:ml-20 sm:mr-10 font-sans">
-  <div class="flex flex-col justify-right p-4 border-2 border-gray-200 rounded-lg dark:border-gray-700 bg-slate-200" style="height:970px; overflow-y:visible;">
+  <div class="flex flex-col justify-right p-4 border-2 border-gray-200 rounded-lg dark:border-gray-700 bg-slate-200" style="height:auto; overflow-y:auto;">
     <div class="inline-flex justify-between items-center">
       <span style='font-size:30px;'>👥 Mi Equipo</span>
       <input type="text" id="search" name="q" placeholder="Buscar usuario" class="search-bar py-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" style="padding-left: 20px; padding-right: 350px; "><br><br>
       <div class="" style="padding-right: 0px;">
-        <a href="/Roles/consultas">
-          <button class="bg-white hover:bg-indigo-600 text-black hover:text-white py-2 px-4 rounded-full transition duration-300">Roles</button>
-        </a>
-        <button class="bg-white hover:bg-indigo-600 text-black hover:text-white py-2 px-4 rounded-full transition duration-300 ml-2">Agregar Cuenta de Empleado</button>
+        <% for (let permiso of permisos) { %>
+          <% if (permiso.Descripcion == 'Consultar roles.') { %>
+            <a href="/Roles/consultas">
+              <button class="bg-white hover:bg-indigo-600 text-black hover:text-white py-2 px-4 rounded-full transition duration-300">Roles</button>
+            </a>
+          <% } %>
+          <% if (permiso.Descripcion == 'Crear usuario.') { %>
+            <button class="bg-white hover:bg-indigo-600 text-black hover:text-white py-2 px-4 rounded-full transition duration-300 ml-2">Agregar Cuenta de Empleado</button>
+          <% } %>
+        <% } %>
+        
       </div>
     </div>
     <div class="flex flex-col items-center justify-center h-screen">
