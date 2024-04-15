@@ -7,18 +7,18 @@ const canEdit = require('../util/canEdit');
 const LeadsController = require('../controllers/leads.controller');
 const VersionController = require('../controllers/version.controller');
 
-router.get('/Analitica', LeadsController.get_analitica);
-router.get('/', LeadsController.get_root);
+router.get('/Analitica', isAuth, LeadsController.get_analitica);
+router.get('/', isAuth, LeadsController.get_root);
 
-router.get('/Historial', VersionController.get_historial);
-router.post('/Historial', VersionController.post_historial);
+router.get('/Historial', isAuth, VersionController.get_historial);
+router.post('/Historial', isAuth, VersionController.post_historial);
 
-router.get('/Leads', LeadsController.get_leads);
-router.post('/Leads/eliminar', LeadsController.post_eliminar_lead);
+router.get('/Leads', isAuth, LeadsController.get_leads);
+router.post('/Leads/eliminar', isAuth, LeadsController.post_eliminar_lead);
 
-router.get('/modificar/:id', LeadsController.get_modificar_lead);
-router.post('/modificar', LeadsController.post_modificar_lead);
+router.get('/modificar/:id', isAuth, LeadsController.get_modificar_lead);
+router.post('/modificar', isAuth, LeadsController.post_modificar_lead);
 
-router.post('/Analitica', LeadsController.postAnalitica);
+router.post('/Analitica', isAuth, LeadsController.postAnalitica);
 
 module.exports = router;

@@ -7,10 +7,12 @@ const isAuth = require('../util/isAuth');
 
 router.get('/login', usuariosController.get_login);
 
-router.get('/signup', isAuth, usuariosController.get_signup);
+router.post('/login', usuariosController.post_login);
 
-router.post('/signup', isAuth, usuariosController.post_signup);
+router.get('/signup', usuariosController.get_signup);
 
-router.get('/logout', usuariosController.get_logout);
+router.post('/signup', usuariosController.post_signup);
+
+router.get('/logout', isAuth, usuariosController.get_logout);
 
 module.exports = router;

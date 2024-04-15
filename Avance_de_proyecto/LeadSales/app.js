@@ -34,6 +34,11 @@ app.use((request, response, next) => {
 const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
+//Protección contra ataques de CSRF
+const csrf = require('csurf');
+const csrfProtection = csrf();
+app.use(csrfProtection); 
+
 const multer = require('multer');
 
 //
