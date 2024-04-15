@@ -1,5 +1,54 @@
-<%- include('includes/head.ejs', {username: username}) %>
+<%- include('includes/head.ejs', {
+  username: username,
+  permisos: permisos}) %>
 
+
+<!-- -------- -->
+<div id="modal" onclick="cerrarModal()" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.3);" class="flex items-center justify-center">
+  <div onclick="event.stopPropagation()" class="relative transform overflow-hidden rounded-lg bg-gray-50 dark:bg-gray-800 text-left shadow-xl transition-all" style="width: 600px; height: 580px;">
+    <h1 class="text-xl font-bold capitalize text-gray-800 dark:text-white" style="padding-left: 20px; padding-top: 20px;">Account settings</h1>
+    <section class="mx-auto max-w-4xl rounded-md bg-gray-50 p-6 shadow-md dark:bg-gray-800">
+      <form>
+        <div class="mt-4 grid grid-cols-1 gap-6 sm:grid-cols-1">
+          <div>
+            <label class="text-gray-800 dark:text-gray-200" for="nombre">Nombre Usuario:</label>
+            <input type="text" id="nombre" name="nombre" required class="mt-2 block w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-gray-700 focus:border-blue-500 focus:outline-none focus:ring dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:focus:border-blue-500" />
+          </div>
+
+          <div>
+            <label class="text-gray-800 dark:text-gray-200" for="correo">Email:</label>
+            <input type="email" id="correo" required class="mt-2 block w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-gray-700 focus:border-blue-500 focus:outline-none focus:ring dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:focus:border-blue-500" />
+          </div>
+
+          <div>
+            <label class="text-gray-800 dark:text-gray-200">Rol:</label>
+            <select id="rol" name="rol" class="mt-2 block w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-gray-700 focus:border-blue-500 focus:outline-none focus:ring dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:focus:border-blue-500"></select>
+          </div>
+
+          <div>
+            <label class="text-gray-800 dark:text-gray-200">Nombre Completo:</label>
+            <input id="nombre" name="nombre" class="mt-2 block w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-gray-700 focus:border-blue-500 focus:outline-none focus:ring dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:focus:border-blue-500"></select>
+          </div>
+
+          <div>
+            <label class="text-gray-800 dark:text-gray-200">Contraseña:</label>
+            <input type="password" id="password" name="password" class="mt-2 block w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-gray-700 focus:border-blue-500 focus:outline-none focus:ring dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:focus:border-blue-500"></select>
+          </div>
+
+          <div>
+            <label class="text-gray-800 dark:text-gray-200">Repetir contraseña:</label>
+            <input type="password" id="repeat-password" name="repeat-password" class="mt-2 block w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-gray-700 focus:border-blue-500 focus:outline-none focus:ring dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:focus:border-blue-500"></input>
+          </div>
+
+          <div class="mt-6 flex justify-end">
+            <button type="button" onclick="cerrarModal()" class="text-gray-800 hover:text-black" style="border: none; padding: 10px 20px; text-align: center; text-decoration: none; display: inline-block; font-size: 25px; margin: 0; cursor: pointer; position: absolute; top: 10px; right: 20px; transition: background-color 0.3s ease; border-radius: 50%;">X</button>
+          </div>
+        </div>
+      </form>
+    </section>
+  </div>
+</div>
+<!-- -------- -->
 
 <div class="p-4 sm:ml-20 sm:mr-10 font-sans">
   <div class="flex flex-col justify-right p-4 border-2 border-gray-200 rounded-lg dark:border-gray-700 bg-slate-200" style="height:970px; overflow-y:visible;">
@@ -10,6 +59,7 @@
         <a href="/Roles/consultas">
           <button class="bg-white hover:bg-indigo-600 text-black hover:text-white py-2 px-4 rounded-full transition duration-300">Roles</button>
         </a>
+        <button class="bg-white hover:bg-indigo-600 text-black hover:text-white py-2 px-4 rounded-full transition duration-300 ml-2">Agregar Cuenta de Empleado</button>
       </div>
     </div>
     <div class="flex flex-col items-center justify-center h-screen">
