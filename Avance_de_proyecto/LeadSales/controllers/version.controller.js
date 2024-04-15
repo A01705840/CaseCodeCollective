@@ -51,7 +51,7 @@ exports.post_historial = async (req, res, next) => {
         await Version.guardar_nuevo(1, "Hola2");
         csv.parseFile(req.file.path)
             .on("data", async function (rowData) {
-                if (fila > 1) {
+                if (fila > 0) {
                     try {
                         if (rowData[21] === "TRUE") {
                             rowData[21] = 1;
@@ -67,31 +67,6 @@ exports.post_historial = async (req, res, next) => {
                         const [usuarioResult, leadResult] =await Promise.all([
                             Usuario.guardar_nuevo(rowData[17]),
                             Lead.guardar_nuevo(rowData[17], rowData[0], rowData[1], rowData[9], rowData[18], rowData[19], rowData[15], rowData[20], rowData[21]),
-                        ]);
-                    } catch (error) {
-                        console.log(error);
-                    }
-                }
-                if(fila==1){
-                    fila++
-                    try {
-                        if (rowData[21] === "TRUE") {
-                            rowData[21] = 1;
-                        } else if (rowData[21] === "FALSE") {
-                            rowData[21] = 0;
-                        } else if (rowData[20] === "Si") {
-                            rowData[20] = 1;
-                        } else if (rowData[20] === "No") {
-                            rowData[20] = 0;
-                        }
-                        rowData[9] = convertirFecha(rowData[9]);
-
-                        // Ejecutar ambas consultas y esperar a que se completen
-                        const [usuarioResult, leadResult] =await Promise.all([
-                            Usuario.guardar_nuevo(rowData[17]),
-                            Lead.guardar_nuevo(rowData[17], rowData[0], rowData[1], rowData[9], rowData[18], rowData[19], rowData[15], rowData[20], rowData[21]),
-                            a= await Lead.max(),
-                            primero=a[0][0]['MAX(IDLead)'],
                         ]);
                     } catch (error) {
                         console.log(error);
@@ -101,15 +76,12 @@ exports.post_historial = async (req, res, next) => {
             })
             .on("end", async function () {
                 fs.unlinkSync(req.file.path);
-                const b= await Lead.max();
-                const ulitmo=b[0][0]['MAX(IDLead)']
-                for (let i = primero; i <= ulitmo; i++) {
-                    await Version_almacena_leads.guardar_nuevo_p(i);
-                }
                 console.log("Registros guardados exitosamente");
+                res.redirect('/lead/historial');
             })
             .on("error", function (error) {
                 console.log(error);
+                res.redirect('/lead/historial');
+
             });
-    res.redirect('/lead/historial');
 };
