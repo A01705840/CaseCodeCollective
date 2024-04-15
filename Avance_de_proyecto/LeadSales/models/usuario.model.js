@@ -16,7 +16,16 @@ module.exports = class Usuario {
             return db.execute(
             `INSERT INTO usuario (UserName, Correo, Nombre, Password) 
             VALUES (?, ?, ?, ?)`, 
-            [this.username, this.correo, this.nombre, password_cifrado]);
+            [this.username, this.correo, this.nombre, password_cifrado])
+            .then(() => {
+                return db.execute(
+                    `CALL rol_default(UserName, IDRol, FechaUsuarioRol,FechaUsuarioRolActualizacion)
+                    VALUES (?, ?, ?, ?)`, 
+                    [this.username, 3, NOW(), NOW()])
+            })
+            .catch((error) => {
+                console.log(error);
+            });
         })
         .catch((error) => {
             console.log(error);
