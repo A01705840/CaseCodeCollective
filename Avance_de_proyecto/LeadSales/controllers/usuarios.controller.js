@@ -10,6 +10,7 @@ exports.get_login = (request, response, next) => {
 exports.get_signup = (req, res, next) => {
     res.render('signup', {
         username: req.session.username || '',
+        permisos: req.session.permisos || '',
         registro: true,
     });
 };
