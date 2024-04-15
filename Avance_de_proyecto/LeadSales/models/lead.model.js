@@ -52,8 +52,10 @@ module.exports = class Lead {
     }
 
     static update(data) {
+        console.log('update');
+        console.log(data);
         return db.execute('UPDATE leads SET asignado_a = ?, Telefono = ?, NombreLead = ?, FechaPrimerMensaje = ?, Embudo = ?, Etapa = ?, Status = ?, Archivado = ?, CreadoManual = ? WHERE IDLead = ?',
-            [data.asignado_a, data.Telefono, data.NombreLead, data.FechaPrimerMensaje, data.Embudo, data.Etapa, data.Status, data.Archivado, data.CreadoManual, data.IDLead]);
+            [data.asignado_a, data.telefono, data.nombre, data.fecha, data.embudo, data.etapa, data.status, data.archivado, data.creadomanual, data.id]);
     }
 
     static eliminar(id) {

@@ -5,7 +5,7 @@
     <input type="hidden" id="_csrf" name="_csrf" value="<%= csrfToken %>">
  
     <div id="modal" onclick="cerrarModal()" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.3);" class="flex items-center justify-center">
-        <div onclick="event.stopPropagation()" class="relative transform overflow-hidden rounded-lg bg-indigo-600 text-left shadow-xl transition-all" style="width: 600px; height: 540px;">
+        <div onclick="event.stopPropagation()" class="relative transform overflow-hidden rounded-lg bg-indigo-600 text-left shadow-xl transition-all" style="width: 600px; height: 580px;">
             <h1 class="text-xl font-bold text-white capitalize dark:text-white" style="padding-left: 20px; padding-top: 20px;">Account settings</h1>
             <section class="max-w-4xl p-6 mx-auto bg-indigo-600 rounded-md shadow-md dark:bg-gray-800 ">
                 <form>
@@ -80,9 +80,16 @@
                                 <option value="SI">SI</option>
                             </select>
                         </div>
-    
+                        <div>
+                            <label class="text-white dark:text-gray-200" >Archivado:</label>
+                            <select id="archivado" name="archivado" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
+                                <option value="NO">NO</option>
+                                <option value="SI">SI</option>
+                            </select>
+                            <button id="botonGuardar"onclick="guardarCambios()" class="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-pink-500 rounded-md hover:bg-pink-700 focus:outline-none focus:bg-gray-600" style="position: relative; left: 338px; bottom: 36px;">Guardar cambios</button>
+                        </div>
+
                         <div class="flex justify-end mt-6">
-                            <button id="botonGuardar" class="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-pink-500 rounded-md hover:bg-pink-700 focus:outline-none focus:bg-gray-600" style="position: relative; left: 290px; bottom: 25px;">Guardar cambios</button>
                             <button type="button" onclick="cerrarModal()" class="hover:text-black text-white" style="border: none; padding: 10px 20px; text-align: center; text-decoration: none; display: inline-block; font-size: 25px; margin: 0; cursor: pointer; position: absolute; top: 10px; right: 20px; transition: background-color 0.3s ease; border-radius: 50%;">X</button>
                         </div>
                     </div>
@@ -227,8 +234,11 @@
 
         $('#etapa').val(data.Etapa);
         $('#status').val(data.Status);
+
+        var archivadoSeleccionado = data.Archivado == 1 ? 'SI' : 'NO';
+        $('#archivado').val(archivadoSeleccionado);
+
         var creadomanualSeleccionado = data.CreadoManual == 1 ? 'SI' : 'NO';
-        console.log(creadomanualSeleccionado);
         $('#creadomanual').val(creadomanualSeleccionado); 
 
         $('#asignado_a').val(data.asignado_a);
@@ -251,7 +261,8 @@ function guardarCambios() {
     var embudo = document.getElementById('embudo').value;
     var etapa = document.getElementById('etapa').value;
     var status = document.getElementById('status').value;
-    var creadomanual = document.getElementById('creadomanual').value;
+    var archivado = document.getElementById('archivado').value === 'true' ? 1 : 0;
+    var creadomanual = document.getElementById('creadomanual').value === 'true' ? 1 : 0;
 
     // Crea un objeto con los datos del formulario
     var datos = {
@@ -263,16 +274,23 @@ function guardarCambios() {
         embudo: embudo,
         etapa: etapa,
         status: status,
-        creadomanual: creadomanual
+        creadomanual: creadomanual,
+        archivado: archivado
     };
 
-    // Envía los datos al servidor
-    $.post('/lead/modificar', datos, function(respuesta) {
-        // Aquí puedes manejar la respuesta del servidor
-        console.log(respuesta);
+   // Envía los datos al servidor
+    $.ajax({
+        url: '/lead/modificar',
+        type: 'POST',
+        data: JSON.stringify(datos),
+        contentType: 'application/json',
+        success: function(respuesta) {
+            // Aquí puedes manejar la respuesta del servidor
+            console.log(respuesta);
 
-        // Redirige al usuario a la página de leads
-        window.location.href = '/lead/Leads';
+            // Redirige al usuario a la página de leads
+            window.location.href = '/lead/Leads';
+        }
     });
 }
 
