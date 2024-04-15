@@ -76,6 +76,7 @@ app.use('/Lead', rutasLeads);
 
 app.use((request, response, next) => {
   response.status(404);
+  console.log('404 ERROR');
   response.render(path.join(__dirname, 'views', '404.ejs')); //Manda la respuesta
 });
 

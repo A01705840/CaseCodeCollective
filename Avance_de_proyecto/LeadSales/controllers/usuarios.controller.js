@@ -2,6 +2,8 @@ const Usuario = require('../models/usuario.model');
 
 const bcrypt = require('bcryptjs');
 exports.get_login = (request, response, next) => {
+    const error = request.session.error || '';
+    request.session.error = '';
     console.log('GET LOGIN');
     console.log('SESSION' + JSON.stringify(request.session));
     console.log('BODY' + JSON.stringify(request.body));
@@ -9,7 +11,8 @@ exports.get_login = (request, response, next) => {
         username: request.session.username || '',
         registro: false,
         csrfToken: request.csrfToken(),
-        //permisos: request.session.permisos || [],
+        error: error,
+        permisos: request.session.permisos || [],
     });
 };
 
@@ -23,13 +26,21 @@ exports.post_login = (request, response, next) => {
                 bcrypt.compare(request.body.password, usuario.Password)
                     .then((doMatch) => {
                         if(doMatch) {
-                            console.log('DOMATCH: ' + doMatch);
-                            console.log('USUARIO: ' + usuario.UserName)
-                            request.session.username = usuario.UserName;
-                            request.session.isLoggedIn = true;
-                            response.redirect('/leads/');
+                            console.log('CONTRASEÑA CORRECTA')
+                            Usuario.getPermisos(usuario.UserName)
+                                .then(([permisos, fieldData]) => {
+                                    request.session.permisos = permisos || [];
+                                    console.log(request.session.permisos);
+                                    request.session.username = usuario.UserName;
+                                    request.session.isLoggedIn = true;
+                                    console.log('SESSION' + JSON.stringify(request.session));
+                                    response.redirect('/Lead/');
+                                })
+                                .catch((error) => {
+                                    console.log(error);
+                                });
                         } else {
-                            equest.session.error = "Usuario y/o contraseña incorrectos";
+                            request.session.error = "Usuario y/o contraseña incorrectos";
                             response.redirect('/usuario/login');
                         }
                     })

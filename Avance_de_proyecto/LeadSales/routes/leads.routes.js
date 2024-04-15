@@ -3,12 +3,13 @@ const express = require('express');
 const router = express.Router();
 const isAuth = require('../util/isAuth');
 const canEdit = require('../util/canEdit');
+const canViewRoles = require('../util/canViewRoles');
 
 const LeadsController = require('../controllers/leads.controller');
 const VersionController = require('../controllers/version.controller');
 
 router.get('/Analitica', isAuth, LeadsController.get_analitica);
-router.get('/', isAuth, LeadsController.get_root);
+router.get('/', isAuth, canViewRoles, LeadsController.get_root);
 
 router.get('/Historial', isAuth, VersionController.get_historial);
 router.post('/Historial', isAuth, VersionController.post_historial);

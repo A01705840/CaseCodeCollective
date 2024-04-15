@@ -1,6 +1,7 @@
 const { request } = require('express');
 
 const Lead = require('../models/lead.model');
+const Usuario = require('../models/usuario.model');
 
 exports.get_analitica = (request, response, next) => {
     console.log('GET ANALITICA');
@@ -14,8 +15,10 @@ exports.get_root = (request, response, next) => {
     console.log(request.session.username + request.session.isLoggedIn)
     response.render('home', {
         username: request.session.username || '',
-        registro: false,
         permisos: request.session.permisos || [],
+    })
+    .catch((error) => {
+        console.log(error);
         
     });
 };

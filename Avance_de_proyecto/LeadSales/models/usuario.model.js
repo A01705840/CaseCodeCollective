@@ -25,4 +25,13 @@ module.exports = class Usuario {
     static fetchOne(username) {
         return db.execute('Select * from usuario WHERE UserName = ?', [username]);
     }
+    
+    static getPermisos(username) {
+        return db.execute(`
+            SELECT f.Descripcion
+            FROM funcion f, rol_adquiere_funcion r_a_f, rol r, usuario_tiene_rol u_t_r, usuario u
+            WHERE u.UserName = ? AND u.IDUsuario = u_t_r.IDUsuario AND
+            u_t_r.IDRol = r.IDRol AND r.IDRol = r_a_f.IDRol AND r_a_f.IDFuncion= f.IDFuncion
+        `, [username]);
+    }
 }
