@@ -28,7 +28,7 @@ exports.get_leads = (request, res, next)  => {
     Lead.fetch(request.params.IDLead)
         .then(([rows,fieldData]) => {
             //console.log(NombreLead);
-            console.log(rows.length); 
+            //console.log(rows.length); 
             res.render ('leads', {
                 csrfToken: request.csrfToken,
                 registro: true,
@@ -54,6 +54,7 @@ exports.post_eliminar_lead = (request, response, next) => {
     }).catch((error) => {
         console.log(error);
     });
+    console.log('LEAD ELIMINADO');
 }
 
 exports.get_fechas = () => {

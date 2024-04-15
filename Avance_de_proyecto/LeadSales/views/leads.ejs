@@ -3,7 +3,6 @@
     permisos: permisos}) %>
     <% console.log('Hola') %>
     <input type="hidden" id="_csrf" name="_csrf" value="<%= csrfToken %>">
- 
     <div id="modal" onclick="cerrarModal()" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.3);" class="flex items-center justify-center">
         <div onclick="event.stopPropagation()" class="relative transform overflow-hidden rounded-lg bg-indigo-600 text-left shadow-xl transition-all" style="width: 600px; height: 580px;">
             <h1 class="text-xl font-bold text-white capitalize dark:text-white" style="padding-left: 20px; padding-top: 20px;">Account settings</h1>
@@ -117,8 +116,16 @@
                             <th scope="col" class="px-6 py-3">Lead</th>
                             <th scope="col" class="px-6 py-3">Fecha</th>
                             <th scope="col" class="px-6 py-3">Creador</th>
+                            <% for (let permiso of permisos) { %>
+                                <% if (permiso.Descripcion == 'Modificar leads.') { %>
                             <th scope="col" class="px-6 py-3">Modificar</th>
-                            <th scope="col" class="px-6 py-3">Eliminar</th>
+                                <% } %>
+                            <% } %>
+                            <% for (let permiso of permisos) { %>
+                                <% if (permiso.Descripcion == 'Consultar roles.') { %>
+                                    <th scope="col" class="px-6 py-3">Eliminar</th>
+                                <% } %>
+                            <% } %>
                         </tr>
                     </thead>
                     <tbody id="table_content">
@@ -134,16 +141,24 @@
                             <td class="px-6 py-4">
                                 <%= lead.asignado_a %>
                             </td>
-                            <td class="px-6 py-4 text-center">
-                                <button onclick="event.preventDefault(); modificar(<%=lead.IDLead%>)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded">
-                                    Modificar
-                                </button>
-                            </td>
-                            <td class="px-6 py-4 text-center">
-                                <button onclick="eliminar(<%=lead.IDLead%>)" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-4 rounded">
-                                    Eliminar
-                                </button>
-                            </td>
+                            <% for (let permiso of permisos) { %>
+                                <% if (permiso.Descripcion == 'Modificar leads.') { %>
+                                    <td class="px-6 py-4 text-center">
+                                        <button onclick="event.preventDefault(); modificar(<%=lead.IDLead%>)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded">
+                                            Modificar
+                                        </button>
+                                    </td>
+                                <% } %>
+                            <% } %>
+                            <% for (let permiso of permisos) { %>
+                                <% if (permiso.Descripcion == 'Consultar roles.') { %>
+                                    <td class="px-6 py-4 text-center">
+                                        <button onclick="eliminar(<%=lead.IDLead%>)" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-4 rounded">
+                                            Eliminar
+                                        </button>
+                                    </td>
+                                <% } %>
+                            <% } %>
                         </tr>
                         <% } %>
                         
@@ -159,6 +174,7 @@
     }
     const eliminar = (IDLead) => {
     const csrf = document.getElementById('_csrf').value;
+    console.log('RESULT')
     fetch('Leads/eliminar', {
         method: 'POST',
         headers: {
@@ -169,6 +185,7 @@
     }).then((result) => {
         return result.json()
     }).then((data) => {
+        console.log('DATA')
         document.getElementById('notification').innerHTML = `
         <div class="notification is-primary">
             <button class="eliminar"></button>
@@ -209,7 +226,8 @@
         console.log(err)
     })
     }
-
+</script>
+<script>
     // Almacena el ID del lead para modificar y poder enviarlo al servidor
     var leadId;
     // Función para modificar un lead
