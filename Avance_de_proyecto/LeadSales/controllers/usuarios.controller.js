@@ -24,9 +24,10 @@ exports.post_login = (request, response, next) => {
                     .then((doMatch) => {
                         if(doMatch) {
                             console.log('DOMATCH: ' + doMatch);
+                            console.log('USUARIO: ' + usuario.UserName)
                             request.session.username = usuario.UserName;
                             request.session.isLoggedIn = true;
-                            response.redirect('/');
+                            response.redirect('/leads/');
                         } else {
                             equest.session.error = "Usuario y/o contraseña incorrectos";
                             response.redirect('/usuario/login');

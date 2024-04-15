@@ -11,6 +11,7 @@ exports.get_analitica = (request, response, next) => {
 };
 exports.get_root = (request, response, next) => {
     console.log('GET ROOT');
+    console.log(request.session.username + request.session.isLoggedIn)
     response.render('home', {
         username: request.session.username || '',
         registro: false,
