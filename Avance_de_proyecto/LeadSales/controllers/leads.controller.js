@@ -75,6 +75,7 @@ exports.post_modificar_lead = async (request, response, next) => {
     console.log('post-modificar');
     try {
         // Actualiza el lead en la base de datos
+        console.log(request.body);
         await Lead.update(request.body);
 
         // Envía una respuesta al cliente indicando que la operación fue exitosa
