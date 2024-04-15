@@ -58,6 +58,7 @@ exports.get_analitica = async (req, res) => {
     //     });
 
     const nDays = req.body.nDays;
+    console.log(nDays);
     // const nDays = 70;
 
     const dateActual = new Date(Date.now());
@@ -75,9 +76,8 @@ exports.get_analitica = async (req, res) => {
     //manejar la informacion, uso de ejemplo
 
     const dataChart = []
-    res.send(result)
+    res.send(result [0])
 };
-
 
 exports.postAnalitica = async (req, res) => {
     try {

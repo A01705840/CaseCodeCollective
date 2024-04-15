@@ -41,10 +41,12 @@ module.exports = class Lead {
         }
     }
 
+
     static async fetchByDate(fechas) {
         console.log(db.execute ('SELECT FechaPrimerMensaje, COUNT(IDLead) AS SUMA_IDLead FROM leads WHERE FechaPrimerMensaje <= ? AND FechaPrimerMensaje >= ? GROUP BY FechaPrimerMensaje;', [fechas.fechaActual, fechas.fechaAnterior]))
-        return await db.execute ('SELECT FechaPrimerMensaje, COUNT(IDLead) AS SUMA_IDLead FROM leads GROUP BY FechaPrimerMensaje;')
+        return await db.execute ('SELECT FechaPrimerMensaje, COUNT(IDLead) AS SUMA_IDLead FROM leads WHERE FechaPrimerMensaje <= ? AND FechaPrimerMensaje >= ? GROUP BY FechaPrimerMensaje;', [fechas.fechaActual, fechas.fechaAnterior])
     }
+
     
     static fetchOne(NombreLead) {
         return db.execute('Select * FROM usuario WHERE NombreLead = ?', [NombreLead]);
