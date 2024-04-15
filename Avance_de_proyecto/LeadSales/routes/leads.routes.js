@@ -5,6 +5,7 @@ const isAuth = require('../util/isAuth');
 const canEdit = require('../util/canEdit');
 const canViewRoles = require('../util/canViewRoles');
 const canViewLeads = require('../util/canViewLeads');
+const canViewHistorial = require('../util/canViewHistorial');
 
 const LeadsController = require('../controllers/leads.controller');
 const VersionController = require('../controllers/version.controller');
