@@ -1,8 +1,8 @@
 const privilegios = require('../models/privilegios.model');
 
-exports.get_privilegios = (req, res, next) => {
+exports.get_privilegios = (request, response, next) => {
     // Obtener el idRol de la solicitud
-    let idRol = req.params.IDRol;
+    let idRol = request.params.IDRol;
     console.log("idRol:",idRol);
 
     privilegios.fetchAll(idRol)
@@ -28,10 +28,11 @@ exports.get_privilegios = (req, res, next) => {
             
             
             // Renderizar la vista con el objeto funcionesRoles, maxRoles y nombresRoles
-            res.render('privilegios', {
-                username: req.session.username || '',
+            response.render('privilegios', {
+                username: request.session.username || '',
                 funcionesRoles: funcionesRoles,
                 nombreRol: nombreRol,
+                permisos: request.session.permisos || [],
             });
         })
         .catch(error => {
@@ -39,8 +40,8 @@ exports.get_privilegios = (req, res, next) => {
         });
 };
 
-exports.post_privilegios = async function(req, res, next) {
-    var changes = req.body;
+exports.post_privilegios = async function(request, response, next) {
+    var changes = request.body;
     
     try {
         //Crear un array de objetos privilegio
@@ -53,9 +54,9 @@ exports.post_privilegios = async function(req, res, next) {
             //se llama a la funcion actualizarPrivilegios del modelo privilegios
             await privilegios.actualizarPrivilegios(privilegiosArray);
 
-        res.json({message: 'Cambios guardados correctamente'});
+        response.json({message: 'Cambios guardados correctamente'});
     } catch (error) {
         console.error('Error:', error);
-        res.status(500).json({ message: 'Error al guardar los cambios' });
+        response.status(500).json({ message: 'Error al guardar los cambios' });
     }
 };
