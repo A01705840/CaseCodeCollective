@@ -34,6 +34,11 @@ app.use((request, response, next) => {
 const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
+//Protección contra ataques de CSRF
+const csrf = require('csurf');
+const csrfProtection = csrf();
+app.use(csrfProtection); 
+
 const multer = require('multer');
 
 //
@@ -55,6 +60,7 @@ app.use(multer({ storage: fileStorage }).single('csv'));
 
 const rutasUsuarios = require('./routes/usuarios.routes');
 app.use('/Usuario', rutasUsuarios);
+app.use('/', rutasUsuarios);
 
 const rutasSignup = require('./routes/usuarios.routes');
 app.use('/Usuario', rutasSignup);
@@ -71,6 +77,7 @@ app.use('/Lead', rutasLeads);
 
 app.use((request, response, next) => {
   response.status(404);
+  console.log('404 ERROR');
   response.render(path.join(__dirname, 'views', '404.ejs')); //Manda la respuesta
 });
 

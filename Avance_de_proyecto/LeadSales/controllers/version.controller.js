@@ -2,16 +2,18 @@ const Version = require('../models/version.model');
 const csv = require('fast-csv');
 const fs = require('fs');
 
-exports.get_historial = (req, res, next) => {
-    Version.fetch(req.params.IDVersion)
-    Version.fetch(req.params.IDUser)
+exports.get_historial = (request, res, next) => {
+    console.log('GET HISTORIAL')
+    Version.fetch(request.params.IDVersion)
+    Version.fetch(request.params.IDUser)
         .then(([rows, fieldData]) => {
             console.log(rows.length);
             res.render('historial', {
+                csrfToken: request.csrfToken,
                 registro: true,
                 versiones: rows,
-                username: req.session.username || '',
-                permisos: req.session.permisos || [],
+                username: request.session.username || '',
+                permisos: request.session.permisos || [],
             });
         })
         .catch((error) => {
@@ -19,18 +21,18 @@ exports.get_historial = (req, res, next) => {
         });
 }
 
-exports.post_historial = (req, res, next) => {
-    console.log(req.body);
-    console.log(req.file);
+exports.post_historial = (request, res, next) => {
+    console.log(request.body);
+    console.log(request.file);
 
     const fileRows = [];
-    csv.parseFile(req.file.path)
+    csv.parseFile(request.file.path)
     .on("data", function (data) {
       fileRows.push(data); // push each row
     })
     .on("end", function () {
       console.log(fileRows)
-      fs.unlinkSync(req.file.path);   // remove temp file
+      fs.unlinkSync(request.file.path);   // remove temp file
       //process "fileRows" and respond
     })
 
