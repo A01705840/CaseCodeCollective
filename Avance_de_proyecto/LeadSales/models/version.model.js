@@ -12,7 +12,7 @@ module.exports = class Version {
         return new Date(mi_fecha)
         .then((password_cifrado) => {
             return db.execute(
-            `INSERT INTO version (IDVersion, IDUser, FechaCreacion, NombreVersion) 
+            `INSERT INTO version (IDVersion, IDUsuario, FechaCreacion, NombreVersion) 
                 VALUES (?, ?, ?, ?)`,
             [this.IDVersion, this.IDUser, this.FechaCreacion, this.NombreVersion]);
         })
@@ -20,6 +20,15 @@ module.exports = class Version {
             console.log(error);
         });
 
+    }
+    static async guardar_nuevo(mi_IDUsuario,mi_NombreVersion) {
+    return await db.execute(
+        `INSERT INTO version (IDVersion, IDUsuario, FechaCreacion, NombreVersion) 
+                VALUES (DEFAULT, ?, CURRENT_TIMESTAMP, ?)`,
+        [mi_IDUsuario,mi_NombreVersion]);
+    }
+    static max(){
+        return  db.execute( `SELECT MAX(IDVersion) FROM version;`)
     }
         static fetchAll() {
             return db.execute('Select * from version')
