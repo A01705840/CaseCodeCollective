@@ -33,7 +33,6 @@ exports.get_historial = async (req, res, next) => {
     Version.fetch(req.params.IDVersion)
     Version.fetch(req.params.IDUser)
         .then(([rows, fieldData]) => {
-            console.log(rows.length);
             res.render('historial', {
                 registro: true,
                 versiones: rows,
