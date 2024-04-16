@@ -98,10 +98,12 @@ exports.post_historial = async (req, res, next) => {
             })
             .on("error", function (error) {
                 console.log(error);
+                fs.unlinkSync(req.file.path);
                 res.redirect('/lead/historial');
             });
     } else {
         console.error('Se intentó subir un archivo con un tipo MIME incorrecto:', req.file.originalname);
+        fs.unlinkSync(req.file.path);
         Version.fetch(req.params.IDVersion)
         Version.fetch(req.params.IDUser)
             .then(([rows, fieldData]) => {
