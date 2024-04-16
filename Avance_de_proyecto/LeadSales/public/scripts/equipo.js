@@ -64,3 +64,4 @@ const buscar = () => {
 
 document.getElementById('search').addEventListener('input', buscar);
 
+

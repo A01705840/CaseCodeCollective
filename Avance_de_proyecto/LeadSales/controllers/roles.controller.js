@@ -1,5 +1,6 @@
 const Rol = require('../models/rol.model');
 const privilegios = require('../models/privilegios.model');
+const Usuario = require('../models/usuario.model');
 
 exports.post_eliminar = (request, response, next) => {
     console.log(request.body.IDRol)
@@ -134,4 +135,31 @@ exports.post_cambiarRol = (req, res, next) => {
         .catch((error) => {
             console.error('Error:', error);
         });
+}
+
+exports.get_agregarEmpleado = (request, response, next) => {
+    Rol.fetchAll()
+    .then(([roles, fieldData]) => {
+        response.json(rows);
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+
+}
+exports.post_agregarEmpleado = async (request, response, next) => {
+    console.log('POST-AgregarEmpleado');
+    try {
+        console.log(request.body);
+        const nuevo_usuario = new Usuario(
+            request.body.username, request.body.nombre, request.body.password, request.body.correo
+        );
+        await nuevo_usuario.save(request.body);
+        
+        return response.status(200).json({ message: 'Lead actualizado con éxito' });
+    } catch (error) {
+        // Maneja cualquier error que pueda ocurrir
+        console.error(error);
+        return response.status(500).json({ message: 'Hubo un error al actualizar el lead' });
+    }
 }

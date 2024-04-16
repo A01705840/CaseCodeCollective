@@ -28,3 +28,15 @@ exports.post_signup = (req, res, next) => {
             res.redirect('/usuario/signup');
         });
 };
+
+exports.eliminar_usuario = (request, response, next) => {
+    console.log(request.body.IDUsuario)
+    Usuario.eliminar_usuario(request.body.IDUsuario)
+    .then(([rows,fieldData]) => {
+        Console.log("Registro eliminado exitosamente")
+        response.redirect ('/Roles/equipo');
+    }).catch((error) => {
+        console.log(error)
+        response.redirect ('/Roles/equipo');
+    })
+}

@@ -24,4 +24,13 @@ module.exports = class Usuario {
        static fetchOne(username) {
         return db.execute('Select * from usuario WHERE username = ?', [username]);
     }
+
+    static fetchAll() {
+        return db.execute('SELECT * FROM usuario');
+    }
+
+    static eliminar_usuario(id) {
+        return db.execute('DELETE FROM usuario WHERE IDUsuario = ?', [id]);
+    }
+
 }

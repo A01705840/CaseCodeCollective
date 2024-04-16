@@ -12,5 +12,7 @@ router.get('/equipo', rolesController.get_equipo);
 router.post('/cambiarRol', rolesController.post_cambiarRol);
 router.get('/buscar/:q', rolesController.get_buscar);
 router.get('/buscar', rolesController.get_buscar);
+router.get('/equipo/agregarEmpleado', rolesController.get_agregarEmpleado);
+router.post('/equipo/agregarEmpleado', rolesController.post_agregarEmpleado);
 
 module.exports = router;
