@@ -1,6 +1,5 @@
 <%- include('includes/head.ejs', {
     username: username}) %>
-    <input type="hidden" id="_csrf" name="_csrf" value="<%= csrfToken %>">
     
     <div class="p-4 sm:ml-20 sm:mr-10 font-sans">
         <h1 class="text-2xl font-bold mb-4">Leads</h1>
@@ -62,12 +61,10 @@
         console.log('click')
     }
     const eliminar = (IDLead) => {
-    const csrf = document.getElementById('_csrf').value;
     fetch('Leads/eliminar', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'csrf-token': csrf,
         },
         body: JSON.stringify({IDLead: IDLead})
     }).then((result) => {

@@ -21,7 +21,7 @@ exports.get_leads = (request, res, next)  => {
             //console.log(NombreLead);
             console.log(rows.length); 
             res.render ('leads', {
-                registro: true,
+                registro: false,
                 leads: rows,
                 username: request.session.username || '',
                 permisos: request.session.permisos || [],
