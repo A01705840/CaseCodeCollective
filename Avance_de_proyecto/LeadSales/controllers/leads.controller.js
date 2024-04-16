@@ -21,7 +21,6 @@ exports.get_leads = (request, res, next)  => {
             //console.log(NombreLead);
             console.log(rows.length); 
             res.render ('leads', {
-                csrfToken: request.csrfToken,
                 registro: true,
                 leads: rows,
                 username: request.session.username || '',

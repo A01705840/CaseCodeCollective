@@ -1,7 +1,5 @@
 <%- include('includes/head.ejs', {
-    username: username,
-    permisos: permisos}) %>
-    <% console.log('Hola') %>
+    username: username}) %>
     <input type="hidden" id="_csrf" name="_csrf" value="<%= csrfToken %>">
     
     <div class="p-4 sm:ml-20 sm:mr-10 font-sans">
