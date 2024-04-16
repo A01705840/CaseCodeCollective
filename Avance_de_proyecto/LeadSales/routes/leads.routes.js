@@ -12,6 +12,8 @@ router.get('/', LeadsController.get_root);
 
 router.get('/Historial', VersionController.get_historial);
 router.post('/Historial', VersionController.post_historial);
+router.post('/descargarhistorial', VersionController.post_descargarhistorial);
+
 
 router.get('/Leads', LeadsController.get_leads);
 router.post('/Leads/eliminar', LeadsController.post_eliminar_lead);
