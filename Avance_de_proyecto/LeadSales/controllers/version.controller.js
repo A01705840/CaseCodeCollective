@@ -47,7 +47,6 @@ exports.get_historial = async (req, res, next) => {
 
 exports.post_historial = async (req, res, next) => {
     let fila = 0;
-    let primero;
         await Version.guardar_nuevo(1, "Hola2");
         csv.parseFile(req.file.path)
             .on("data", async function (rowData) {

@@ -42,6 +42,7 @@ const csv = require('fast-csv');
 //fileStorage: Es nuestra constante de configuración para manejar el almacenamiento
 const fileStorage = multer.diskStorage({
     destination: (request, file, callback) => {
+        
         //'public/uploads': Es el directorio del servidor donde se subirán los archivos 
         callback(null, 'public/uploads');
     },
@@ -51,7 +52,17 @@ const fileStorage = multer.diskStorage({
         callback(null, file.originalname);
     },
 });
-app.use(multer({ storage: fileStorage }).single('csv')); 
+
+const fileFilter = (request, file, callback) => {
+  if (file.mimetype == 'text/csv') {
+          callback(null, true);
+  } else {
+    console.error('Se intentó subir un archivo con un tipo MIME incorrecto:', file.originalname);
+    callback(new Error('Solo se permiten archivos CSV'));
+  }
+};
+
+app.use(multer({ storage: fileStorage, fileFilter: fileFilter }).single('csv')); 
 
 const rutasUsuarios = require('./routes/usuarios.routes');
 app.use('/Usuario', rutasUsuarios);
