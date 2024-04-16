@@ -7,6 +7,7 @@ const csv = require('fast-csv');
 const fs = require('fs');
 const { fileLoader } = require('ejs');
 const { version } = require('os');
+const multer = require('multer');
 
 
 function convertirFecha(fecha) {
@@ -38,6 +39,8 @@ exports.get_historial = async (req, res, next) => {
                 versiones: rows,
                 username: req.session.username || '',
                 permisos: req.session.permisos || [],
+                FileTypeError: false,
+                Succes: false,
             });
         })
         .catch((error) => {
@@ -47,6 +50,7 @@ exports.get_historial = async (req, res, next) => {
 
 exports.post_historial = async (req, res, next) => {
     let fila = 0;
+    if (req.file.mimetype == 'text/csv') {
         await Version.guardar_nuevo(1, "Hola2");
         csv.parseFile(req.file.path)
             .on("data", async function (rowData) {
@@ -76,11 +80,44 @@ exports.post_historial = async (req, res, next) => {
             .on("end", async function () {
                 fs.unlinkSync(req.file.path);
                 console.log("Registros guardados exitosamente");
-                res.redirect('/lead/historial');
+                Version.fetch(req.params.IDVersion)
+                Version.fetch(req.params.IDUser)
+                    .then(([rows, fieldData]) => {
+                        console.log(rows.length);
+                        res.render('historial', {
+                            registro: true,
+                            versiones: rows,
+                            username: req.session.username || '',
+                            permisos: req.session.permisos || [],
+                            FileTypeError: false,
+                            Succes: true,
+                        });
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
             })
             .on("error", function (error) {
                 console.log(error);
                 res.redirect('/lead/historial');
-
             });
+    } else {
+        console.error('Se intentó subir un archivo con un tipo MIME incorrecto:', req.file.originalname);
+        Version.fetch(req.params.IDVersion)
+        Version.fetch(req.params.IDUser)
+            .then(([rows, fieldData]) => {
+                console.log(rows.length);
+                res.render('historial', {
+                    registro: true,
+                    versiones: rows,
+                    username: req.session.username || '',
+                    permisos: req.session.permisos || [],
+                    FileTypeError: true,
+                    Succes: false,
+                });
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
 };
