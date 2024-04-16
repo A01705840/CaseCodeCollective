@@ -56,7 +56,7 @@ exports.get_analitica = async (req, res) => {
     //     .catch((error) => {
     //         console.log(error);
     //     });
-
+    // const nDays = req.body.nDays;
     const nDays = req.body.nDays;
     console.log(nDays);
     // const nDays = 70;
@@ -74,9 +74,9 @@ exports.get_analitica = async (req, res) => {
 
 
     //manejar la informacion, uso de ejemplo
-
-    const dataChart = []
-    res.send(result [0])
+    const dataChart = result.map(entry => entry.SUMA_IDLead);
+    // res.send(result [0]);
+    res.send(dataChart);
 };
 
 exports.postAnalitica = async (req, res) => {
