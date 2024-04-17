@@ -40,9 +40,12 @@ module.exports = class Lead {
             return this.fetchAll();
         }
     }
-    static async fetchByDate(nDays) {
-        console.log(db.execute('SELECT * FROM leads GROUP BY ... WHERE DATE<8 AND DATE>90'))
-        return await db.execute('SELECT * FROM leads GROUP BY ... WHERE DATE<8 AND DATE>90')
+    static async fetchByDate() {
+        const date = new Date();
+        const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+        const firstDayOfNextMonth = new Date(date.getFullYear(), date.getMonth() + 1, 1);
+    
+        return await db.execute('SELECT * FROM leads WHERE FechaPrimerMensaje >= ? AND FechaPrimerMensaje < ?', [firstDayOfMonth, firstDayOfNextMonth]);
     }
     static fetchOne(NombreLead) {
         return db.execute('Select * FROM usuario WHERE NombreLead = ?', [NombreLead]);

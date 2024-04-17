@@ -2,9 +2,11 @@ const { request } = require('express');
 
 const Lead = require('../models/lead.model');
 
-exports.get_analitica = (request, response, next) => {
+exports.get_analitica = async (request, response, next) => {
+    const result = await Lead.fetchByDate();
     response.render('analitica', {
         username: request.session.username || '',
+        leads: result[0],
         registro: false,
     });
 };
@@ -52,11 +54,6 @@ exports.get_fechas = () => {
     Lead
 }
 
-exports.postAnalitica = (req, res) => {
-    const nDayss = req.body.nDays; // Obtiene del cuerpo de la peticion, valor que haya en NDays
-    const data =  Lead.fetchByDate(nDayss);
-    res.send(data);
-};
 
 
 exports.get_modificar_lead = (request, response, next) => {

@@ -21,6 +21,6 @@ router.post('/Leads/eliminar', LeadsController.post_eliminar_lead);
 router.get('/modificar/:id', LeadsController.get_modificar_lead);
 router.post('/modificar', LeadsController.post_modificar_lead);
 
-router.post('/Analitica', LeadsController.postAnalitica);
+
 
 module.exports = router;
