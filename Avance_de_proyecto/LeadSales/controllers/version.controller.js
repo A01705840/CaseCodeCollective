@@ -50,7 +50,7 @@ exports.get_historial = async (req, res, next) => {
 exports.post_historial = async (req, res, next) => {
     let fila = 0;
     if (req.file.mimetype == 'text/csv') {
-        await Version.guardar_nuevo(1, "Hola2");
+        await Version.guardar_nuevo(1, "Version");
         csv.parseFile(req.file.path)
             .on("data", async function (rowData) {
                 if (fila > 0) {
