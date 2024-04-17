@@ -160,15 +160,19 @@ let chartData = function(){
             //          this.renderChart();
             //      })
 
-            fetch('/lead/analitica', {method: 'post', body: {
-               "nDayss": 30
-            }}) // Peticiones asincronas del cliente al server
-               .then(res => res.json())
+            fetch('/lead/analitica'+ index, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+            }) // Peticiones asincronas del cliente al server
+                .then(res => res.json())
                 .then(res => {
-                   this.data = res.dataChart;
+                    this.data = res.dates;
+                    console.log(data);
                     this.renderChart();
-                })
-        },
+                })
+        },
         renderChart: function(){
             let c = false;
 

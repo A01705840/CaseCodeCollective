@@ -39,12 +39,14 @@ exports.post_eliminar_lead = (req, res, next) => {
     });
 }
 
-
 exports.get_analitica = (req, res) => {
+    // console.log(req);
     try {
-        const nDays = 365;
+
+        //7 DAY
+        const nDays = 7;
         const dateActual = new Date(Date.now());
-        const milisecondsInDay = 24 * 60 * 60 * 1000;
+        const milisecondsInDay = 24 * 60 * 60 * 1000 ;
         const newDate = dateActual - (nDays * milisecondsInDay)
 
         const data = {
@@ -52,15 +54,14 @@ exports.get_analitica = (req, res) => {
             fechaAnterior: new Date(newDate)
         };
         console.log(data);
-        
-        // Obtener los datos de los leads
+
+        // Get leads data for 7 days
         Lead.fetchByDate(data)
             .then(leadsData => {
-                // Manejar los datos de los leads
                 const leads = leadsData[0];
 
-                // Agrupar los datos por día y calcular el total por día
-                const groupedData = leads.reduce(function(acc, curr) {
+                // Group data by day and calculate total per day for 7 days
+                const groupedData7Days = leads.reduce(function(acc, curr) {
                     const fecha = new Date(curr.FechaPrimerMensaje).toISOString().split('T')[0];
                     if (!acc[fecha]) {
                         acc[fecha] = 0;
@@ -69,34 +70,112 @@ exports.get_analitica = (req, res) => {
                     return acc;
                 }, {});
 
-                // Calcular el total y el promedio diario
-                const total = Object.values(groupedData).reduce((acc, curr) => acc + curr, 0);
-                const upDown = total / Object.keys(groupedData).length;
+                // Calculate total and average per day for 7 days
+                const total7Days = Object.values(groupedData7Days).reduce((acc, curr) => acc + curr, 0);
+                const upDown7Days = total7Days / Object.keys(groupedData7Days).length;
 
-                // Estructurar los datos en el formato deseado
-                const formattedData = {
-                    dates: {
-                        today: {
-                            total: total,
-                            upDown: upDown,
-                            data: {
-                                labels: Object.keys(groupedData),
-                                income: Object.values(groupedData)
-                            }
-                        }
-                        // Puedes agregar más períodos de tiempo aquí si lo deseas
-                    }
-                };
-                const jsonString = JSON.stringify(formattedData);
-                //console.log(jsonString)
-                // Enviar los datos estructurados como respuesta
-                
-                res.render('analitica', {
-                    registro: true,
-                    datosformateados: jsonString,
-                    username: req.session.username || '',
-                    permisos: req.session.permisos || [],
+                // Fetch leads data for 30 days, 185 days, and 365 days
+                const nDaysArray = [30, 185, 365];
+                const promises = nDaysArray.map(numDays => {
+                    const newDate = dateActual - (numDays * milisecondsInDay);
+                    const data = {
+                        fechaActual: new Date(Date.now()),
+                        fechaAnterior: new Date(newDate)
+                    };
+                    return Lead.fetchByDate(data);
                 });
+
+                Promise.all(promises)
+                    .then(results => {
+                        const formattedData = {
+                            dates: {
+                                today: {
+                                    total: total7Days,
+                                    upDown: upDown7Days,
+                                    data: {
+                                        labels: Object.keys(groupedData7Days),
+                                        income: Object.values(groupedData7Days)
+                                    }
+                                },
+                                "7days": {
+                                    total: 0,
+                                    upDown: 0,
+                                    data: {
+                                        labels: [],
+                                        income: []
+                                    }
+                                },
+                                "30days": {
+                                    total: 0,
+                                    upDown: 0,
+                                    data: {
+                                        labels: [],
+                                        income: []
+                                    }
+                                },
+                                "6months": {
+                                    total: 0,
+                                    upDown: 0,
+                                    data: {
+                                        labels: [],
+                                        income: []
+                                    }
+                                },
+                                "year": {
+                                    total: 0,
+                                    upDown: 0,
+                                    data: {
+                                        labels: [],
+                                        income: []
+                                    }
+                                }
+                            }
+                        };
+
+                        // Populate data for 30 days, 185 days, and 365 days
+                        results.forEach((leadsData, index) => {
+                            const leads = leadsData[0];
+                            const numDays = nDaysArray[index];
+                            const groupedData = leads.reduce(function(acc, curr) {
+                                const fecha = new Date(curr.FechaPrimerMensaje).toISOString().split('T')[0];
+                                if (!acc[fecha]) {
+                                    acc[fecha] = 0;
+                                }
+                                acc[fecha] += curr.SUMA_IDLead;
+                                return acc;
+                            }, {});
+                            const total = Object.values(groupedData).reduce((acc, curr) => acc + curr, 0);
+                            const upDown = total / Object.keys(groupedData).length;
+                            formattedData.dates[`${numDays}days`] = {
+                                total: total,
+                                upDown: upDown,
+                                data: {
+                                    labels: Object.keys(groupedData),
+                                    income: Object.values(groupedData)
+                                }
+                            };
+                        });
+
+                        const jsonString = JSON.stringify(formattedData);
+                        console.log(jsonString);
+
+                        //Linea para mostrar JSON EN LA FINAL (PRINCIPAL RUTA)
+                        res.json(jsonString);
+                        
+                
+
+                        // Send the structured data as response
+                        res.render('analitica', {
+                            registro: true,
+                            datosformateados: jsonString,
+                            username: req.session.username || '',
+                            permisos: req.session.permisos || [],
+                        });
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        res.status(500).send("Error al obtener la analítica.");
+                    });
             })
             .catch(error => {
                 console.log(error);
@@ -107,6 +186,7 @@ exports.get_analitica = (req, res) => {
         res.status(500).send("Error al obtener la analítica.");
     }
 };
+
 
 
 // exports.postAnalitica = async (req, res) => {

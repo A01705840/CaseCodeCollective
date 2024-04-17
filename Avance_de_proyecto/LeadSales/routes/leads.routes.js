@@ -9,6 +9,8 @@ router.get('/', LeadsController.get_root);
 
 
 router.get('/Analitica', LeadsController.get_analitica);
+router.get('/Analitica/:index', LeadsController.get_analitica);
+
 //router.post('/Analitica', LeadsController.postAnalitica);
 
 router.get('/Historial', VersionController.get_historial);
