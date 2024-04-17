@@ -118,28 +118,28 @@ Number.prototype.comma_formatter = function() {
 // Boton seleccionar, objeto
 let chartData = function(){
     return {
-        date: 'today',
+        date: 'year',
 
         options: [
             {
                 label: 'Today',
-                value: 1,
+                value: 'today',
             },
             {
                 label: 'Last 7 Days',
-                value: 7,
+                value: '7days',
             },
             {
                 label: 'Last 30 Days',
-                value: 30,
+                value: '30days',
             },
             {
                 label: 'Last 6 Months',
-                value: 182,
+                value: '6months',
             },
             {
                 label: 'This Year',
-                value: 365,
+                value: 'year',
             },
         ],
         showDropdown: false,
@@ -153,18 +153,19 @@ let chartData = function(){
         data: null,
         fetch: function(){
             // Meter la ruta a este fetch, en la cual debe de coincidir 
-            // fetch('https://cdn.jsdelivr.net/gh/swindon/fake-api@master/tailwindAlpineJsChartJsEx1.json')
-            //     .then(res => res.json())
-            //     .then(res => {
-            //         this.data = res.dates;
-            //         this.renderChart();
-            //     })
+            //  fetch('https://cdn.jsdelivr.net/gh/swindon/fake-api@master/tailwindAlpineJsChartJsEx1.json')
+            //      .then(res => res.json())
+            //      .then(res => {
+            //          this.data = res.dates;
+            //          this.renderChart();
+            //      })
+
             fetch('/lead/analitica', {method: 'post', body: {
-                "nDayss": 30
+               "nDayss": 30
             }}) // Peticiones asincronas del cliente al server
-                .then(res => res.json())
+               .then(res => res.json())
                 .then(res => {
-                    this.data = res.dataChart;
+                   this.data = res.dataChart;
                     this.renderChart();
                 })
         },

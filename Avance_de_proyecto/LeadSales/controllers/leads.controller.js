@@ -40,52 +40,82 @@ exports.post_eliminar_lead = (req, res, next) => {
 }
 
 
-exports.get_analitica = async (req, res) => {
-    
-    // Lead.fetch(1)
-    //     .then(([data]) => {
-    //         console.log(data);
-    //         res.render('analitica', {
-    //             registro: true,
-    //             versiones: data,
-    //             username: req.session.username || '',
-    //             permisos: req.session.permisos || [],
-               
-    //         });
-    //     })
-    //     .catch((error) => {
-    //         console.log(error);
-    //     });
-    //const nDays = req.body.nDays;
-    const nDays = 365;
-    console.log(nDays);
-    // const nDays = 70;
-
-    const dateActual = new Date(Date.now());
-    const milisecondsInDay = 24 * 60 * 60 * 1000;
-    const newDate = dateActual - ( nDays * milisecondsInDay )
-
-    const data = {
-        fechaActual : new Date(Date.now()),
-        fechaAnterior : new Date(newDate)
-    }
-    console.log(data)
-    const result = await Lead.fetchByDate(data);
-
-
-    //manejar la informacion, uso de ejemplo
-
-    const dataChart = []
-    res.send(result [0])
-};
-
-exports.postAnalitica = async (req, res) => {
+exports.get_analitica = (req, res) => {
     try {
-        const nDays = req.body.nDays; // Obtiene del cuerpo de la peticion, valor que haya en NDays
-        const data = await Version.fetchByDate(nDays); // Espera a que se resuelva la promesa
-        res.send(data);
+        const nDays = 365;
+        const dateActual = new Date(Date.now());
+        const milisecondsInDay = 24 * 60 * 60 * 1000;
+        const newDate = dateActual - (nDays * milisecondsInDay)
+
+        const data = {
+            fechaActual: new Date(Date.now()),
+            fechaAnterior: new Date(newDate)
+        };
+        console.log(data);
+        
+        // Obtener los datos de los leads
+        Lead.fetchByDate(data)
+            .then(leadsData => {
+                // Manejar los datos de los leads
+                const leads = leadsData[0];
+
+                // Agrupar los datos por día y calcular el total por día
+                const groupedData = leads.reduce(function(acc, curr) {
+                    const fecha = new Date(curr.FechaPrimerMensaje).toISOString().split('T')[0];
+                    if (!acc[fecha]) {
+                        acc[fecha] = 0;
+                    }
+                    acc[fecha] += curr.SUMA_IDLead;
+                    return acc;
+                }, {});
+
+                // Calcular el total y el promedio diario
+                const total = Object.values(groupedData).reduce((acc, curr) => acc + curr, 0);
+                const upDown = total / Object.keys(groupedData).length;
+
+                // Estructurar los datos en el formato deseado
+                const formattedData = {
+                    dates: {
+                        today: {
+                            total: total,
+                            upDown: upDown,
+                            data: {
+                                labels: Object.keys(groupedData),
+                                income: Object.values(groupedData)
+                            }
+                        }
+                        // Puedes agregar más períodos de tiempo aquí si lo deseas
+                    }
+                };
+                const jsonString = JSON.stringify(formattedData);
+                //console.log(jsonString)
+                // Enviar los datos estructurados como respuesta
+                
+                res.render('analitica', {
+                    registro: true,
+                    datosformateados: jsonString,
+                    username: req.session.username || '',
+                    permisos: req.session.permisos || [],
+                });
+            })
+            .catch(error => {
+                console.log(error);
+                res.status(500).send("Error al obtener la analítica.");
+            });
     } catch (error) {
         console.log(error);
         res.status(500).send("Error al obtener la analítica.");
     }
 };
+
+
+// exports.postAnalitica = async (req, res) => {
+//    try {
+//        const nDays = req.body.nDays; // Obtiene del cuerpo de la peticion, valor que haya en NDays
+//        const data = await Version.fetchByDate(nDays); // Espera a que se resuelva la promesa
+//         res.send(data);
+//     } catch (error) {
+//        console.log(error);
+//         res.status(500).send("Error al obtener la analítica.");
+//     }
+// };

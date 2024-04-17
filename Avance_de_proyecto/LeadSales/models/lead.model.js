@@ -48,11 +48,11 @@ module.exports = class Lead {
     }
 
     
-    static fetchOne(NombreLead) {
-        return db.execute('Select * FROM usuario WHERE NombreLead = ?', [NombreLead]);
+    static fetchOne(id) {
+        return db.execute('Select * FROM leads WHERE IDLead = ?', [id]);
     }
     static delete(id) {
-        return db.execute('DELETE FROM lead WHERE IDLead = ?', [id]);
+        return db.execute('DELETE FROM leads WHERE IDLead = ?', [id]);
     }
 
     

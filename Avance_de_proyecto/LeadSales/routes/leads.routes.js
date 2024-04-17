@@ -9,7 +9,7 @@ router.get('/', LeadsController.get_root);
 
 
 router.get('/Analitica', LeadsController.get_analitica);
-router.post('/Analitica', LeadsController.postAnalitica);
+//router.post('/Analitica', LeadsController.postAnalitica);
 
 router.get('/Historial', VersionController.get_historial);
 router.post('/Historial', VersionController.post_historial);
