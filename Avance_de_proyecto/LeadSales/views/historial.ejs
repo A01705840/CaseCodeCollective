@@ -74,15 +74,15 @@
 
 <script>
     function mostrarCarga() {
-        swal({
-            title: 'Now loading',
+        Swal.fire({
+            title: 'Cargando leads a la plataforma...',
             allowEscapeKey: false,
             allowOutsideClick: false,
+            showConfirmButton: false,
             onOpen: () => {
-              swal.mostrarCarga();
-            },
-            showConfirmButton: false
-        })  ;
+                Swal.showLoading(); // Mostrar la animación de carga
+            }
+        });
     }
 
     const openModalButton = document.getElementById('openModalButton');
