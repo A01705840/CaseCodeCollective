@@ -3,21 +3,18 @@ const { request } = require('express');
 const Lead = require('../models/lead.model');
 
 exports.get_analitica = async (request, response, next) => {
-    const result = await Lead.fetchLeadsByDay();
+    const range = request.params.date; // Obtener el rango de la ruta
+    const result = await Lead.fetchLeadsByDay(range);
+    console.log(result[0]);
+    response.json(result[0]); // Devolver los datos como JSON
+};
+
+exports.get_analiticaPRESET = async (request, response, next) => {
+    const result = await Lead.fetchLeadsByDay('1'); // Siempre usa '1' (semana) como valor predeterminado
     console.log(result[0]);
     response.render('analitica', {
         username: request.session.username || '',
         leadsPerDay: result[0], // Resultado de la consulta SQL
-        registro: false,
-    });
-
-
-};
-
-
-exports.get_analiticaPRESET = (request, response, next) => {
-    response.render('analiticaPRESET', {
-        username: request.session.username || '',
         registro: false,
     });
 };
