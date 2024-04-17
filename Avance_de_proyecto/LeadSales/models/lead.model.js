@@ -40,13 +40,24 @@ module.exports = class Lead {
             return this.fetchAll();
         }
     }
-    static async fetchByDate() {
+    static async fetchLeadsByDay() {
         const date = new Date();
-        const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
-        const firstDayOfNextMonth = new Date(date.getFullYear(), date.getMonth() + 1, 1);
+       // const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+        //const firstDayOfNextMonth = new Date(date.getFullYear(), date.getMonth() + 1, 1);
+        const firstDayOfMonth = new Date(2022, 0, 1); // Enero de 2022
+        const firstDayOfNextMonth = new Date(2022, 1, 1); // Febrero de 2022
     
-        return await db.execute('SELECT * FROM leads WHERE FechaPrimerMensaje >= ? AND FechaPrimerMensaje < ?', [firstDayOfMonth, firstDayOfNextMonth]);
+        // Consulta SQL para obtener la cantidad de leads por día
+        const query = `
+            SELECT DATE(FechaPrimerMensaje) as Fecha, COUNT(*) as CantidadLeads 
+            FROM leads 
+            WHERE FechaPrimerMensaje >= ? AND FechaPrimerMensaje < ?
+            GROUP BY DATE(FechaPrimerMensaje)
+        `;
+        return await db.execute(query, [firstDayOfMonth, firstDayOfNextMonth]);
     }
+
+
     static fetchOne(NombreLead) {
         return db.execute('Select * FROM usuario WHERE NombreLead = ?', [NombreLead]);
     }

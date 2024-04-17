@@ -3,13 +3,25 @@ const { request } = require('express');
 const Lead = require('../models/lead.model');
 
 exports.get_analitica = async (request, response, next) => {
-    const result = await Lead.fetchByDate();
+    const result = await Lead.fetchLeadsByDay();
+    console.log(result[0]);
     response.render('analitica', {
         username: request.session.username || '',
-        leads: result[0],
+        leadsPerDay: result[0], // Resultado de la consulta SQL
+        registro: false,
+    });
+
+
+};
+
+
+exports.get_analiticaPRESET = (request, response, next) => {
+    response.render('analiticaPRESET', {
+        username: request.session.username || '',
         registro: false,
     });
 };
+
 exports.get_root = (request, response, next) => {
     response.render('home', {
         username: request.session.username || '',

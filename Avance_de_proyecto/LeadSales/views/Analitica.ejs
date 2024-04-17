@@ -1,20 +1,96 @@
 <%- include('includes/head.ejs', {username: username}) %>
 
 <div class="p-4 sm:ml-20 sm:mr-10 font-sans">
-  <div class="flex flex-col justify-right p-4 border-2 border-gray-200 rounded-lg dark:border-gray-700 bg-slate-200" style="height:970px; overflow-y:visible;">
-      <div class="inline-flex justify-between items-center">
-        <span style='font-size:30px;'>👥 Analíticas</span>
-      </div>
-      <div class="flex flex-col items-center justify-center h-screen">
-          <div class="w-full max-w-2x1 h-full">
-              <div class="flex justify-center sm:mt-4 p-1 border-1 border-gray-200 rounded-lg dark:border-gray-200 bg-white" style="height:auto; overflow-y: auto;  overflow-x: hidden;">
-                  <ul>
-                      <% leadsPerMonth.forEach(function(lead) { %>
-                          <li><%= lead.ID %> - <%= lead.FechaCreacion %></li>
-                      <% }); %>
-                  </ul>
-              </div>
-          </div>
-      </div>
+    <div class="flex flex-col justify-right p-4 border-2 border-gray-200 rounded-lg dark:border-gray-700 bg-slate-200" style="height:970px; overflow-y:visible;">
+        <div class="inline-flex justify-between items-center">
+          <span style='font-size:30px;'>👥 Analíticas</span>
+        </div>
+        <div class="flex flex-col items-center h-full">
+            <div class="w-full max-w-2x1 h-full">
+                <canvas id="leadsChart"></canvas> 
+            </div>
+        </div>
+    </div>
   </div>
-</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const data = <%- JSON.stringify(leadsPerDay) %>.map(item => ({
+        ...item,
+        Fecha: new Date(item.Fecha)
+    }));
+    const ctx = document.getElementById('leadsChart').getContext('2d');
+    const chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: data.map(item => item.Fecha.toISOString().split('T')[0]),
+            datasets: [{
+                label: 'Leads por día',
+                data: data.map(item => item.CantidadLeads),
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1,
+                pointRadius: 5,
+                pointBackgroundColor: 'rgba(75, 192, 192, 1)',
+                fill: true,
+                point: {
+                    onHover: (event, point, dataset, context) => {
+                        event.native.target.style.cursor = 'pointer';
+                    },
+                    onLeave: (event, point, dataset, context) => {
+                        event.native.target.style.cursor = 'default';
+                    }
+                }
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        drawBorder: false,
+                        color: function(context) {
+                            if (context.tick.value == 0)
+                                return 'rgba(0, 0, 0, 0)';
+                            else
+                                return 'rgba(0, 0, 0, 0.1)';
+                        },
+                        drawOnChartArea: false
+                    }
+                },
+                x: {
+                    grid: {
+                        drawBorder: false,
+                        color: function(context) {
+                            if (context.tick.value == 0)
+                                return 'rgba(0, 0, 0, 0)';
+                            else
+                                return 'rgba(0, 0, 0, 0.1)';
+                        },
+                        borderDash: [5, 5]
+                    }
+                }
+            },
+            plugins: {
+                tooltip: {
+                    intersect: false,
+                    mode: 'index',
+                    displayColors: false,
+                    callbacks: {
+                        title: () => {},
+                        label: function(context) {
+                            var label = context.dataset.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            if (context.parsed.y !== null) {
+                                label += new Intl.NumberFormat('es-ES').format(context.parsed.y);
+                            }
+                            return label;
+                        }
+                    }
+                }
+            }
+        }
+    });
+</script>

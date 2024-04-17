@@ -7,6 +7,8 @@ const canEdit = require('../util/canEdit');
 const LeadsController = require('../controllers/leads.controller');
 const VersionController = require('../controllers/version.controller');
 
+router.get('/AnaliticaPRESET', LeadsController.get_analiticaPRESET);
+
 router.get('/Analitica', LeadsController.get_analitica);
 router.get('/', LeadsController.get_root);
 
