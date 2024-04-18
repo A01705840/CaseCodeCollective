@@ -50,29 +50,54 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                    <tr class="bg-gray border-b dark:bg-gray-800 dark:border-gray-700">
+                        <% let row=0; %>
                         <% for (let version of versiones.reverse()) { %>
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            <%= version.NombreVersion %>
-                        </th>
-                        <td class="px-6 py-4">
-                            <%= version.IDVersion %>
-                        </td>
-                        <td class="px-6 py-4">
-                            <%= version.IDUsuario %>
-                        </td>
-                        <td class="px-6 py-4">
-                            <%  let fechaActual = version.FechaCreacion;
-                            // Convertir la fecha a un objeto Date
-                            const fecha = new Date(fechaActual);
-                            // Obtener día, mes y año
-                            const dia = fecha.getDate().toString().padStart(2, '0');
-                            const mes = (fecha.getMonth() + 1).toString().padStart(2, '0'); // El mes comienza desde 0
-                            const año = fecha.getFullYear();
-                            // Crear la cadena en el formato deseado (dd/mm/yyyy)
-                            const fechaFormateada = `${dia}/${mes}/${año}`;%>
-                            <%= fechaFormateada %>
-                        </td>
+                        <% if(row%2==0){ %>
+                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                <%= version.NombreVersion %>
+                            </th>
+                            <td class="px-6 py-4">
+                                <%= version.IDVersion %>
+                            </td>
+                            <td class="px-6 py-4">
+                                <%= version.IDUsuario %>
+                            </td>
+                            <td class="px-6 py-4">
+                                <%  let fechaActual = version.FechaCreacion;
+                                // Convertir la fecha a un objeto Date
+                                const fecha = new Date(fechaActual);
+                                // Obtener día, mes y año
+                                const dia = fecha.getDate().toString().padStart(2, '0');
+                                const mes = (fecha.getMonth() + 1).toString().padStart(2, '0'); // El mes comienza desde 0
+                                const año = fecha.getFullYear();
+                                // Crear la cadena en el formato deseado (dd/mm/yyyy)
+                                const fechaFormateada = `${dia}/${mes}/${año}`;%>
+                                <%= fechaFormateada %>
+                            </td>
+                        <% } else { %>
+                            <th scope="row" class="bg-gray-100 px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                <%= version.NombreVersion %>
+                            </th>
+                            <td class="bg-gray-100 px-6 py-4">
+                                <%= version.IDVersion %>
+                            </td>
+                            <td class="bg-gray-100  px-6 py-4">
+                                <%= version.IDUsuario %>
+                            </td>
+                            <td class="bg-gray-100  px-6 py-4">
+                                <%  let fechaActual = version.FechaCreacion;
+                                // Convertir la fecha a un objeto Date
+                                const fecha = new Date(fechaActual);
+                                // Obtener día, mes y año
+                                const dia = fecha.getDate().toString().padStart(2, '0');
+                                const mes = (fecha.getMonth() + 1).toString().padStart(2, '0'); // El mes comienza desde 0
+                                const año = fecha.getFullYear();
+                                // Crear la cadena en el formato deseado (dd/mm/yyyy)
+                                const fechaFormateada = `${dia}/${mes}/${año}`;%>
+                                <%= fechaFormateada %>
+                            </td>
+                        <% } row++ %>
                     </tr>
                     <% } %>
                 </tbody>

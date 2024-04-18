@@ -74,7 +74,10 @@ exports.post_historial = async (req, res, next) => {
                         console.log(error);
                     }
                 }
+                else{
+                console.log(rowData);
                 fila++;
+                }
             })
             .on("end", async function () {
                 fs.unlinkSync(req.file.path);
