@@ -41,6 +41,7 @@ exports.get_historial = async (req, res, next) => {
                 permisos: req.session.permisos || [],
                 FileTypeError: false,
                 Succes: false,
+                FormatTypeError: false,
             });
         })
         .catch((error) => {
@@ -89,8 +90,9 @@ exports.post_historial = async (req, res, next) => {
                                     versiones: rows,
                                     username: req.session.username || '',
                                     permisos: req.session.permisos || [],
-                                    FileTypeError: true,
+                                    FileTypeError: false,
                                     Succes: false,
+                                    FormatTypeError: true,
                                 });
                             })
                             .catch((error) => {
@@ -115,6 +117,7 @@ exports.post_historial = async (req, res, next) => {
                             permisos: req.session.permisos || [],
                             FileTypeError: false,
                             Succes: true,
+                            FormatTypeError: false,
                         });
                     })
                     .catch((error) => {
@@ -141,6 +144,7 @@ exports.post_historial = async (req, res, next) => {
                     permisos: req.session.permisos || [],
                     FileTypeError: true,
                     Succes: false,
+                    FormatTypeError: false,
                 });
             })
             .catch((error) => {

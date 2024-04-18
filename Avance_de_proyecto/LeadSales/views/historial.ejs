@@ -1,4 +1,4 @@
-<%- include('includes/head.ejs', {username: username},{FileTypeError: FileTypeError},{Succes: Succes}) %>
+<%- include('includes/head.ejs', {username: username},{FileTypeError: FileTypeError},{Succes: Succes},{FormatTypeError: FormatTypeError}) %>
 <meta charset="UTF-8">
 
 
@@ -20,6 +20,11 @@
                     <% if (Succes) { %>
                         <script>
                             swal('Guardado', 'La versión se ha registrado.', 'success')
+                        </script>
+                    <% } %>
+                    <% if (FormatTypeError) { %>
+                        <script>
+                            swal('Error', 'Revisa el formato de tu archivo CSV, guíate con el Ejemplo.CSV', 'error')
                         </script>
                     <% } %>
                 </button>
@@ -130,17 +135,35 @@
                     <div class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
                         <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                             <div class="sm:flex sm:items-start">
-                                <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                                    <h3 class="text-base font-semibold leading-6 text-gray-900" id="modal-title">Subir CSV</h3>
+                                <div class="mr-6 mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                                    <h2 class="text-center font-semibold leading-6 text-xl text-gray-900" id="modal-title">Importar Leads</h2>
                                     <div class="mt-2">
-                                        <p class="text-sm text-gray-500">Subir archivo csv.</p>
+                                        <p class="text-sm text-base text-black">
+                                            
+                                            <br>Para asegurar que la importación de tus lead sea exitosa, tu archivo debe contener:
+                                            
+
+                                            <ul class="ml-10 mt-2 mb-2 mr-8 list-disc">
+                                                <li>El Télefono sin el símbolo de "+".</li>
+                                                <li>Las columnas en este orden: Teléfono, 
+                                                    Nombre de contacto, Valor monetario,
+                                                    Email, Etiquetas (separadas por comas), Asignado.</li>
+                                                <li>Todos los números de tus leads <b>deben ser de un solo país.</b></li>
+                                            </ul>
+
+                                            Puedes ayudarte a limpiar tu archivo con nuestro vídeo tutorial
+                                            ver aquí
+ 
+
+                                        <br>
+                                        </p>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <form action="/lead/Historial" method="POST" enctype="multipart/form-data" id="uploadForm">
-                            <input class="mt-3  inline-flex w-full justify-center  sm:flex sm:flex-row-reverse sm:px-6" type="file" id="csv" name="csv">
+                            <input class="ml-4 mb-4 inline-flex w-full justify-center  sm:flex sm:flex-row-reverse sm:px-6" type="file" id="csv" name="csv">
                             <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                                 <button type="submit" class="inline-flex w-full justify-center rounded-md bg-blue-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-purple-600 sm:ml-3 sm:w-auto" onclick="mostrarCarga()">Subir</button>
                                 <button onclick="location.href = 'historial';" type="button" class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">Cancel</button>
