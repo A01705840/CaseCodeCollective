@@ -30,6 +30,18 @@ module.exports = class Version {
     static max(){
         return  db.execute( `SELECT MAX(IDVersion) FROM version;`)
     }
+    static async deleteLast(){
+        await db.execute(
+            `DELETE FROM version_almacena_leads
+            WHERE IDVersion = (SELECT MAX(IDVersion) FROM Version)`
+        );
+        
+        // Segunda consulta para eliminar de la tabla Version
+        await db.execute(
+            `DELETE FROM Version
+            WHERE IDVersion = (SELECT MAX(IDVersion) FROM Version)`
+        );
+    }
         static fetchAll() {
             return db.execute('Select * from version')
         }

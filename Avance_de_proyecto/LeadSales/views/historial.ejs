@@ -1,77 +1,130 @@
-<%- include('includes/head.ejs', {
-  username: username,
-  permisos: permisos}) %>
+<%- include('includes/head.ejs', {username: username},{permisos: permisos},{FileTypeError: FileTypeError},{Succes: Succes},{FormatTypeError: FormatTypeError},{csrfToken: csrfToken} ) %>
 
 <input type="hidden" id="_csrf" name="_csrf" value="<%= csrfToken %>">
 <div class="p-4 sm:ml-20 sm:mr-10 font-sans">
 
-  <div class="flex flex-col justify-right p-4 border-2 border-gray-200 rounded-lg dark:border-gray-700 bg-slate-200">
-    <div class="inline-flex justify-between items-center">
-      <span style='font-size:30px;'>&#128214; Historial</span>
-      <div class="flex space-x-2">
-        <% for (let permiso of permisos) { %>
-          <% if (permiso.Descripcion == 'Descargar historial de reportes de Leads.') { %>
-            <button class="bg-white hover:bg-gray-300 py-2 px-4 rounded-full flex items-center">
-              <svg width="14" height="18" viewBox="0 0 14 18" fill="none" xmlns="http://www.w3.org/2000/svg" class="mr-2">
-                <path fill-rule="evenodd" clip-rule="evenodd" d="M2.83331 2.33335C2.37308 2.33335 1.99998 2.70645 1.99998 3.16669V14.8334C1.99998 15.2936 2.37308 15.6667 2.83331 15.6667H11.1666C11.6269 15.6667 12 15.2936 12 14.8334L12 6.8452L7.48814 2.33335H2.83331ZM0.333313 3.16669C0.333313 1.78598 1.4526 0.666687 2.83331 0.666687H7.48814C7.93016 0.666687 8.35409 0.842282 8.66665 1.15484L13.1785 5.66669C13.4911 5.97925 13.6666 6.40317 13.6666 6.8452V14.8334C13.6666 16.2141 12.5474 17.3334 11.1666 17.3334H2.83331C1.4526 17.3334 0.333313 16.2141 0.333313 14.8334V3.16669ZM6.99998 6.50002C7.46022 6.50002 7.83331 6.87312 7.83331 7.33335V10.3215L8.91072 9.2441C9.23616 8.91866 9.7638 8.91866 10.0892 9.2441C10.4147 9.56954 10.4147 10.0972 10.0892 10.4226L7.58923 12.9226C7.2638 13.248 6.73616 13.248 6.41072 12.9226L3.91072 10.4226C3.58529 10.0972 3.58529 9.56954 3.91072 9.2441C4.23616 8.91866 4.7638 8.91866 5.08923 9.2441L6.16665 10.3215V7.33335C6.16665 6.87312 6.53974 6.50002 6.99998 6.50002Z" fill="#4A5567" />
-              </svg>
-              Descargar Historial
-            </button>
-          <% } %>
-        <% } %>
-        <% for (let permiso of permisos) { %>
-          <% if (permiso.Descripcion == 'Registrar importación de CSV.') { %>
-            <button id="openModalButton" class="bg-white hover:bg-gray-300 py-2 px-4 rounded-full flex items-center">
-              <svg width="14" height="18" viewBox="0 0 14 18" fill="none" xmlns="http://www.w3.org/2000/svg" class="mr-2">
-                <path fill-rule="evenodd" clip-rule="evenodd" d="M2.83331 2.33335C2.37308 2.33335 1.99998 2.70645 1.99998 3.16669V14.8334C1.99998 15.2936 2.37308 15.6667 2.83331 15.6667H11.1666C11.6269 15.6667 12 15.2936 12 14.8334L12 6.8452L7.48814 2.33335H2.83331ZM0.333313 3.16669C0.333313 1.78598 1.4526 0.666687 2.83331 0.666687H7.48814C7.93016 0.666687 8.35409 0.842282 8.66665 1.15484L13.1785 5.66669C13.4911 5.97925 13.6666 6.40317 13.6666 6.8452V14.8334C13.6666 16.2141 12.5474 17.3334 11.1666 17.3334H2.83331C1.4526 17.3334 0.333313 16.2141 0.333313 14.8334V3.16669ZM6.99998 6.50002C7.46022 6.50002 7.83331 6.87312 7.83331 7.33335V10.3215L8.91072 9.2441C9.23616 8.91866 9.7638 8.91866 10.0892 9.2441C10.4147 9.56954 10.4147 10.0972 10.0892 10.4226L7.58923 12.9226C7.2638 13.248 6.73616 13.248 6.41072 12.9226L3.91072 10.4226C3.58529 10.0972 3.58529 9.56954 3.91072 9.2441C4.23616 8.91866 4.7638 8.91866 5.08923 9.2441L6.16665 10.3215V7.33335C6.16665 6.87312 6.53974 6.50002 6.99998 6.50002Z" fill="#4A5567" />
-              </svg>
-              Importar Leads
-            </button>
-          <% } %>
-        <% } %>
-      </div>
-    </div>
-    <div class="flex justify-center sm:mt-4 p-1 border-1 border-gray-200 rounded-lg dark:border-gray-200 bg-white">
-      <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-          <tr>
-            <th scope="col" class="px-6 py-3">
-              Version
-            </th>
-            <th scope="col" class="px-6 py-3">
-              No. Version
-            </th>
-            <th scope="col" class="px-6 py-3">
-              Creador
-            </th>
-            <th scope="col" class="px-6 py-3">
-              Fecha de Importación
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="bg-white border-b">
-            <% for (let version of versiones) { %>
-            <td scope="row" class="px-6 py-4 ">
-              <%= version.NombreVersion %>
-            </td>
-            <td class="px-6 py-4">
-              <%= version.IDVersion %>
-            </td>
-            <td class="px-6 py-4">
-              <%= version.IDUsuario %>
-            </td>
-            <td class="px-6 py-4">
-              <%= version.FechaCreacion %>
-            </td>
-          </tr>
-          <% } %>
-        </tbody>
-      </table>
-    </div>
-  </div>
+  <div class="shadow-lg flex flex-col justify-right p-4 border-2 border-gray-200 rounded-lg dark:border-gray-700 bg-slate-200">
+        <div class="inline-flex justify-between items-center">
+            <span style='font-size:30px;'>&#128214; Historial</span>
+            <div class="flex space-x-2">
+                <button class="bg-white hover:bg-gray-300 py-2 px-4 rounded-full flex items-center">
+                    <svg width="14" height="18" viewBox="0 0 14 18" fill="none" xmlns="http://www.w3.org/2000/svg" class="mr-2">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M2.83331 2.33335C2.37308 2.33335 1.99998 2.70645 1.99998 3.16669V14.8334C1.99998 15.2936 2.37308 15.6667 2.83331 15.6667H11.1666C11.6269 15.6667 12 15.2936 12 14.8334L12 6.8452L7.48814 2.33335H2.83331ZM0.333313 3.16669C0.333313 1.78598 1.4526 0.666687 2.83331 0.666687H7.48814C7.93016 0.666687 8.35409 0.842282 8.66665 1.15484L13.1785 5.66669C13.4911 5.97925 13.6666 6.40317 13.6666 6.8452V14.8334C13.6666 16.2141 12.5474 17.3334 11.1666 17.3334H2.83331C1.4526 17.3334 0.333313 16.2141 0.333313 14.8334V3.16669ZM6.99998 6.50002C7.46022 6.50002 7.83331 6.87312 7.83331 7.33335V10.3215L8.91072 9.2441C9.23616 8.91866 9.7638 8.91866 10.0892 9.2441C10.4147 9.56954 10.4147 10.0972 10.0892 10.4226L7.58923 12.9226C7.2638 13.248 6.73616 13.248 6.41072 12.9226L3.91072 10.4226C3.58529 10.0972 3.58529 9.56954 3.91072 9.2441C4.23616 8.91866 4.7638 8.91866 5.08923 9.2441L6.16665 10.3215V7.33335C6.16665 6.87312 6.53974 6.50002 6.99998 6.50002Z" fill="#4A5567"/>
+                    </svg>
+                    Descargar Historial
+                    <% if (FileTypeError) { %>
+                        <script>
+                            swal('Error', 'Debes subir archivos de tipo csv.', 'info');
+                        </script>
+                    <% } %>
+                    <% if (Succes) { %>
+                        <script>
+                            swal('Guardado', 'La versión se ha registrado.', 'success')
+                        </script>
+                    <% } %>
+                    <% if (FormatTypeError) { %>
+                        <script>
+                            swal('Atención.', 'Revisa el formato de tu archivo CSV.', 'info')
+                        </script>
+                    <% } %>
+                </button>
+                <button id="openModalButton"  class="bg-white hover:bg-gray-300 py-2 px-4 rounded-full flex items-center">
+                    <svg width="14" height="18" viewBox="0 0 14 18" fill="none" xmlns="http://www.w3.org/2000/svg" class="mr-2">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M2.83331 2.33335C2.37308 2.33335 1.99998 2.70645 1.99998 3.16669V14.8334C1.99998 15.2936 2.37308 15.6667 2.83331 15.6667H11.1666C11.6269 15.6667 12 15.2936 12 14.8334L12 6.8452L7.48814 2.33335H2.83331ZM0.333313 3.16669C0.333313 1.78598 1.4526 0.666687 2.83331 0.666687H7.48814C7.93016 0.666687 8.35409 0.842282 8.66665 1.15484L13.1785 5.66669C13.4911 5.97925 13.6666 6.40317 13.6666 6.8452V14.8334C13.6666 16.2141 12.5474 17.3334 11.1666 17.3334H2.83331C1.4526 17.3334 0.333313 16.2141 0.333313 14.8334V3.16669ZM6.99998 6.50002C7.46022 6.50002 7.83331 6.87312 7.83331 7.33335V10.3215L8.91072 9.2441C9.23616 8.91866 9.7638 8.91866 10.0892 9.2441C10.4147 9.56954 10.4147 10.0972 10.0892 10.4226L7.58923 12.9226C7.2638 13.248 6.73616 13.248 6.41072 12.9226L3.91072 10.4226C3.58529 10.0972 3.58529 9.56954 3.91072 9.2441C4.23616 8.91866 4.7638 8.91866 5.08923 9.2441L6.16665 10.3215V7.33335C6.16665 6.87312 6.53974 6.50002 6.99998 6.50002Z" fill="#4A5567"/>
+                    </svg>
+                    Importar Leads
+                </button>
+            </div>
+        </div>
+        <div class="flex justify-center sm:mt-4 p-1 border-1 border-gray-200 rounded-lg dark:border-gray-200 bg-white">
+            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <thead class="text-xs  border-b-2 border-gray-100 text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            Version
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            No. Version
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Creador
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Fecha de Importación
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="bg-gray border-b dark:bg-gray-800 dark:border-gray-700">
+                        <% let row=0; %>
+                        <% for (let version of versiones.reverse()) { %>
+                        <% if(row%2==0){ %>
+                            <th scope="row" class="px-6 py-4 font-medium  border-b-2 border-gray-100 text-gray-900 whitespace-nowrap dark:text-white">
+                                <%= version.NombreVersion %>
+                            </th>
+                            <td class="px-6 py-4 border-b-2 border-gray-100">
+                                <%= version.IDVersion %>
+                            </td>
+                            <td class="px-6 py-4 border-b-2 border-gray-100">
+                                <%= version.IDUsuario %>
+                            </td>
+                            <td class="px-6 py-4 border-b-2 border-gray-100">
+                                <%  let fechaActual = version.FechaCreacion;
+                                // Convertir la fecha a un objeto Date
+                                const fecha = new Date(fechaActual);
+                                // Obtener día, mes y año
+                                const dia = fecha.getDate().toString().padStart(2, '0');
+                                const mes = (fecha.getMonth() + 1).toString().padStart(2, '0'); // El mes comienza desde 0
+                                const año = fecha.getFullYear();
+                                // Crear la cadena en el formato deseado (dd/mm/yyyy)
+                                const fechaFormateada = `${dia}/${mes}/${año}`;%>
+                                <%= fechaFormateada %>
+                            </td>
+                        <% } else { %>
+                            <th scope="row" class="bg-gray-50 px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                <%= version.NombreVersion %>
+                            </th>
+                            <td class="bg-gray-50 px-6 py-4">
+                                <%= version.IDVersion %>
+                            </td>
+                            <td class="bg-gray-50  px-6 py-4">
+                                <%= version.IDUsuario %>
+                            </td>
+                            <td class="bg-gray-50  px-6 py-4">
+                                <%  let fechaActual = version.FechaCreacion;
+                                // Convertir la fecha a un objeto Date
+                                const fecha = new Date(fechaActual);
+                                // Obtener día, mes y año
+                                const dia = fecha.getDate().toString().padStart(2, '0');
+                                const mes = (fecha.getMonth() + 1).toString().padStart(2, '0'); // El mes comienza desde 0
+                                const año = fecha.getFullYear();
+                                // Crear la cadena en el formato deseado (dd/mm/yyyy)
+                                const fechaFormateada = `${dia}/${mes}/${año}`;%>
+                                <%= fechaFormateada %>
+                            </td>
+                        <% } row++ %>
+                    </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>        
+</div>
+
 
   <script>
+
+    function mostrarCarga() {
+        Swal.fire({
+            title: 'Cargando leads a la plataforma...',
+            allowEscapeKey: false,
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            onOpen: () => {
+                Swal.showLoading(); // Mostrar la animación de carga
+            }
+        });
+    }
+
     const openModalButton = document.getElementById('openModalButton');
     openModalButton.addEventListener('click', function() {
       const modalContent = `
@@ -82,21 +135,43 @@
                     <div class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
                         <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                             <div class="sm:flex sm:items-start">
-                                <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                                    <h3 class="text-base font-semibold leading-6 text-gray-900" id="modal-title">Subir CSV</h3>
+                                <div class="mr-6 mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                                    <h2 class="text-center font-semibold leading-6 text-xl text-gray-900" id="modal-title">Importar Leads</h2>
                                     <div class="mt-2">
-                                        <p class="text-sm text-gray-500">Subir archivo csv.</p>
+                                        <p class="text-sm text-base text-black">
+                                            
+                                            <br>Para asegurar que la importación de tus lead sea exitosa, tu archivo debe contener:
+                                            
+                                            <svg width="14" height="17" viewBox="0 0 14 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" clip-rule="evenodd" d="M0 15.6666C0 15.4014 0.105357 15.1471 0.292893 14.9595C0.48043 14.772 0.734784 14.6666 1 14.6666H13C13.2652 14.6666 13.5196 14.772 13.7071 14.9595C13.8946 15.1471 14 15.4014 14 15.6666C14 15.9318 13.8946 16.1862 13.7071 16.3737C13.5196 16.5613 13.2652 16.6666 13 16.6666H1C0.734784 16.6666 0.48043 16.5613 0.292893 16.3737C0.105357 16.1862 0 15.9318 0 15.6666ZM3.293 7.95963C3.48053 7.77215 3.73484 7.66684 4 7.66684C4.26516 7.66684 4.51947 7.77215 4.707 7.95963L6 9.25263V1.66663C6 1.40141 6.10536 1.14706 6.29289 0.959519C6.48043 0.771983 6.73478 0.666626 7 0.666626C7.26522 0.666626 7.51957 0.771983 7.70711 0.959519C7.89464 1.14706 8 1.40141 8 1.66663V9.25263L9.293 7.95963C9.38525 7.86412 9.49559 7.78793 9.6176 7.73552C9.7396 7.68311 9.87082 7.65553 10.0036 7.65437C10.1364 7.65322 10.2681 7.67852 10.391 7.7288C10.5139 7.77909 10.6255 7.85334 10.7194 7.94723C10.8133 8.04112 10.8875 8.15277 10.9378 8.27567C10.9881 8.39857 11.0134 8.53025 11.0123 8.66303C11.0111 8.7958 10.9835 8.92703 10.9311 9.04903C10.8787 9.17103 10.8025 9.28138 10.707 9.37363L7.707 12.3736C7.51947 12.5611 7.26516 12.6664 7 12.6664C6.73484 12.6664 6.48053 12.5611 6.293 12.3736L3.293 9.37363C3.10553 9.1861 3.00021 8.93179 3.00021 8.66663C3.00021 8.40146 3.10553 8.14715 3.293 7.95963Z" fill="#4A5567"/>
+                                                </svg>
+                                                
+
+                                            <ul class="ml-10 mt-2 mb-2 mr-8 list-disc">
+                                                <li>El Télefono sin el símbolo de "+".</li>
+                                                <li>Las columnas en este orden: Teléfono, 
+                                                    Nombre de contacto, Valor monetario,
+                                                    Email, Etiquetas (separadas por comas), Asignado.</li>
+                                                <li>Todos los números de tus leads <b>deben ser de un solo país.</b></li>
+                                            </ul>
+
+                                            Puedes ayudarte a limpiar tu archivo con nuestro vídeo tutorial
+                                            ver aquí
+ 
+
+                                        <br>
+                                        </p>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <form action="/lead/Historial" method="POST" enctype="multipart/form-data">
-                            <input  class="mt-3  inline-flex w-full justify-center  sm:flex sm:flex-row-reverse sm:px-6" type="file" id="csv" name="csv">
-                        <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                            <button type="submit" class="inline-flex w-full justify-center rounded-md bg-blue-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto">Subir</button>
-                            <button onclick="location.href = 'historial';" type="button" class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">Cancel</button>
-                        </div>
+                        <form action="/lead/Historial" method="POST" enctype="multipart/form-data" id="uploadForm">
+                            <input class="ml-4 mb-4 inline-flex w-full justify-center  sm:flex sm:flex-row-reverse sm:px-6" type="file" id="csv" name="csv">
+                            <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                                <button type="submit" class="inline-flex w-full justify-center rounded-md bg-blue-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-purple-600 sm:ml-3 sm:w-auto" onclick="mostrarCarga()">Subir</button>
+                                <button onclick="location.href = 'historial';" type="button" class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">Cancel</button>
+                            </div>
                         </form>
 
                     </div>
