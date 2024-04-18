@@ -33,4 +33,7 @@ module.exports = class Usuario {
         return db.execute('DELETE FROM usuario WHERE IDUsuario = ?', [id]);
     }
 
+    static establecer_rol(IDRoles,username) {
+        return db.execute('INSERT INTO usuario_tiene_rol (UserName, IDRol) VALUES (?, ?)', [username, IDRoles]);
+    }
 }

@@ -140,7 +140,7 @@ exports.post_cambiarRol = (req, res, next) => {
 exports.get_agregarEmpleado = (request, response, next) => {
     Rol.fetchAll()
     .then(([roles, fieldData]) => {
-        response.json(rows);
+        response.json(roles);
     })
     .catch((error) => {
         console.log(error);
@@ -152,10 +152,16 @@ exports.post_agregarEmpleado = async (request, response, next) => {
     try {
         console.log(request.body);
         const nuevo_usuario = new Usuario(
-            request.body.username, request.body.nombre, request.body.password, request.body.correo
+            request.body.username || '', 
+            request.body.nombre || '', 
+            request.body.password || '', 
+            request.body.correo || '',
         );
         await nuevo_usuario.save(request.body);
+
+        Rol.fetchAll();
         
+        await nuevo_usuario.establecer_rol()
         return response.status(200).json({ message: 'Lead actualizado con éxito' });
     } catch (error) {
         // Maneja cualquier error que pueda ocurrir
