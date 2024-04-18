@@ -18,6 +18,8 @@
         </div>
     </div>
   </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
@@ -28,13 +30,15 @@
         document.getElementById('dateRange').value = selectedRange; // Establecer la opción seleccionada
     }
 
-
+    // Datos de ejemplo
     const data = <%- JSON.stringify(leadsPerDay) %>.map(item => ({
         ...item,
         Fecha: new Date(item.Fecha)
     }));
+    // Obtener el contexto del canvas para después crear la gráfica
     const ctx = document.getElementById('leadsChart').getContext('2d');
 
+    // Función para formatear la fecha
     function formatDate(date, range) {
         switch (parseInt(range)) {
             case 1: // Semana
@@ -50,6 +54,7 @@
         }
     }
 
+    // Función para obtener el texto del label
     function getLabelText(range) {
         switch (parseInt(range)) {
             case 1: // Semana
@@ -71,6 +76,7 @@ let myChart = new Chart(ctx, {
             label: getLabelText(selectedRange), // Usar la función getLabelText
             data: data.map(item => item.CantidadLeads),
                 backgroundColor: 'rgba(23, 16, 198, 0.2)',
+                pointStyle: 'star', // Cambiar la forma de los puntos a triángulos
                 borderColor: 'rgba(23, 16, 198, 0.8)',
                 borderWidth: 5,
                 pointRadius: 5,
