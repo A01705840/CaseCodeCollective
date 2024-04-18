@@ -28,18 +28,24 @@
                     if(cont>2){
                     let shouldCheck = funcionesRoles[descripcion].roles.some(role => role.nombre && role.nombre === nombreRol);
                 %>
-          <tr>
-            <td class="p-3 text-sm font-semibold tracking-wide text-left"><%= funcionesRoles[descripcion].id -2 %>. <%= descripcion %></td>
-            <td style="text-align: center;">
-              <input type="checkbox" class="privilege-checkbox" data-role="<%= funcionesRoles[descripcion].roles && funcionesRoles[descripcion].roles[0] ? funcionesRoles[descripcion].roles[0].id : '' %>" data-privilege="<%= funcionesRoles[descripcion].id %>" style="width: 20px; height: 20px; margin-right: 50%;" <% if(shouldCheck) { %> checked <% } %>>
-            </td>
-          </tr>
-          <% }} %>
-        </tbody>
-      </table>
+                    <tr>
+                        <td class="p-3 text-sm font-semibold tracking-wide text-left"><%= funcionesRoles[descripcion].id -2 %>. <%= descripcion %></td>
+                        <td style="text-align: center;">
+                            <input type="checkbox" class="privilege-checkbox" 
+                            // Se asigna el id del rol
+                            data-role="<%= funcionesRoles[descripcion].roles && funcionesRoles[descripcion].roles[0] ? funcionesRoles[descripcion].roles[0].id : '' %>" 
+                            // Se asigna el id del privilegio
+                            data-privilege="<%= funcionesRoles[descripcion].id %>"  
+                            style="width: 20px; height: 20px; margin-right: 50%;" 
+                            <% if(shouldCheck) { %> checked <% } %>>
+                        </td>
+                    </tr>
+                <% }} %>
+            </tbody>
+            </table>
+        </div>
+        <button id="save-changes" class="bg-blue-500 hover:bg-blue-700 text-white font-bold" style="padding: 10px 18px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 40px auto 0px; cursor: pointer; position: absolute; bottom: 5px; right: 40px; transition: background-color 0.3s ease; border-radius: 10px;">Guardar cambios</button>
     </div>
-    <button id="save-changes" class="bg-blue-500 hover:bg-blue-700 text-white font-bold" style="padding: 10px 18px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 40px auto 0px; cursor: pointer; position: absolute; bottom: 5px; right: 40px; transition: background-color 0.3s ease; border-radius: 10px;">Guardar cambios</button>
-  </div>
 </div>
 
 <script src="/scripts/privilegios.js"></script>
