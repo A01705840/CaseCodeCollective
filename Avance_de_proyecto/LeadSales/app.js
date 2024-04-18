@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
+require('dotenv').config();
+
 const app = express();
 
 app.use(express.json());
