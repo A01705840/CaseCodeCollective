@@ -21,6 +21,7 @@ module.exports = class Version {
         });
 
     }
+    
         static fetchAll() {
             return db.execute('Select * from version')
         }
