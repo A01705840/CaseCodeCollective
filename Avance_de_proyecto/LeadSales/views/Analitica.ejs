@@ -25,7 +25,7 @@
 
 <script>
     // Establecer la opción seleccionada tan pronto como se carga el script
-    const selectedRange = localStorage.getItem('selectedRange'); // Obtener el rango seleccionado
+    const selectedRange = localStorage.getItem('selectedRange') || '1'; // Obtener el rango seleccionado
     if (selectedRange) {
         document.getElementById('dateRange').value = selectedRange; // Establecer la opción seleccionada
     }
