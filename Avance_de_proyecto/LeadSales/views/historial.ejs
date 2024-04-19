@@ -256,4 +256,50 @@ function indescargarhistorial() {
     });
 }
 
+
+
+function descargarhist() {
+    console.log('descargarh');
+    
+        $('#modal').show();
+    
+    document.getElementById('indescargarhistorial').addEventListener('click', indescargarhistorial);
+}
+
+function cerrarModal() {
+    $('#modal').hide();
+}
+function indescargarhistorial() {
+    console.log('indescargarhistorial');
+    var versiones = [];
+    var filas = document.querySelectorAll('tbody tr');
+
+    filas.forEach(function(fila) {
+        var version = {
+            NombreVersion: fila.children[0].innerText,
+            IDVersion: fila.children[1].innerText,
+            IDUsuario: fila.children[2].innerText,
+            FechaCreacion: fila.children[3].innerText
+        };
+
+        versiones.push(version);
+    });
+
+    fetch('/lead/descargarhistorial', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(versiones)
+    }).then(response => {
+        response.blob().then(blob => {
+            let url = window.URL.createObjectURL(blob);
+            let a = document.createElement('a');
+            a.href = url;
+            a.download = 'historial.pdf';
+            a.click();
+        });
+    });
+}
+
 </script>
