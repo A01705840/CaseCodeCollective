@@ -15,6 +15,7 @@
                     <option value="4">Un año</option>
                   </select>
             <canvas id="leadsChart"></canvas> 
+            <canvas id="pieChart"></canvas>
             </div>
         </div>
     </div>
@@ -30,6 +31,42 @@
     if (selectedRange) {
         document.getElementById('dateRange').value = selectedRange; // Establecer la opción seleccionada
     }
+
+     // Datos de ejemplo para la gráfica de donut
+  const pieData = {
+    labels: ['Red', 'Blue', 'Yellow'],
+    datasets: [{
+      label: 'My First Dataset',
+      data: [300, 50, 100],
+      backgroundColor: [
+        'rgb(255, 99, 132)',
+        'rgb(54, 162, 235)',
+        'rgb(255, 205, 86)'
+      ],
+      hoverOffset: 4
+    }]
+  };
+
+  // Obtener el contexto del canvas para la gráfica de donut
+  const pieCtx = document.getElementById('pieChart').getContext('2d');
+  let pieChart = new Chart(pieCtx, {
+    type: 'pie',
+    data: pieData,
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'top',
+        },
+        title: {
+          display: true,
+          text: 'Gráfica de Pay'
+        }
+      }
+    }
+  });
+
+
 
     // Datos de ejemplo
     const data = <%- JSON.stringify(leadsPerDay) %>.map(item => ({
@@ -175,4 +212,5 @@ let myChart = new Chart(ctx, {
             myChart.update();
         });
 });
+
 </script>
