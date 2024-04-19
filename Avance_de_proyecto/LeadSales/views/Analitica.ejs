@@ -16,6 +16,8 @@
                     <option value="4">Un año</option>
                   </select>
             <canvas id="leadsChart"></canvas> 
+            <canvas id="pieChartEmbudo"></canvas>
+            <canvas id="pieChartEstatus"></canvas>
             </div>
         </div>
 
@@ -28,6 +30,7 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
 <script>
@@ -67,6 +70,82 @@
         document.getElementById('dateRange').value = selectedRange; // Establecer la opción seleccionada
     }
 
+    // Datos de ejemplo para la gráfica de donut
+    const datos = <%- JSON.stringify(cantidadLeadsEmbudos) %>[0];
+
+    // Crear arrays para almacenar las etiquetas y los totales de leads
+    const embudos = [];
+    const totalesLeads = [];
+
+    // Iterar sobre cada objeto en el array
+    datos.forEach(embudo => {
+        // Obtener el nombre del embudo y el total de leads
+        const nombreEmbudo = embudo.Embudo;
+        const totalLeads = parseInt(embudo.TotalLeads);
+        
+        // Agregar el nombre del embudo y el total de leads a los arrays correspondientes
+        embudos.push(nombreEmbudo);
+        totalesLeads.push(totalLeads);
+    });
+
+    // Función para generar un color aleatorio pastel
+    function getRandomPastelColor() {
+        let r, g, b;
+        do {
+            r = Math.floor(Math.random() * 128) + 128; // Valor entre 128 y 255 para tonos más claros
+            g = Math.floor(Math.random() * 128) + 128; // Valor entre 128 y 255 para tonos más claros
+            b = Math.floor(Math.random() * 128) + 128; // Valor entre 128 y 255 para tonos más claros
+        } while (r === g && g === b); // Evitar colores grises
+        return `rgb(${r}, ${g}, ${b})`;
+    }
+
+    // Crear un array para almacenar los colores
+    const backgroundColors = embudos.map(() => getRandomPastelColor());
+
+    // Definir el objeto pieData con las etiquetas y los totales de leads
+    const pieData = {
+        labels: embudos, // Usar los nombres de los embudos como etiquetas
+        datasets: [{
+            label: '1',
+            data:  totalesLeads,
+            backgroundColor: backgroundColors,
+            hoverOffset: 4
+        }]
+    };
+
+    // Obtener el contexto del canvas para la gráfica de donut
+    const pieCtx = document.getElementById('pieChartEmbudo').getContext('2d');
+
+    // Configuración de la gráfica de donut
+    let pieChartEmbudo = new Chart(pieCtx, {
+        type: 'doughnut',
+        data: pieData,
+        options: {
+            responsive: true,
+            plugins: {
+                datalabels: {
+                    formatter: (value, ctx) => {
+                        const total = ctx.chart.data.datasets[0].data.reduce((acc, curr) => acc + curr, 0);
+                        const percentage = ((value / total) * 100).toFixed(2) + '%';
+                        return percentage;
+                    },
+                    color: '#fff',
+                    font: {
+                        weight: 'bold'
+                    }
+                }
+            },
+            legend: {
+                position: 'top',
+            },
+            title: {
+                display: true,
+                text: 'Gráfica de Pay Embudo'
+            }
+        }
+    });
+
+
     // Datos de ejemplo
     const data = <%- JSON.stringify(leadsPerDay) %>.map(item => ({
         ...item,
@@ -105,7 +184,7 @@
         }
     }
 
-let myChart = new Chart(ctx, {
+    let myChart = new Chart(ctx, {
     type: 'line',
     data: {
         labels: data.map(item => formatDate(item.Fecha, selectedRange)), // Usar la función formatDate

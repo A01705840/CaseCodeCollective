@@ -8,11 +8,13 @@ exports.get_analitica = async (request, response, next) => {
     const result = await Lead.fetchLeadsByDay(range);
     const cantidadLeads = await Lead.obtenerCantidadLeads();
     const cantidadLeadsOrganicos = await Lead.obtenerCantidadLeadsOrganicos();
+    const cantidadLeadsEmbudos = await Lead.obtenerCantidadLeadsEmbudos();
     console.log(result[0]);
     response.json({
         leadsPorDia: result[0],
         cantidadTotalLeads: cantidadLeads,
-        cantidadLeadsOrganicos: cantidadLeadsOrganicos
+        cantidadLeadsOrganicos: cantidadLeadsOrganicos,
+        cantidadLeadsEmbudos: cantidadLeadsEmbudos,
     }); // Devolver los datos como JSON
 };
 
@@ -20,12 +22,14 @@ exports.get_analiticaPRESET = async (request, response, next) => {
     const result = await Lead.fetchLeadsByDay('1'); // Siempre usa '1' (semana) como valor predeterminado
     const cantidadLeads = await Lead.obtenerCantidadLeads();
     const cantidadLeadsOrganicos = await Lead.obtenerCantidadLeadsOrganicos();
+    const cantidadLeadsEmbudos = await Lead.obtenerCantidadLeadsEmbudos();
     console.log(result[0]);
     response.render('analitica', {
         username: request.session.username || '',
         leadsPerDay: result[0], // Resultado de la consulta SQL
         cantidadTotalLeads: cantidadLeads,
         cantidadLeadsOrganicos: cantidadLeadsOrganicos,
+        cantidadLeadsEmbudos: cantidadLeadsEmbudos,
         registro: false,
     });
 };

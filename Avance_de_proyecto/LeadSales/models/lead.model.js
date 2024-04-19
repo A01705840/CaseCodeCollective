@@ -95,6 +95,10 @@ module.exports = class Lead {
         return rows[0].cantidad;
     }
 
+    static async obtenerCantidadLeadsEmbudos() {
+        return db.execute('SELECT Embudo, COUNT(*) AS TotalLeads FROM leads GROUP BY Embudo')
+    }
+
     
     static fetchOne(NombreLead) {
         return db.execute('Select * FROM usuario WHERE NombreLead = ?', [NombreLead]);
