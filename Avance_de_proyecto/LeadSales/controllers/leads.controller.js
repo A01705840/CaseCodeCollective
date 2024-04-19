@@ -3,13 +3,24 @@ const { request } = require('express');
 const Lead = require('../models/lead.model');
 const Usuario = require('../models/usuario.model');
 
-exports.get_analitica = (request, response, next) => {
+exports.get_analitica = async (request, response, next) => {
     console.log('GET ANALITICA');
+    const range = request.params.date; // Obtener el rango de la ruta
+    const result = await Lead.fetchLeadsByDay(range);
+    console.log(result[0]);
+    response.json(result[0]); // Devolver los datos como JSON
+};
+
+exports.get_analiticaPRESET = async (request, response, next) => {
+    const result = await Lead.fetchLeadsByDay('1'); // Siempre usa '1' (semana) como valor predeterminado
+    console.log(result[0]);
     response.render('analitica', {
         username: request.session.username || '',
+        leadsPerDay: result[0], // Resultado de la consulta SQL
         registro: false,
     });
 };
+
 exports.get_root = (request, response, next) => {
     console.log('GET ROOT');
     console.log(request.session.username + request.session.isLoggedIn)
@@ -88,6 +99,7 @@ exports.post_modificar_lead = async (request, response, next) => {
     console.log('POST MODIFICAR LEAD');
     try {
         // Actualiza el lead en la base de datos
+        console.log(request.body);
         console.log(request.body);
         await Lead.update(request.body);
 

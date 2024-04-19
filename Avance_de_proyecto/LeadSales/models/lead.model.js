@@ -49,10 +49,43 @@ module.exports = class Lead {
             return this.fetchAll();
         }
     }
-    static async fetchByDate(nDays) {
-        console.log(db.execute('SELECT * FROM leads GROUP BY ... WHERE DATE<8 AND DATE>90'))
-        return await db.execute('SELECT * FROM leads GROUP BY ... WHERE DATE<8 AND DATE>90')
+
+    static async fetchLeadsByDay(range) {
+        const endDate = new Date(2022, 0, 1);// Fecha actual
+        let startDate = new Date(endDate); // Crea una copia de endDate
+        let groupBy;
+    
+        switch (parseInt(range)) {
+            case 1:
+                startDate.setDate(endDate.getDate() - 7); // Una semana antes de la fecha actual
+                groupBy = 'DAY';
+                break;
+            case 2:
+                startDate.setMonth(endDate.getMonth() - 1); // Un mes antes de la fecha actual
+                groupBy = 'DAY';
+                break;
+            case 3:
+                startDate.setMonth(endDate.getMonth() - 6); // Seis meses antes de la fecha actual
+                groupBy = 'MONTH';
+                break;
+            case 4:
+                startDate.setFullYear(endDate.getFullYear() - 1); // Un año antes de la fecha actual
+                groupBy = 'MONTH';
+                break;
+            default:
+                throw new Error('Invalid range');
+        }
+    
+        const query = `
+            SELECT DATE(FechaPrimerMensaje) as Fecha, COUNT(*) as CantidadLeads 
+            FROM leads 
+            WHERE FechaPrimerMensaje >= ? AND FechaPrimerMensaje < ?
+            GROUP BY ${groupBy}(FechaPrimerMensaje)
+        `;
+        return await db.execute(query, [startDate, endDate]);
     }
+    
+
     static fetchOne(NombreLead) {
         return db.execute('Select * FROM usuario WHERE NombreLead = ?', [NombreLead]);
     }

@@ -29,6 +29,8 @@ function convertirFecha(fecha) {
     // Devolver la fecha en el nuevo formato
     return año + '-' + mes + '-' + dia;
 }
+const jsPDF = require('jspdf').jsPDF;
+const autoTable = require('jspdf-autotable');
 
 exports.get_historial = (req, res, next) => {
     Version.fetch(req.params.IDVersion)
@@ -148,4 +150,23 @@ exports.post_historial = async (req, res, next) => {
                 console.log(error);
             });
     }
+};
+exports.post_descargarhistorial = async (req, res, next) => {
+    console.log('Descargando historial');
+    console.log(req.body);
+    let doc = new jsPDF();
+
+    let body = req.body.map(version => [version.IDVersion, version.NombreVersion, version.IDUsuario, version.FechaCreacion]);
+
+    doc.autoTable({
+        head: [['IDVersion', 'NombreVersion', 'IDUsuario', 'FechaCreacion']],
+        body: body
+    });
+
+    let pdf = doc.output('arraybuffer');
+
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename=historial.pdf');
+
+    res.send(Buffer.from(pdf));
 };

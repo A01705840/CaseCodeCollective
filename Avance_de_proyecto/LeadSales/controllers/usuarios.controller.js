@@ -59,7 +59,6 @@ exports.get_signup = (req, res, next) => {
     console.log('GET SIGNUP');
     res.render('signup', {
         username: req.session.username || '',
-        permisos: req.session.permisos || '',
         registro: true,
         csrfToken: req.csrfToken(),
     });
@@ -83,7 +82,6 @@ exports.post_signup = (req, res, next) => {
 };
 
 exports.get_logout = (request, response, next) => {
-    console.log('GET LOGOUT');
     request.session.destroy(() => {
         response.redirect('/usuario/login'); //Este código se ejecuta cuando la sesión se elimina.
     });

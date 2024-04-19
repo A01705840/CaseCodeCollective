@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
+require('dotenv').config();
+
 const app = express();
 
 app.use(express.json());
@@ -40,6 +42,7 @@ const multer = require('multer');
 
 //
 const csv = require('fast-csv');
+
 
 //fileStorage: Es nuestra constante de configuración para manejar el almacenamiento
 const fileStorage = multer.diskStorage({
