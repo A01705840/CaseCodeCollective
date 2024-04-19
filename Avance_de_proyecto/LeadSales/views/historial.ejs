@@ -64,6 +64,10 @@
             </div>
         </div>
         <div class="flex justify-center sm:mt-4 p-1 border-1 border-gray-200 rounded-lg dark:border-gray-200 bg-white">
+            <% if(versiones.length === 0) {%>
+                <p class="text-2xl text-gray-500 mt-48 mb-48">Importa tus primeros leads, para poder visualizar el historial.</p>
+            <%  } else{ %> 
+ 
             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead class="text-xs  border-b-2 border-gray-100 text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
@@ -134,7 +138,8 @@
                     <% } %>
                 </tbody>
             </table>
-        </div>        
+            <% } %> 
+        </div>      
 </div>
 
 
