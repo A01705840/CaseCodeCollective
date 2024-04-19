@@ -1,51 +1,28 @@
 <%- include('includes/head.ejs', {username: username}) %>
+<%- include('mx') %>
 <div class="p-4 sm:ml-20 sm:mr-10 font-sans">
     <div class="shadow-lg flex flex-col justify-right p-4 border-2 border-gray-200 rounded-lg dark:border-gray-700 bg-slate-200">
         <div class="inline-flex justify-between items-center">
-            <span style='font-size:30px;'>📊 Analíticas</span>
-            <button id="toggleButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Mostrar México</button>
+          <span style='font-size:30px;'>📊 Analíticas</span>
         </div>
-        <div class="mt-2 flex flex-col justify-right p-4 border-2 border-gray-200 rounded-lg bg-b bg-white" style="height:970px; overflow-y:visible;">
-            <div id="graphContainer" class="hidden max-w-2x1" style="width: 50%; height: 50%; background-color: #ffffff; border: 0px solid #444; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); padding: 20px; border-radius: 15px;">
-                <select id="dateRange" class="bg-grey-600 rounded-md shadow-sm focus:outline-none text-ellipsis" style="margin-bottom: 0px; position:relative; left: 656px;">
+    <div class="mt-2 lex flex-col justify-right p-4 border-2 border-gray-200 rounded-lg bg-b bg-white" style="height:970px; overflow-y:visible;">
+        <div class="flex flex-col items-center h-full">
+            <div class="max-w-2x1" style="width: 50%; height: 50%; background-color: #ffffff; border: 0px solid #444; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); padding: 20px; border-radius: 15px;">
+                <select id="dateRange" class=" bg-grey-600 rounded-md shadow-sm focus:outline-none text-ellipsis" style=" margin-bottom: 0px; position:relative; left: 656px;">
                     <option value="1">Una semana</option>
                     <option value="2">Un mes</option>
                     <option value="3">Un semestre</option>
                     <option value="4">Un año</option>
-                </select>
-                <canvas id="leadsChart"></canvas>
-            </div>
-            <div id="mexicoContainer" class="max-w-2x1 hidden" style="width: 50%; height: 50%; background-color: #ffffff; border: 0px solid #444; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); padding: 20px; border-radius: 15px;">
-                <!-- Contenido de México aquí -->
-                <%- include('mx') %>
+                  </select>
+            <canvas id="leadsChart"></canvas> 
             </div>
         </div>
     </div>
+  </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-
-<script>
-    let isGraphVisible = true; // Variable para controlar la visibilidad de la gráfica
-
-    document.getElementById('toggleButton').addEventListener('click', function() {
-        const graphContainer = document.getElementById('graphContainer');
-        const mexicoContainer = document.getElementById('mexicoContainer');
-
-        if (isGraphVisible) {
-            graphContainer.classList.add('hidden');
-            mexicoContainer.classList.remove('hidden');
-            this.textContent = 'Mostrar Gráfica';
-        } else {
-            graphContainer.classList.remove('hidden');
-            mexicoContainer.classList.add('hidden');
-            this.textContent = 'Mostrar México';
-        }
-
-        isGraphVisible = !isGraphVisible; // Invertir el estado de visibilidad
-    });
-</script>
 
 <script>
     // Establecer la opción seleccionada tan pronto como se carga el script
