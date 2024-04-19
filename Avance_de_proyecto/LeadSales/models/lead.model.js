@@ -28,6 +28,15 @@ module.exports = class Lead {
                 console.log(error);
             });
         }
+
+    static guardar_nuevo(mi_asignado_a,mi_telefono,mi_nombreLead,mi_FechaPrimerMensaje,mi_Embudo,mi_Etapa,mi_Status,mi_Archivado,mi_CreadoManual){
+        return db.execute(`INSERT INTO leads (asignado_a, Telefono, NombreLead, FechaPrimerMensaje, Embudo, Etapa, Status, Archivado, CreadoManual) 
+        VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ? )`,
+        [mi_asignado_a,mi_telefono,mi_nombreLead,mi_FechaPrimerMensaje,mi_Embudo,mi_Etapa,mi_Status,mi_Archivado,mi_CreadoManual])
+    }  
+    static max(){
+        return db.execute(`SELECT MAX(IDLead) FROM leads;`)
+    }  
         static async fetchAll() {
             console.log(db.execute('SELECT * FROM leads'))
             return await db.execute('SELECT * FROM leads')
@@ -94,4 +103,6 @@ module.exports = class Lead {
     static eliminar(id) {
         return db.execute('DELETE FROM leads WHERE IDLead = ?', [id]);
     }
+
+    
 }

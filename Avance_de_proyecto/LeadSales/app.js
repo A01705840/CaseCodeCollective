@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
+require('dotenv').config();
+
 const app = express();
 
 app.use(express.json());
@@ -34,6 +36,8 @@ app.use((request, response, next) => {
 const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
+//Protección contra ataques de CSRF
+
 const multer = require('multer');
 
 //
@@ -43,6 +47,7 @@ const csv = require('fast-csv');
 //fileStorage: Es nuestra constante de configuración para manejar el almacenamiento
 const fileStorage = multer.diskStorage({
     destination: (request, file, callback) => {
+        
         //'public/uploads': Es el directorio del servidor donde se subirán los archivos 
         callback(null, 'public/uploads');
     },
@@ -52,10 +57,13 @@ const fileStorage = multer.diskStorage({
         callback(null, file.originalname);
     },
 });
-app.use(multer({ storage: fileStorage }).single('csv')); 
+
+
+app.use(multer({ storage: fileStorage}).single('csv')); 
 
 const rutasUsuarios = require('./routes/usuarios.routes');
 app.use('/Usuario', rutasUsuarios);
+app.use('/', rutasUsuarios);
 
 const rutasSignup = require('./routes/usuarios.routes');
 app.use('/Usuario', rutasSignup);
@@ -72,6 +80,7 @@ app.use('/Lead', rutasLeads);
 
 app.use((request, response, next) => {
   response.status(404);
+  console.log('404 ERROR');
   response.render(path.join(__dirname, 'views', '404.ejs')); //Manda la respuesta
 });
 

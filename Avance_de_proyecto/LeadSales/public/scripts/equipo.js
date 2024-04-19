@@ -52,6 +52,14 @@ const buscar = () => {
                         </button>
                     </form>
                 </td>
+                <td class="py-4 px-6 border-b border-gray-200">
+            <form action="/Roles/eliminarUsuario" method="POST">
+                <input type="hidden" name="IDUsuario" value="${item.IDUsuario}">
+                <button type="submit" class="px-4 py-2 text-white font-bold bg-red-500 border border-transparent rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                    Eliminar
+                </button>
+            </form>
+        </td>
             </tr>
             `;
         });

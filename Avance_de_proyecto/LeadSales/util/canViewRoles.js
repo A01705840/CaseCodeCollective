@@ -1,11 +1,12 @@
 module.exports = (request, response, next) => {
-  let canEdit = false;
+  let canViewRoles = false;
+  //console.log('I AM THE PROBLEM')
   for (let permiso of request.session.permisos) {
-    if (permiso.permiso == "editar_libro") {
-      canEdit = true;
+    if (permiso.Descripcion == "Consultar roles.") {
+      canViewRoles = true;
     }
   }
-  if (canEdit) {
+  if (canViewRoles) {
     next();
   } else {
     return response.redirect("/usuario/logout");

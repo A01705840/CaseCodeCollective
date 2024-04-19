@@ -62,7 +62,7 @@ module.exports = class Rol {
 
     
     static delete(id) {
-        return db.execute('DELETE FROM rol_adquiere_funcion WHERE IDRol = ? ', [id]),db.execute('UPDATE usuario_tiene_rol SET IDRol = 4, FechaUsuarioRolActualizacion = NOW() WHERE IDRol = ? ', [id])    
+        return db.execute('DELETE FROM rol_adquiere_funcion WHERE IDRol = ? ', [id]), db.execute('UPDATE usuario_tiene_rol SET IDRol = 5, FechaUsuarioRolActualizacion = NOW() WHERE IDRol = ? ', [id])    
         .then(()=>{
             return  db.execute('DELETE FROM rol WHERE IDRol = ? ', [id])
         })
@@ -71,6 +71,18 @@ module.exports = class Rol {
             throw Error ('Rol no encntrado')
         }));
     }
+
+    static deleteUsuario(IDUsuario) {
+        return db.execute('DELETE FROM `usuario_tiene_rol` WHERE IDUsuario = ?;', [IDUsuario])
+        .then(() => {
+            return db.execute('DELETE FROM usuario WHERE IDUsuario = ?;', [IDUsuario])
+        })
+            .catch((error) => {
+                console.log(error);
+                throw new Error('Usuario no encontrado');
+            });
+    }
+    
 
     static fetchAllParaRoles() {
         return db.execute('SELECT * FROM rol WHERE TipoRol NOT IN ("owner", "SinRol") ORDER BY IDRol ASC');

@@ -1,22 +1,74 @@
 const Usuario = require('../models/usuario.model');
 
+const bcrypt = require('bcryptjs');
 exports.get_login = (request, response, next) => {
+    const error = request.session.error || '';
+    request.session.error = '';
+    console.log('GET LOGIN');
+    console.log('SESSION' + JSON.stringify(request.session));
+    console.log('BODY' + JSON.stringify(request.body));
     response.render('signup', {
         username: request.session.username || '',
         registro: false,
+        csrfToken: request.csrfToken(),
+        error: error,
+        permisos: request.session.permisos || [],
     });
 };
 
+exports.post_login = (request, response, next) => {
+    console.log('POST LOGIN');
+    console.log('BODY' + JSON.stringify(request.body));
+    Usuario.fetchOne(request.body.username)
+        .then(([usuarios]) => {
+            if (usuarios.length == 1) {
+                const usuario = usuarios[0];
+                bcrypt.compare(request.body.password, usuario.Password)
+                    .then((doMatch) => {
+                        if(doMatch) {
+                            console.log('CONTRASEÑA CORRECTA')
+                            Usuario.getPermisos(usuario.UserName)
+                                .then(([permisos, fieldData]) => {
+                                    request.session.permisos = permisos || [];
+                                    console.log(request.session.permisos);
+                                    request.session.username = usuario.UserName;
+                                    request.session.isLoggedIn = true;
+                                    console.log('SESSION' + JSON.stringify(request.session));
+                                    response.redirect('/Lead/');
+                                })
+                                .catch((error) => {
+                                    console.log(error);
+                                });
+                        } else {
+                            request.session.error = "Usuario y/o contraseña incorrectos";
+                            response.redirect('/usuario/login');
+                        }
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+            } else {
+                request.session.error = "Usuario y/o contraseña incorrectos";
+                response.redirect('/usuario/login');
+            }
+        })
+        .catch((error) => {console.log(error);});
+};
+
 exports.get_signup = (req, res, next) => {
+    console.log('GET SIGNUP');
     res.render('signup', {
         username: req.session.username || '',
         registro: true,
+        csrfToken: req.csrfToken(),
     });
 };
 
 exports.post_signup = (req, res, next) => {
+    console.log('POST SIGNUP')
+    console.log('BODY' + JSON.stringify(req.body));
     const nuevo_usuario = new Usuario(
-        req.body.username, req.body.name, req.body.password
+        req.body.username, req.body.correo, req.body.name, req.body.password
     );
     nuevo_usuario.save()
         .then(() => {
@@ -27,4 +79,10 @@ exports.post_signup = (req, res, next) => {
             req.sesion.error = 'Nombre de usuario ya existe';
             res.redirect('/usuario/signup');
         });
+};
+
+exports.get_logout = (request, response, next) => {
+    request.session.destroy(() => {
+        response.redirect('/usuario/login'); //Este código se ejecuta cuando la sesión se elimina.
+    });
 };

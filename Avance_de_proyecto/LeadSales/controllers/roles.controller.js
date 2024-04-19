@@ -13,6 +13,19 @@ exports.post_eliminar = (request, response, next) => {
         })
 };
 
+
+exports.post_eliminarUsuario = (request, response, next) => {
+    console.log(request.body.IDUsuario)
+    Rol.deleteUsuario(request.body.IDUsuario)
+        .then(([rows,fieldData]) => {
+            Console.log("Registro eliminado exitosamente")
+            response.redirect ('/Roles/equipo');
+        }).catch((error) => {
+            console.log(error)
+            response.redirect ('/Roles/equipo');
+        })
+};
+
 exports.get_buscar = (req, res, next) => {
     Rol.buscar(req.params.q || '')
         .then(([rows, fieldData]) => {

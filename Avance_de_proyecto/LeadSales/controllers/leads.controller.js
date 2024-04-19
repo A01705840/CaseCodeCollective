@@ -1,8 +1,13 @@
 const { request } = require('express');
 
 const Lead = require('../models/lead.model');
+const Usuario = require('../models/usuario.model');
 
 exports.get_analitica = async (request, response, next) => {
+<<<<<<< HEAD
+=======
+    console.log('GET ANALITICA');
+>>>>>>> a5003f70847e10431f62d915a4a528e66dd35ab5
     const range = request.params.date; // Obtener el rango de la ruta
     const result = await Lead.fetchLeadsByDay(range);
     console.log(result[0]);
@@ -20,17 +25,24 @@ exports.get_analiticaPRESET = async (request, response, next) => {
 };
 
 exports.get_root = (request, response, next) => {
+    console.log('GET ROOT');
+    console.log(request.session.username + request.session.isLoggedIn)
     response.render('home', {
         username: request.session.username || '',
-        registro: false,
+        permisos: request.session.permisos || [],
+    })
+    .catch((error) => {
+        console.log(error);
+        
     });
 };
 
 exports.get_leads = (request, res, next)  => {
+    console.log('GET LEADS');
     Lead.fetch(request.params.IDLead)
         .then(([rows,fieldData]) => {
             //console.log(NombreLead);
-            console.log(rows.length); 
+            //console.log(rows.length); 
             res.render ('leads', {
                 csrfToken: request.csrfToken,
                 registro: true,
@@ -46,7 +58,7 @@ exports.get_leads = (request, res, next)  => {
 }
 
 exports.post_eliminar_lead = (request, response, next) => {
-    console.log('post-eliminar');
+    console.log('POST ELIMINAR LEAD');
     Lead.eliminar(request.body.IDLead)
     .then(() => {
         return Lead.fetchAll();
@@ -56,16 +68,28 @@ exports.post_eliminar_lead = (request, response, next) => {
     }).catch((error) => {
         console.log(error);
     });
+    console.log('LEAD ELIMINADO');
 }
 
 exports.get_fechas = () => {
+    console.log('GET FECHAS')
     console.log('');
     Lead
 }
 
+<<<<<<< HEAD
+=======
+exports.postAnalitica = (req, res) => {
+    console.log('POST ANALITICA');
+    const nDayss = req.body.nDays; // Obtiene del cuerpo de la peticion, valor que haya en NDays
+    const data =  Lead.fetchByDate(nDayss);
+    res.send(data);
+};
+>>>>>>> a5003f70847e10431f62d915a4a528e66dd35ab5
 
 
 exports.get_modificar_lead = (request, response, next) => {
+    console.log('GET MODIFICAR LEAD')
     const id = request.params.id;
     Lead.fetchOneLeadbyid(id)
     .then(([rows, fieldData]) => {
@@ -78,9 +102,10 @@ exports.get_modificar_lead = (request, response, next) => {
 
 
 exports.post_modificar_lead = async (request, response, next) => {
-    console.log('post-modificar');
+    console.log('POST MODIFICAR LEAD');
     try {
         // Actualiza el lead en la base de datos
+        console.log(request.body);
         console.log(request.body);
         await Lead.update(request.body);
 

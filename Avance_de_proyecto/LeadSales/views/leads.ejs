@@ -1,7 +1,6 @@
 <%- include('includes/head.ejs', {
     username: username,
     permisos: permisos}) %>
-    <% console.log('Hola') %>
     <input type="hidden" id="_csrf" name="_csrf" value="<%= csrfToken %>">
  
     <div id="modal" onclick="cerrarModal()" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.3);" class="flex items-center justify-center">
@@ -98,18 +97,22 @@
         </div>
     </div>
 
-    <div class="p-4 sm:ml-20 sm:mr-10 font-sans">
-        <h1 class="text-2xl font-bold mb-4">Leads</h1>
-        <div class="flex flex-col justify-right p-4 border-2 border-gray-200 rounded-lg dark:border-gray-700 bg-slate-200">
-            <div class="inline-flex justify-between items-center mb-4">
-                <div class="flex space-x-2">
-                    <button class="bg-white hover:bg-indigo-600 text-indigo-600 hover:text-white py-2 px-4 rounded-full transition duration-300">Crear Lead</button>
-                    <button class="bg-white hover:bg-indigo-600 text-indigo-600 hover:text-white py-2 px-4 rounded-full transition duration-300">Descargar Leads</button>
-                </div>
+  <div class="p-4 sm:ml-20 sm:mr-10 font-sans">
+      <div class="shadow-lg flex flex-col justify-right p-4 border-2 border-gray-200 rounded-lg dark:border-gray-700 bg-slate-200">
+        <div class="inline-flex justify-between items-center mb-4">
+            <span style='font-size:30px;'>📋 Leads</span>
+              <div class="flex space-x-2">
+                  <button class="bg-white hover:bg-indigo-600 hover:text-white py-2 px-4 rounded-full transition duration-300">
+                    Crear Lead</button>
+                  <button class="bg-white hover:bg-indigo-600 hover:text-white py-2 px-4 rounded-full transition duration-300">Descargar Leads</button>
+              </div>
 
 
             </div>
-            <div class="flex justify-center sm:mt-4 p-1 border-1 border-gray-200 rounded-lg dark:border-gray-200 bg-white">
+            <div class="flex justify-center border-1 border-gray-200 rounded-lg dark:border-gray-200 bg-white">
+                <% if(leads.length === 0) {%>
+                    <p class="text-2xl text-gray-500 mt-48 mb-48">Importa tus primeros leads, en el historial, para comenzar...</p>
+                <%  } else{ %> 
                 <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
@@ -128,7 +131,16 @@
                                 <%= lead.NombreLead %>
                             </th>
                             <td class="px-6 py-4">
-                                <%= lead.FechaPrimerMensaje %>
+                                <%  let fechaActual = lead.FechaPrimerMensaje;
+                                // Convertir la fecha a un objeto Date
+                                const fecha = new Date(fechaActual);
+                                // Obtener día, mes y año
+                                const dia = fecha.getDate().toString().padStart(2, '0');
+                                const mes = (fecha.getMonth() + 1).toString().padStart(2, '0'); // El mes comienza desde 0
+                                const año = fecha.getFullYear();
+                                // Crear la cadena en el formato deseado (dd/mm/yyyy)
+                                const fechaFormateada = `${dia}/${mes}/${año}`;%>
+                                <%= fechaFormateada %>
                             </td>
                             <td class="px-6 py-4">
                                 <%= lead.asignado_a %>
@@ -149,6 +161,7 @@
                     </tbody>
 
                 </table>
+                <%  }%> 
             </div>
         </div>
     </div>
@@ -170,62 +183,62 @@
         return result.json()
     }).then((data) => {
 
-        let html = "";
-        for (let lead of data.leads) {
-            html += 
-            `<tr>`;
-            
-                html += 
-                `<th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    ${lead.NombreLead }
-                </th>
-                <td class="px-6 py-4">
-                    ${lead.FechaPrimerMensaje}
-                </td>
-                <td class="px-6 py-4">
-                    ${lead.asignado_a}
-                </td>
-                <td class="px-6 py-4 text-center">
-                    <button onclick="window.location.href='/lead/modificar/${lead.IDLead}'" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded">
-                        Modificar
-                    </button>
-                </td>
-                <td class="px-6 py-4 text-center">
-                    <button onclick="eliminar(${lead.IDLead})" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-4 rounded">
-                        Eliminar
-                    </button>
-                </td>
-            </tr>`;
-        }
+      let html = "";
+      for (let lead of data.leads) {
+          html += 
+          `<tr>`;
+          
+              html += 
+              `<th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-gray-800">
+                  ${lead.NombreLead }
+              </th>
+              <td class="px-6 py-4">
+                  ${lead.FechaPrimerMensaje}
+              </td>
+              <td class="px-6 py-4">
+                  ${lead.asignado_a}
+              </td>
+              <td class="px-6 py-4 text-center">
+                  <button onclick="window.location.href='/lead/modificar/${lead.IDLead}'" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded">
+                      Modificar
+                  </button>
+              </td>
+              <td class="px-6 py-4 text-center">
+                  <button onclick="eliminar(${lead.IDLead})" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-4 rounded">
+                      Eliminar
+                  </button>
+              </td>
+          </tr>`;
+      }
 
-        document.getElementById('table_content').innerHTML = html;
+      document.getElementById('table_content').innerHTML = html;
 
-    }).catch((err) => {
-        console.log(err)
-    })
-    }
+  }).catch((err) => {
+      console.log(err)
+  })
+  }
 
-    // Almacena el ID del lead para modificar y poder enviarlo al servidor
-    var leadId;
-    // Función para modificar un lead
-    function modificar(id) {
-        leadId = id;
-    console.log('modificar', id);
-    $.get(`/lead/modificar/${id}`, function(data) {
-        
-        // Aquí, `data` es el lead que se obutvo del servidor. (Un botón de modificar)
-        $('#nombre').val(data.NombreLead);
-        
-        //Se agregan los valores a los select porque no se pueden agregar directamente en el html
+  // Almacena el ID del lead para modificar y poder enviarlo al servidor
+  var leadId;
+  // Función para modificar un lead
+  function modificar(id) {
+      leadId = id;
+  console.log('modificar', id);
+  $.get(`/lead/modificar/${id}`, function(data) {
+      
+      // Aquí, `data` es el lead que se obutvo del servidor. (Un botón de modificar)
+      $('#nombre').val(data.NombreLead);
+      
+      //Se agregan los valores a los select porque no se pueden agregar directamente en el html
 
-        // Aquí, se obtiene la fecha del primer mensaje y se formatea para que sea compatible con el input de tipo date.
-        var fechaSeleccionada = new Date(data.FechaPrimerMensaje);
-        var fechaFormateada = fechaSeleccionada.toISOString().split('T')[0];
-        $('#fecha').val(fechaFormateada);
+      // Aquí, se obtiene la fecha del primer mensaje y se formatea para que sea compatible con el input de tipo date.
+      var fechaSeleccionada = new Date(data.FechaPrimerMensaje);
+      var fechaFormateada = fechaSeleccionada.toISOString().split('T')[0];
+      $('#fecha').val(fechaFormateada);
 
-        $('#telefono').val(data.Telefono);
+      $('#telefono').val(data.Telefono);
 
-        $('#embudo').val(data.Embudo); 
+      $('#embudo').val(data.Embudo); 
 
         $('#etapa').val(data.Etapa);
         $('#status').val(data.Status);
@@ -236,14 +249,14 @@
         var creadomanualSeleccionado = data.CreadoManual == 1 ? 'SI' : 'NO';
         $('#creadomanual').val(creadomanualSeleccionado); 
 
-        $('#asignado_a').val(data.asignado_a);
+      $('#asignado_a').val(data.asignado_a);
 
-        $('#modal').show();
-    });
-    document.getElementById('botonGuardar').addEventListener('click', guardarCambios);
+      $('#modal').show();
+  });
+  document.getElementById('botonGuardar').addEventListener('click', guardarCambios);
 }
 function cerrarModal() {
-    $('#modal').hide();
+  $('#modal').hide();
 }
 
 function guardarCambios() {
@@ -289,6 +302,6 @@ function guardarCambios() {
     });
 }
 
-    </script>
+  </script>
 </body>
 </html>
