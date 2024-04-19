@@ -1,7 +1,6 @@
 <%- include('includes/head.ejs', {
     username: username,
     permisos: permisos}) %>
-    <% console.log('Hola') %>
     <input type="hidden" id="_csrf" name="_csrf" value="<%= csrfToken %>">
  
     <div id="modal" onclick="cerrarModal()" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.3);" class="flex items-center justify-center">
