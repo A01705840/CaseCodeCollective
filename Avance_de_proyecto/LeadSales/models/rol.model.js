@@ -72,6 +72,18 @@ module.exports = class Rol {
         }));
     }
 
+    static deleteUsuario(IDUsuario) {
+        return db.execute('DELETE FROM `usuario_tiene_rol` WHERE IDUsuario = ?;', [IDUsuario])
+        .then(() => {
+            return db.execute('DELETE FROM usuario WHERE IDUsuario = ?;', [IDUsuario])
+        })
+            .catch((error) => {
+                console.log(error);
+                throw new Error('Usuario no encontrado');
+            });
+    }
+    
+
     static fetchAllParaRoles() {
         return db.execute('SELECT * FROM rol WHERE TipoRol NOT IN ("owner", "SinRol") ORDER BY IDRol ASC');
     }
