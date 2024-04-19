@@ -85,7 +85,17 @@ module.exports = class Lead {
         return await db.execute(query, [startDate, endDate]);
     }
     
+    static async obtenerCantidadLeads() {
+        const [rows] = await db.execute('SELECT COUNT(*) AS cantidad FROM leads');
+        return rows[0].cantidad;
+    }
+    
+    static async obtenerCantidadLeadsOrganicos() {
+        const [rows] = await db.execute('SELECT COUNT(*) AS cantidad FROM leads WHERE CreadoManual = 0');
+        return rows[0].cantidad;
+    }
 
+    
     static fetchOne(NombreLead) {
         return db.execute('Select * FROM usuario WHERE NombreLead = ?', [NombreLead]);
     }

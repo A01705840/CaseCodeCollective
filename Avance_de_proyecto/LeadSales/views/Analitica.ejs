@@ -7,6 +7,8 @@
         </div>
     <div class="mt-2 lex flex-col justify-right p-4 border-2 border-gray-200 rounded-lg bg-b bg-white" style="height:970px; overflow-y:visible;">
         <div class="flex flex-col items-center h-full">
+            <h2 class="text-4xl font-bold mb-4">Total de Leads: <%= cantidadTotalLeads %></h2>
+            <h2 class="text-4xl font-bold mb-4">El <span id="porcentajeLeadsOrganicos"></span> de los leads son orgánicos.</h2>
             <div class="max-w-2x1" style="width: 50%; height: 50%; background-color: #ffffff; border: 0px solid #444; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); padding: 20px; border-radius: 15px;">
                 <select id="dateRange" class=" bg-grey-600 rounded-md shadow-sm focus:outline-none text-ellipsis" style=" margin-bottom: 0px; position:relative; left: 656px;">
                     <option value="1">Una semana</option>
@@ -25,6 +27,27 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
 <script>
+    // Declarar las variables al principio del script
+    const cantidadTotalLeads = <%= cantidadTotalLeads %>;
+    const cantidadLeadsOrganicos = <%= cantidadLeadsOrganicos %>;
+
+    // Calcular el porcentaje de leads orgánicos y actualizar el texto
+    const porcentajeLeadsOrganicos = (cantidadLeadsOrganicos / cantidadTotalLeads) * 100;
+    document.getElementById('porcentajeLeadsOrganicos').textContent = porcentajeLeadsOrganicos.toFixed(2) + '%';
+
+    // Asignar una clase de color en función del porcentaje
+    const porcentajeLeadsOrganicosElement = document.getElementById('porcentajeLeadsOrganicos');
+    if (porcentajeLeadsOrganicos >= 75) {
+        porcentajeLeadsOrganicosElement.className = 'text-blue-700';
+    } else if (porcentajeLeadsOrganicos >= 50) {
+        porcentajeLeadsOrganicosElement.className = 'text-blue-500';
+    } else if (porcentajeLeadsOrganicos >= 25) {
+        porcentajeLeadsOrganicosElement.className = 'text-blue-300';
+    } else {
+        porcentajeLeadsOrganicosElement.className = 'text-blue-100';
+    }
+
+
     // Establecer la opción seleccionada tan pronto como se carga el script
     const selectedRange = localStorage.getItem('selectedRange') || '1'; // Obtener el rango seleccionado
     if (selectedRange) {
@@ -161,18 +184,25 @@ let myChart = new Chart(ctx, {
     const selectedRange = this.value;
     localStorage.setItem('selectedRange', selectedRange); // Guardar el rango seleccionado
 
-    // Hacer una solicitud AJAX para obtener los datos
-    fetch('/lead/analitics/' + selectedRange)
-        .then(response => response.json())
-        .then(data => {
-            // Formatear las fechas y actualizar la gráfica con los nuevos datos
-            myChart.data.labels = data.map(item => formatDate(item.Fecha, selectedRange));
-            myChart.data.datasets[0].data = data.map(item => item.CantidadLeads);
-            myChart.data.datasets[0].label = getLabelText(selectedRange); // Actualizar el label del dataset
-            myChart.options.plugins.tooltip.callbacks.title = function(tooltipItem) {
-                return getLabelText(selectedRange); // Actualizar el título del tooltip
-            };
-            myChart.update();
-        });
-});
+     // Hacer una solicitud AJAX para obtener los datos
+     fetch('/lead/analitics/' + selectedRange)
+            .then(response => response.json())
+            .then(data => {
+                // Formatear las fechas y actualizar la gráfica con los nuevos datos
+                myChart.data.labels = data.leadsPorDia.map(item => formatDate(item.Fecha, selectedRange));
+                myChart.data.datasets[0].data = data.leadsPorDia.map(item => item.CantidadLeads);
+                myChart.data.datasets[0].label = getLabelText(selectedRange); // Actualizar el label del dataset
+                myChart.options.plugins.tooltip.callbacks.title = function(tooltipItem) {
+                    return getLabelText(selectedRange); // Actualizar el título del tooltip
+                };
+                myChart.update();
+
+                // Actualizar la cantidad total de leads
+                document.getElementById('totalLeads').textContent = `Total de Leads: ${data.cantidadTotalLeads}`;
+
+                // Calcular el porcentaje de leads orgánicos y actualizar el texto
+                const porcentajeLeadsOrganicos = (cantidadLeadsOrganicos / cantidadTotalLeads) * 100;
+                document.getElementById('porcentajeLeadsOrganicos').textContent = porcentajeLeadsOrganicos.toFixed(2) + '%';
+            });
+    });
 </script>

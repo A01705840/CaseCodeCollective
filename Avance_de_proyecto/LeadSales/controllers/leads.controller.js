@@ -6,16 +6,26 @@ const Usuario = require('../models/usuario.model');
 exports.get_analitica = async (request, response, next) => {
     const range = request.params.date; // Obtener el rango de la ruta
     const result = await Lead.fetchLeadsByDay(range);
+    const cantidadLeads = await Lead.obtenerCantidadLeads();
+    const cantidadLeadsOrganicos = await Lead.obtenerCantidadLeadsOrganicos();
     console.log(result[0]);
-    response.json(result[0]); // Devolver los datos como JSON
+    response.json({
+        leadsPorDia: result[0],
+        cantidadTotalLeads: cantidadLeads,
+        cantidadLeadsOrganicos: cantidadLeadsOrganicos
+    }); // Devolver los datos como JSON
 };
 
 exports.get_analiticaPRESET = async (request, response, next) => {
     const result = await Lead.fetchLeadsByDay('1'); // Siempre usa '1' (semana) como valor predeterminado
+    const cantidadLeads = await Lead.obtenerCantidadLeads();
+    const cantidadLeadsOrganicos = await Lead.obtenerCantidadLeadsOrganicos();
     console.log(result[0]);
     response.render('analitica', {
         username: request.session.username || '',
         leadsPerDay: result[0], // Resultado de la consulta SQL
+        cantidadTotalLeads: cantidadLeads,
+        cantidadLeadsOrganicos: cantidadLeadsOrganicos,
         registro: false,
     });
 };
