@@ -4,10 +4,6 @@ const Lead = require('../models/lead.model');
 const Usuario = require('../models/usuario.model');
 
 exports.get_analitica = async (request, response, next) => {
-<<<<<<< HEAD
-=======
-    console.log('GET ANALITICA');
->>>>>>> a5003f70847e10431f62d915a4a528e66dd35ab5
     const range = request.params.date; // Obtener el rango de la ruta
     const result = await Lead.fetchLeadsByDay(range);
     console.log(result[0]);
@@ -77,15 +73,6 @@ exports.get_fechas = () => {
     Lead
 }
 
-<<<<<<< HEAD
-=======
-exports.postAnalitica = (req, res) => {
-    console.log('POST ANALITICA');
-    const nDayss = req.body.nDays; // Obtiene del cuerpo de la peticion, valor que haya en NDays
-    const data =  Lead.fetchByDate(nDayss);
-    res.send(data);
-};
->>>>>>> a5003f70847e10431f62d915a4a528e66dd35ab5
 
 
 exports.get_modificar_lead = (request, response, next) => {
