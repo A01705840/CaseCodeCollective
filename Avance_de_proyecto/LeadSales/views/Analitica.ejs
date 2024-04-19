@@ -7,6 +7,8 @@
         </div>
     <div class="mt-2 lex flex-col justify-right p-4 border-2 border-gray-200 rounded-lg bg-b bg-white" style="height:970px; overflow-y:visible;">
         <div class="flex flex-col items-center h-full">
+            <h2 class="text-4xl font-bold mb-4">Total de Leads: <%= cantidadTotalLeads %></h2>
+            <h2 class="text-4xl font-bold mb-4">El <span id="porcentajeLeadsOrganicos"></span> de los leads son orgánicos.</h2>
             <div class="max-w-2x1" style="width: 50%; height: 50%; background-color: #ffffff; border: 0px solid #444; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); padding: 20px; border-radius: 15px;">
                 <select id="dateRange" class=" bg-grey-600 rounded-md shadow-sm focus:outline-none text-ellipsis" style=" margin-bottom: 0px; position:relative; left: 656px;">
                     <option value="1">Una semana</option>
@@ -15,7 +17,8 @@
                     <option value="4">Un año</option>
                   </select>
             <canvas id="leadsChart"></canvas> 
-            <canvas id="pieChart"></canvas>
+            <canvas id="pieChartEmbudo"></canvas>
+            <canvas id="pieChartEstatus"></canvas>
             </div>
         </div>
     </div>
@@ -23,49 +26,112 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
 <script>
+
+    // Declarar las variables al principio del script
+    const cantidadTotalLeads = <%= cantidadTotalLeads %>;
+    const cantidadLeadsOrganicos = <%= cantidadLeadsOrganicos %>;
+
+    // Calcular el porcentaje de leads orgánicos y actualizar el texto
+    const porcentajeLeadsOrganicos = (cantidadLeadsOrganicos / cantidadTotalLeads) * 100;
+    document.getElementById('porcentajeLeadsOrganicos').textContent = porcentajeLeadsOrganicos.toFixed(2) + '%';
+
+    // Asignar una clase de color en función del porcentaje
+    const porcentajeLeadsOrganicosElement = document.getElementById('porcentajeLeadsOrganicos');
+    if (porcentajeLeadsOrganicos >= 75) {
+        porcentajeLeadsOrganicosElement.className = 'text-blue-700';
+    } else if (porcentajeLeadsOrganicos >= 50) {
+        porcentajeLeadsOrganicosElement.className = 'text-blue-500';
+    } else if (porcentajeLeadsOrganicos >= 25) {
+        porcentajeLeadsOrganicosElement.className = 'text-blue-300';
+    } else {
+        porcentajeLeadsOrganicosElement.className = 'text-blue-100';
+    }
+
+
     // Establecer la opción seleccionada tan pronto como se carga el script
     const selectedRange = localStorage.getItem('selectedRange') || '1'; // Obtener el rango seleccionado
     if (selectedRange) {
         document.getElementById('dateRange').value = selectedRange; // Establecer la opción seleccionada
     }
 
-     // Datos de ejemplo para la gráfica de donut
-  const pieData = {
-    labels: ['Red', 'Blue', 'Yellow'],
-    datasets: [{
-      label: 'My First Dataset',
-      data: [300, 50, 100],
-      backgroundColor: [
-        'rgb(255, 99, 132)',
-        'rgb(54, 162, 235)',
-        'rgb(255, 205, 86)'
-      ],
-      hoverOffset: 4
-    }]
-  };
+    // Datos de ejemplo para la gráfica de donut
+    const datos = <%- JSON.stringify(cantidadLeadsEmbudos) %>[0];
 
-  // Obtener el contexto del canvas para la gráfica de donut
-  const pieCtx = document.getElementById('pieChart').getContext('2d');
-  let pieChart = new Chart(pieCtx, {
-    type: 'pie',
-    data: pieData,
-    options: {
-      responsive: true,
-      plugins: {
-        legend: {
-          position: 'top',
-        },
-        title: {
-          display: true,
-          text: 'Gráfica de Pay'
-        }
-      }
+    // Crear arrays para almacenar las etiquetas y los totales de leads
+    const embudos = [];
+    const totalesLeads = [];
+
+    // Iterar sobre cada objeto en el array
+    datos.forEach(embudo => {
+        // Obtener el nombre del embudo y el total de leads
+        const nombreEmbudo = embudo.Embudo;
+        const totalLeads = parseInt(embudo.TotalLeads);
+        
+        // Agregar el nombre del embudo y el total de leads a los arrays correspondientes
+        embudos.push(nombreEmbudo);
+        totalesLeads.push(totalLeads);
+    });
+
+    // Función para generar un color aleatorio pastel
+    function getRandomPastelColor() {
+        let r, g, b;
+        do {
+            r = Math.floor(Math.random() * 128) + 128; // Valor entre 128 y 255 para tonos más claros
+            g = Math.floor(Math.random() * 128) + 128; // Valor entre 128 y 255 para tonos más claros
+            b = Math.floor(Math.random() * 128) + 128; // Valor entre 128 y 255 para tonos más claros
+        } while (r === g && g === b); // Evitar colores grises
+        return `rgb(${r}, ${g}, ${b})`;
     }
-  });
 
+    // Crear un array para almacenar los colores
+    const backgroundColors = embudos.map(() => getRandomPastelColor());
+
+    // Definir el objeto pieData con las etiquetas y los totales de leads
+    const pieData = {
+        labels: embudos, // Usar los nombres de los embudos como etiquetas
+        datasets: [{
+            label: '1',
+            data:  totalesLeads,
+            backgroundColor: backgroundColors,
+            hoverOffset: 4
+        }]
+    };
+
+    // Obtener el contexto del canvas para la gráfica de donut
+    const pieCtx = document.getElementById('pieChartEmbudo').getContext('2d');
+
+    // Configuración de la gráfica de donut
+    let pieChartEmbudo = new Chart(pieCtx, {
+        type: 'doughnut',
+        data: pieData,
+        options: {
+            responsive: true,
+            plugins: {
+                datalabels: {
+                    formatter: (value, ctx) => {
+                        const total = ctx.chart.data.datasets[0].data.reduce((acc, curr) => acc + curr, 0);
+                        const percentage = ((value / total) * 100).toFixed(2) + '%';
+                        return percentage;
+                    },
+                    color: '#fff',
+                    font: {
+                        weight: 'bold'
+                    }
+                }
+            },
+            legend: {
+                position: 'top',
+            },
+            title: {
+                display: true,
+                text: 'Gráfica de Pay Embudo'
+            }
+        }
+    });
 
 
     // Datos de ejemplo
@@ -106,7 +172,7 @@
         }
     }
 
-let myChart = new Chart(ctx, {
+    let myChart = new Chart(ctx, {
     type: 'line',
     data: {
         labels: data.map(item => formatDate(item.Fecha, selectedRange)), // Usar la función formatDate
@@ -198,19 +264,25 @@ let myChart = new Chart(ctx, {
     const selectedRange = this.value;
     localStorage.setItem('selectedRange', selectedRange); // Guardar el rango seleccionado
 
-    // Hacer una solicitud AJAX para obtener los datos
-    fetch('/lead/analitics/' + selectedRange)
-        .then(response => response.json())
-        .then(data => {
-            // Formatear las fechas y actualizar la gráfica con los nuevos datos
-            myChart.data.labels = data.map(item => formatDate(item.Fecha, selectedRange));
-            myChart.data.datasets[0].data = data.map(item => item.CantidadLeads);
-            myChart.data.datasets[0].label = getLabelText(selectedRange); // Actualizar el label del dataset
-            myChart.options.plugins.tooltip.callbacks.title = function(tooltipItem) {
-                return getLabelText(selectedRange); // Actualizar el título del tooltip
-            };
-            myChart.update();
-        });
-});
+     // Hacer una solicitud AJAX para obtener los datos
+     fetch('/lead/analitics/' + selectedRange)
+            .then(response => response.json())
+            .then(data => {
+                // Formatear las fechas y actualizar la gráfica con los nuevos datos
+                myChart.data.labels = data.leadsPorDia.map(item => formatDate(item.Fecha, selectedRange));
+                myChart.data.datasets[0].data = data.leadsPorDia.map(item => item.CantidadLeads);
+                myChart.data.datasets[0].label = getLabelText(selectedRange); // Actualizar el label del dataset
+                myChart.options.plugins.tooltip.callbacks.title = function(tooltipItem) {
+                    return getLabelText(selectedRange); // Actualizar el título del tooltip
+                };
+                myChart.update();
 
+                // Actualizar la cantidad total de leads
+                document.getElementById('totalLeads').textContent = `Total de Leads: ${data.cantidadTotalLeads}`;
+
+                // Calcular el porcentaje de leads orgánicos y actualizar el texto
+                const porcentajeLeadsOrganicos = (cantidadLeadsOrganicos / cantidadTotalLeads) * 100;
+                document.getElementById('porcentajeLeadsOrganicos').textContent = porcentajeLeadsOrganicos.toFixed(2) + '%';
+            });
+    });
 </script>

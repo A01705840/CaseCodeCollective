@@ -4,19 +4,32 @@ const Lead = require('../models/lead.model');
 const Usuario = require('../models/usuario.model');
 
 exports.get_analitica = async (request, response, next) => {
-    console.log('GET ANALITICA');
     const range = request.params.date; // Obtener el rango de la ruta
     const result = await Lead.fetchLeadsByDay(range);
+    const cantidadLeads = await Lead.obtenerCantidadLeads();
+    const cantidadLeadsOrganicos = await Lead.obtenerCantidadLeadsOrganicos();
+    const cantidadLeadsEmbudos = await Lead.obtenerCantidadLeadsEmbudos();
     console.log(result[0]);
-    response.json(result[0]); // Devolver los datos como JSON
+    response.json({
+        leadsPorDia: result[0],
+        cantidadTotalLeads: cantidadLeads,
+        cantidadLeadsOrganicos: cantidadLeadsOrganicos,
+        cantidadLeadsEmbudos: cantidadLeadsEmbudos,
+    }); // Devolver los datos como JSON
 };
 
 exports.get_analiticaPRESET = async (request, response, next) => {
     const result = await Lead.fetchLeadsByDay('1'); // Siempre usa '1' (semana) como valor predeterminado
+    const cantidadLeads = await Lead.obtenerCantidadLeads();
+    const cantidadLeadsOrganicos = await Lead.obtenerCantidadLeadsOrganicos();
+    const cantidadLeadsEmbudos = await Lead.obtenerCantidadLeadsEmbudos();
     console.log(result[0]);
     response.render('analitica', {
         username: request.session.username || '',
         leadsPerDay: result[0], // Resultado de la consulta SQL
+        cantidadTotalLeads: cantidadLeads,
+        cantidadLeadsOrganicos: cantidadLeadsOrganicos,
+        cantidadLeadsEmbudos: cantidadLeadsEmbudos,
         registro: false,
     });
 };
@@ -76,12 +89,6 @@ exports.get_fechas = () => {
     Lead
 }
 
-exports.postAnalitica = (req, res) => {
-    console.log('POST ANALITICA');
-    const nDayss = req.body.nDays; // Obtiene del cuerpo de la peticion, valor que haya en NDays
-    const data =  Lead.fetchByDate(nDayss);
-    res.send(data);
-};
 
 
 exports.get_modificar_lead = (request, response, next) => {
