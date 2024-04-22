@@ -15,11 +15,21 @@
                     <option value="3">Un semestre</option>
                     <option value="4">Un año</option>
                   </select>
-            <canvas id="leadsChart"></canvas> 
-            <canvas id="pieChartEmbudo"></canvas>
-            <canvas id="pieChartEstatus"></canvas>
+                  <canvas id="leadsChart"></canvas>
             </div>
         </div>
+            <canvas id="pieChartEmbudo"></canvas>
+            <canvas id="pieChartEstatus"></canvas>
+
+            <div class="max-w-2x1" style="width: 50%; height: 50%; background-color: #ffffff; border: 0px solid #444; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); padding: 20px; border-radius: 15px;">
+                <select id="dateRangeLeadsPorAgente" class=" bg-grey-600 rounded-md shadow-sm focus:outline-none text-ellipsis" style=" margin-bottom: 0px; position:relative; left: 656px;">
+                    <option value="1">Una semana</option>
+                    <option value="2">Un mes</option>
+                    <option value="3">Un semestre</option>
+                    <option value="4">Un año</option>
+                  </select>
+                  <canvas id="leadsPorAgenteChart"></canvas>
+            </div>
 
         <div  style="width: 32%; height: 20%; background-color: #ffffff; border: 0px solid #444; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); padding: 20px; border-radius: 15px;">
             <h2 class="text-4xl mb-4">Total de Leads: <span id="totalLeads" class="font-bold"><%= cantidadTotalLeads %></span></h2>
@@ -53,7 +63,6 @@
         }
     }
 
-    console.log(cantidadTotalLeads, cantidadLeadsOrganicos);
     // Calcular el porcentaje de leads orgánicos y actualizar el texto
     const porcentajeLeadsOrganicos = (cantidadLeadsOrganicos / cantidadTotalLeads) * 100;
     const porcentajeLeadsOrganicosElement = document.getElementById('porcentajeLeadsOrganicos');
@@ -61,13 +70,18 @@
 
     // Asignar una clase de color en función del porcentaje
     porcentajeLeadsOrganicosElement.className = getColorForPercentage(porcentajeLeadsOrganicos);
-
     porcentajeLeadsOrganicosElement.style.fontWeight = 'bold';
 
     // Establecer la opción seleccionada tan pronto como se carga el script
     const selectedRange = localStorage.getItem('selectedRange') || '1'; // Obtener el rango seleccionado
     if (selectedRange) {
         document.getElementById('dateRange').value = selectedRange; // Establecer la opción seleccionada
+    }
+
+    // Establecer la opción seleccionada de Agente
+    const selectedRangeAgente = localStorage.getItem('selectedRangeAgente') || '1'; // Obtener el rango seleccionado
+    if (selectedRangeAgente) {
+        document.getElementById('dateRangeLeadsPorAgente').value = selectedRangeAgente; // Establecer la opción seleccionada
     }
 
     // Datos de ejemplo para la gráfica de donut
@@ -153,7 +167,7 @@
     }));
     // Obtener el contexto del canvas para después crear la gráfica
     const ctx = document.getElementById('leadsChart').getContext('2d');
-
+    console.log(data);
     // Función para formatear la fecha
     function formatDate(date, range) {
         switch (parseInt(range)) {
@@ -268,16 +282,98 @@
             }
         }]
     });
+ 
 
+    var fechas = <%- JSON.stringify(fechas) %>;
+    var datasets = <%- JSON.stringify(datasets) %>;
+   
+    console.log("datasets",datasets);
+    console.log("fechas",fechas);
+    // Formatear las fechas antes de usarlas en la gráfica
+   
 
+    // Obtener el contexto del segundo canvas
+    const ctxAgent = document.getElementById('leadsPorAgenteChart').getContext('2d');
+
+     // Crear la gráfica de Leads por Agente
+     const leadsPorAgenteChart = new Chart(ctxAgent, {
+        type: 'line',
+        data: {
+        labels: fechas.map(fecha => formatDate(fecha, selectedRangeAgente)), // Usar la función formatDate
+        datasets: datasets.map(dataset => ({
+            label: dataset.agente, // Asegurarse de incluir la propiedad label
+            data: dataset.datos, // Asegurarse de incluir la propiedad data
+            tension: 0.4 // Añadir curvas a las líneas
+        }))
+    },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        drawBorder: false,
+                        drawOnChartArea: false
+                    }
+                },
+                x: {
+                    grid: {
+                        drawBorder: false,
+                        drawOnChartArea: false
+                    }
+                }
+            },
+            plugins: {
+                tooltip: {
+                    intersect: false,
+                    mode: 'index',
+                    displayColors: false,
+                    callbacks: {
+                        title: function(tooltipItem) {
+                            return getLabelText(selectedRange); // Actualizar el título del tooltip
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    
+
+    document.getElementById('dateRangeLeadsPorAgente').addEventListener('change', function(event) {
+    event.preventDefault(); // Evitar la recarga de la página
+    const selectedRangeAgent = this.value;
+    localStorage.setItem('selectedRangeAgent', selectedRangeAgent); // Guardar el rango seleccionado
+
+    fetch('/lead/analitics/agent/' + selectedRangeAgent)
+    .then(response => response.json())
+    .then(data => {
+        console.log("CHECARESTO",data);
+
+        // Utilizar los datos ya procesados que recibes del servidor
+        const fechas = data.fechas;
+        const datasets = data.datasets.map(dataset=> {
+            return {
+                label: dataset.agente, // Usar el nombre del agente
+                data: dataset.datos, // Usar los datos del agente
+                tension: 0.4 // Añadir curvas a las líneas
+            };
+        });
+
+        // Actualizar la gráfica con los nuevos datos
+        leadsPorAgenteChart.data.labels = fechas.map(fecha => formatDate(fecha, selectedRangeAgent));
+        leadsPorAgenteChart.data.datasets = datasets;
+        leadsPorAgenteChart.update();
+    })
+    .catch(error => console.error('Error en la solicitud fetch: ', error));
+});
 
     document.getElementById('dateRange').addEventListener('change', function(event) {
     event.preventDefault(); // Evitar la recarga de la página
     const selectedRange = this.value;
     localStorage.setItem('selectedRange', selectedRange); // Guardar el rango seleccionado
 
-      // Hacer una solicitud AJAX para obtener los datos
-      fetch('/lead/analitics/' + selectedRange)
+       // Hacer una solicitud AJAX para obtener los datos
+       fetch('/lead/analitics/' + selectedRange)
             .then(response => response.json())
             .then(data => {
                 // Formatear las fechas y actualizar la gráfica con los nuevos datos
@@ -288,17 +384,6 @@
                     return getLabelText(selectedRange); // Actualizar el título del tooltip
                 };
                 myChart.update();
-
-                // Actualizar la cantidad total de leads
-                document.getElementById('totalLeads').textContent = `${data.cantidadTotalLeads}`;
-
-                // Calcular el porcentaje de leads orgánicos y actualizar el texto
-                const porcentajeLeadsOrganicos = (data.cantidadLeadsOrganicos / data.cantidadTotalLeads) * 100;
-                const porcentajeLeadsOrganicosElement = document.getElementById('porcentajeLeadsOrganicos');
-                porcentajeLeadsOrganicosElement.textContent = porcentajeLeadsOrganicos.toFixed(2) + '%';
-
-                // Asignar una clase de color en función del porcentaje
-                porcentajeLeadsOrganicosElement.className = getColorForPercentage(porcentajeLeadsOrganicos);
-            });
-        });
+    });
+});
 </script>

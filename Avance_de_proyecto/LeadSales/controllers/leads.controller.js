@@ -2,35 +2,84 @@ const { request } = require('express');
 
 const Lead = require('../models/lead.model');
 const Usuario = require('../models/usuario.model');
+const utils = require('../controllers/util');
 
 exports.get_analitica = async (request, response, next) => {
-    const range = request.params.date; // Obtener el rango de la ruta
+    const range = request.params.date; // Obtener el rango de la ruta para obtener los leads
     const result = await Lead.fetchLeadsByDay(range);
-    const cantidadLeads = await Lead.obtenerCantidadLeads();
-    const cantidadLeadsOrganicos = await Lead.obtenerCantidadLeadsOrganicos();
-    const cantidadLeadsEmbudos = await Lead.obtenerCantidadLeadsEmbudos();
     console.log(result[0]);
     response.json({
         leadsPorDia: result[0],
-        cantidadTotalLeads: cantidadLeads,
-        cantidadLeadsOrganicos: cantidadLeadsOrganicos,
-        cantidadLeadsEmbudos: cantidadLeadsEmbudos,
-    }); // Devolver los datos como JSON
+    }); 
+};
+
+exports.get_analitica_agent = async (request, response, next) => {
+    const rangeAgent = Number(request.params.date); // Obtener el rango de la ruta
+
+    // Verificar si el rango es de días o de meses
+    let result;
+    if (rangeAgent === 3 || rangeAgent === 4) {
+        // Para semestre y año, llamar a la nueva función
+        result = await Lead.fetchLeadsPorAgenteAgrupadosPorMes(rangeAgent);
+        return response.json(result);
+    } else {
+        // Para otros casos, llamar a la función original
+        result = await Lead.fetchLeadsPorAgente(rangeAgent);
+    }
+
+    const leadsPorAgente = result[0]; // Solo usar el primer elemento del array
+
+    // Calcular el rango de fechas y generar las fechas
+    const rangoFechas = utils.calcularRangoFechas(rangeAgent);
+    const fechas = utils.generarFechas(rangoFechas.inicio, rangoFechas.fin);
+
+    // Filtrar los leads para incluir solo los elementos dentro del rango de fechas
+    const leadsFiltrados = leadsPorAgente.filter(item => {
+        var fecha = new Date(item.Fecha);
+        return fecha >= rangoFechas.inicio && fecha <= rangoFechas.fin;
+    });
+
+    const gruposPorAgente = utils.agruparLeadsPorAgente(leadsFiltrados);
+    const datasetsPorAgente = utils.generarDatasetsPorAgente(gruposPorAgente, fechas);
+
+    response.json({
+        startDate: rangoFechas.inicio,
+        endDate: rangoFechas.fin,
+        fechas: fechas,
+        datasets: datasetsPorAgente
+    });
 };
 
 exports.get_analiticaPRESET = async (request, response, next) => {
-    const result = await Lead.fetchLeadsByDay('1'); // Siempre usa '1' (semana) como valor predeterminado
+    const rangeAgent = '1'; // Siempre usa '1' (semana) como valor predeterminado
+    const result = await Lead.fetchLeadsByDay(rangeAgent);
     const cantidadLeads = await Lead.obtenerCantidadLeads();
     const cantidadLeadsOrganicos = await Lead.obtenerCantidadLeadsOrganicos();
     const cantidadLeadsEmbudos = await Lead.obtenerCantidadLeadsEmbudos();
-    console.log(result[0]);
+    const leadsPorAgenteResult = await Lead.fetchLeadsPorAgente(rangeAgent);
+    const leadsPorAgente = leadsPorAgenteResult[0]; // Solo usar el primer elemento del array
+
+    // Calcular el rango de fechas y generar las fechas
+    const rangoFechas = utils.calcularRangoFechas(rangeAgent);
+    const fechas = utils.generarFechas(rangoFechas.inicio, rangoFechas.fin);
+
+    // Filtrar los leads para incluir solo los elementos dentro del rango de fechas
+    const leadsFiltrados = leadsPorAgente.filter(item => {
+        var fecha = new Date(item.Fecha);
+        return fecha >= rangoFechas.inicio && fecha <= rangoFechas.fin;
+    });
+
+    const gruposPorAgente = utils.agruparLeadsPorAgente(leadsFiltrados);
+    const datasetsPorAgente = utils.generarDatasetsPorAgente(gruposPorAgente, fechas);
+
     response.render('analitica', {
         username: request.session.username || '',
-        leadsPerDay: result[0], // Resultado de la consulta SQL
+        leadsPerDay: result[0], 
         cantidadTotalLeads: cantidadLeads,
         cantidadLeadsOrganicos: cantidadLeadsOrganicos,
         cantidadLeadsEmbudos: cantidadLeadsEmbudos,
-        registro: false,
+        fechas: fechas,
+        datasets: datasetsPorAgente,
     });
 };
 

@@ -51,7 +51,7 @@ module.exports = class Lead {
     }
 
     static async fetchLeadsByDay(range) {
-        const endDate = new Date(2022, 0, 1);// Fecha actual
+        const endDate = new Date(2023, 0, 1);// Fecha actual
         let startDate = new Date(endDate); // Crea una copia de endDate
         let groupBy;
     
@@ -99,6 +99,75 @@ module.exports = class Lead {
         return db.execute('SELECT Embudo, COUNT(*) AS TotalLeads FROM leads GROUP BY Embudo')
     }
 
+    static async fetchLeadsPorAgente(rangeAgent) {
+        const endDate = new Date(2023, 0, 1); // Fecha actual
+        let startDate = new Date(endDate); // Crea una copia de endDate
+        let groupBy;
+        console.log(rangeAgent);
+    
+        switch (parseInt(rangeAgent)) {
+            case 1:
+                startDate.setDate(endDate.getDate() - 7); // Una semana antes de la fecha actual
+                groupBy = 'DAY';
+                break;
+            case 2:
+                startDate.setMonth(endDate.getMonth() - 1); // Un mes antes de la fecha actual
+                groupBy = 'DAY';
+                break;
+            default:
+                throw new Error('Invalid range');
+        }
+    
+        const query = `
+            SELECT DATE(FechaPrimerMensaje) AS Fecha, asignado_a AS Agente, COUNT(*) as CantidadLeads 
+            FROM leads 
+            WHERE FechaPrimerMensaje >= ? AND FechaPrimerMensaje < ?
+            GROUP BY Fecha, asignado_a, ${groupBy}(FechaPrimerMensaje)
+        `;
+        return await db.execute(query, [startDate, endDate]);
+    }
+
+    static async fetchLeadsPorAgenteAgrupadosPorMes(rangeAgent) {
+        const endDate = new Date(2023, 0, 1); // Fecha actual
+        let startDate = new Date(endDate); // Crea una copia de endDate
+    
+        switch (parseInt(rangeAgent)) {
+            case 3:
+                startDate.setMonth(endDate.getMonth() - 6); // Seis meses antes de la fecha actual
+                break;
+            case 4:
+                startDate.setFullYear(endDate.getFullYear() - 1); // Un año antes de la fecha actual
+                break;
+            default:
+                throw new Error('Invalid range');
+        }
+    
+        const query = `
+            SELECT DATE_FORMAT(FechaPrimerMensaje, '%Y-%m') AS Fecha, asignado_a AS Agente, COUNT(*) as CantidadLeads 
+            FROM leads 
+            WHERE FechaPrimerMensaje >= ? AND FechaPrimerMensaje < ?
+            GROUP BY Fecha, asignado_a
+            ORDER BY Fecha, asignado_a
+        `;
+        const [rows] = await db.execute(query, [startDate, endDate]);
+    
+        // Crear un conjunto de todas las fechas y agentes únicos
+        let fechas = [...new Set(rows.map(row => row.Fecha))];
+        let agentes = [...new Set(rows.map(row => row.Agente))];
+    
+        // Crear un conjunto de datos para cada agente
+        let datasets = agentes.map(agente => {
+            let datos = fechas.map(fecha => {
+                // Encontrar la fila correspondiente a esta fecha y agente
+                let row = rows.find(row => row.Fecha === fecha && row.Agente === agente);
+                // Si se encuentra una fila, usar la cantidad de leads, de lo contrario usar 0
+                return row ? row.CantidadLeads : 0;
+            });
+            return { agente, datos };
+        });
+    
+        return { startDate, endDate, fechas, datasets };
+    }
     
     static fetchOne(NombreLead) {
         return db.execute('Select * FROM usuario WHERE NombreLead = ?', [NombreLead]);
