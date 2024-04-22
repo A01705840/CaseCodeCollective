@@ -103,7 +103,7 @@
                     <% }); %>
                   </select>
                 </td>
-                <td class="py-4 border-b border-gray-200" style="padding-left: 70px;"><%= item.FechaUsuarioRolActualizacion %></td>
+                <td class="py-4  px-6 border-b border-gray-200"><%= item.FechaUsuarioRolActualizacion %></td>
                 <td class="py-4 px-6 border-b border-gray-200">
                   <form action="/Roles/editar/<%= item.IDUsuario %>" method="GET">
                     <input type="hidden" name="IDUsuario" value="<%= item.IDUsuario %>">
