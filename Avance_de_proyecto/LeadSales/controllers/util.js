@@ -26,8 +26,11 @@ exports.calcularRangoFechas = function(seleccion) {
             inicio = new Date(ahora.getFullYear(), ahora.getMonth(), ahora.getDate() - 7);
     }
     //console.log("INICIO",inicio);
+    //console.log("FIN",fin);
     return { inicio: inicio, fin: fin };
 };
+
+// convertirRangoFechas ejemplo de output: INICIO 2022-12-25T06:00:00.000Z, FIN 2022-12-31T06:00:00.000Z
 
 
 // Función para generar un array de fechas que representen todos los días en el rango de fechas seleccionado
@@ -38,8 +41,21 @@ exports.generarFechas = function(inicio, fin) {
         fechas.push(new Date(fechaActual));
         fechaActual.setDate(fechaActual.getDate() + 1);
     }
+    console.log("FECHAS",fechas);
     return fechas;
 };
+
+/*
+Ejemplo de output FECHAS (semana) [
+  2022-12-25T06:00:00.000Z,
+  2022-12-26T06:00:00.000Z,
+  2022-12-27T06:00:00.000Z,
+  2022-12-28T06:00:00.000Z,
+  2022-12-29T06:00:00.000Z,
+  2022-12-30T06:00:00.000Z,
+  2022-12-31T06:00:00.000Z
+]
+*/
 
 // Función para agrupar los leads por agente
 exports.agruparLeadsPorAgente = function(leadsPorAgente) {
@@ -67,4 +83,18 @@ exports.generarDatasetsPorAgente = function(gruposPorAgente, fechas) {
             datos,
         };
     });
+};
+
+
+exports.generarLeadsConDiasSinLeads = function(leadsPorDia, fechas) {
+    // Crear un nuevo array de leads que incluya los días sin leads
+    let leadsConDiasSinLeads = fechas.map(fecha => {
+        // Buscar el lead para esta fecha
+        let lead = leadsPorDia.find(lead => new Date(lead.Fecha).getTime() === fecha.getTime());
+
+        // Si se encuentra un lead, usar la cantidad de leads, de lo contrario usar 0
+        return { Fecha: fecha, CantidadLeads: lead ? lead.CantidadLeads : 0 };
+    });
+
+    return leadsConDiasSinLeads;
 };

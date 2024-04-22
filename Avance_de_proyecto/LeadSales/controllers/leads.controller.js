@@ -6,10 +6,58 @@ const utils = require('../controllers/util');
 
 exports.get_analitica = async (request, response, next) => {
     const range = request.params.date; // Obtener el rango de la ruta para obtener los leads
-    const result = await Lead.fetchLeadsByDay(range);
-    console.log(result[0]);
+    let result = await Lead.fetchLeadsByDay(range);
+    console.log("get_analitica",result);
+    // Inicializar las fechas
+    let fechas = [];
+
+    if (range === '3' || range === '4') {
+        const hoy = new Date(); // Fecha actual
+        const meses = range === '3' ? 6 : 12; // Si el rango es un semestre, generar 6 fechas, si es un año, generar 12
+    
+        // Verificar que hoy es una fecha válida
+        if (isNaN(hoy.getTime())) {
+            console.error('Error: hoy no es una fecha válida');
+            return;
+        }
+    
+        // Verificar que meses es un número
+        if (typeof meses !== 'number') {
+            console.error('Error: meses no es un número');
+            return;
+        }
+    
+        // Número de día fecha actual
+        const numday = hoy.getDate();
+    
+        // Verificar que numday es un número
+        if (typeof numday !== 'number') {
+            console.error('Error: numday no es un número');
+            return;
+        }
+    
+        for (let i = 0; i < meses; i++) {
+            const fecha = new Date(hoy.getFullYear(), hoy.getMonth() - i, numday);
+            fechas.unshift(fecha); // Añadir la fecha al inicio del array para mantener el orden cronológico
+    
+            // Verificar que fecha es una fecha válida
+            if (isNaN(fecha.getTime())) {
+                console.error('Error: fecha no es una fecha válida');
+                return;
+            }
+        }
+        console.log("FECHAS",fechas);
+    } else {
+        // Si el rango es una semana o un mes, calcular el rango de fechas y generar las fechas
+        const rangoFechas = utils.calcularRangoFechas(range);
+        fechas = utils.generarFechas(rangoFechas.inicio, rangoFechas.fin);
+    }
+
+    // Generar los leads con días sin leads
+    let leadsConDiasSinLeads = utils.generarLeadsConDiasSinLeads(result.leadsPerDay, fechas);
+
     response.json({
-        leadsPorDia: result[0],
+        leadsPerDay: leadsConDiasSinLeads,
     }); 
 };
 
@@ -25,6 +73,7 @@ exports.get_analitica_agent = async (request, response, next) => {
     } else {
         // Para otros casos, llamar a la función original
         result = await Lead.fetchLeadsPorAgente(rangeAgent);
+        console.log(result);
     }
 
     const leadsPorAgente = result[0]; // Solo usar el primer elemento del array
@@ -33,13 +82,9 @@ exports.get_analitica_agent = async (request, response, next) => {
     const rangoFechas = utils.calcularRangoFechas(rangeAgent);
     const fechas = utils.generarFechas(rangoFechas.inicio, rangoFechas.fin);
 
-    // Filtrar los leads para incluir solo los elementos dentro del rango de fechas
-    const leadsFiltrados = leadsPorAgente.filter(item => {
-        var fecha = new Date(item.Fecha);
-        return fecha >= rangoFechas.inicio && fecha <= rangoFechas.fin;
-    });
+    console.log("leadsPorAgente",leadsPorAgente);
 
-    const gruposPorAgente = utils.agruparLeadsPorAgente(leadsFiltrados);
+    const gruposPorAgente = utils.agruparLeadsPorAgente(leadsPorAgente);
     const datasetsPorAgente = utils.generarDatasetsPorAgente(gruposPorAgente, fechas);
 
     response.json({
@@ -63,18 +108,15 @@ exports.get_analiticaPRESET = async (request, response, next) => {
     const rangoFechas = utils.calcularRangoFechas(rangeAgent);
     const fechas = utils.generarFechas(rangoFechas.inicio, rangoFechas.fin);
 
-    // Filtrar los leads para incluir solo los elementos dentro del rango de fechas
-    const leadsFiltrados = leadsPorAgente.filter(item => {
-        var fecha = new Date(item.Fecha);
-        return fecha >= rangoFechas.inicio && fecha <= rangoFechas.fin;
-    });
+    // Generar los leads con días sin leads
+    let leadsConDiasSinLeads = utils.generarLeadsConDiasSinLeads(result[0], fechas);
 
-    const gruposPorAgente = utils.agruparLeadsPorAgente(leadsFiltrados);
+    const gruposPorAgente = utils.agruparLeadsPorAgente(leadsPorAgente);
     const datasetsPorAgente = utils.generarDatasetsPorAgente(gruposPorAgente, fechas);
 
     response.render('analitica', {
         username: request.session.username || '',
-        leadsPerDay: result[0], 
+        leadsPerDay: leadsConDiasSinLeads, 
         cantidadTotalLeads: cantidadLeads,
         cantidadLeadsOrganicos: cantidadLeadsOrganicos,
         cantidadLeadsEmbudos: cantidadLeadsEmbudos,

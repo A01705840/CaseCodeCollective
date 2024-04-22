@@ -159,14 +159,10 @@
     });
 
 
-    // Datos de ejemplo
-    const data = <%- JSON.stringify(leadsPerDay) %>.map(item => ({
-        ...item,
-        Fecha: new Date(item.Fecha)
-    }));
+    
     // Obtener el contexto del canvas para después crear la gráfica
     const ctx = document.getElementById('leadsChart').getContext('2d');
-    console.log(data);
+
     // Función para formatear la fecha
     function formatDate(date, range) {
         switch (parseInt(range)) {
@@ -197,13 +193,22 @@
         }
     }
 
+
+    // Datos de ejemplo
+    const leadsPerDay = <%- JSON.stringify(leadsPerDay) %>.map(item => ({
+        ...item,
+        Fecha: new Date(item.Fecha)
+    }));
+
+    console.log("LEADSPERDAY",leadsPerDay);
+    
     let myChart = new Chart(ctx, {
     type: 'line',
     data: {
-        labels: data.map(item => formatDate(item.Fecha, selectedRange)), // Usar la función formatDate
-        datasets: [{
-            label: getLabelText(selectedRange), // Usar la función getLabelText
-            data: data.map(item => item.CantidadLeads),
+            labels: leadsPerDay.map(lead => formatDate(lead.Fecha, selectedRange)), // Usar leadsPerDay para las etiquetas
+            datasets: [{
+                label: getLabelText(selectedRange), // Usar la función getLabelText
+                data: leadsPerDay.map(lead => lead.CantidadLeads), // Mapear leadsPerDay a un array de cantidades de leads
                 backgroundColor: 'rgba(23, 16, 198, 0.2)',
                 pointStyle: 'star', // Cambiar la forma de los puntos a triángulos
                 borderColor: 'rgba(23, 16, 198, 0.8)',
@@ -219,9 +224,10 @@
                     onLeave: (event, point, dataset, context) => {
                         event.native.target.style.cursor = 'default';
                     }
-                }
+                }   
             }]
         },
+
         options: {
             scales: {
                 y: {
@@ -271,7 +277,7 @@
                     if (index === 0) return;
                     const xPos = xAxis.getPixelForTick(index);
                     ctx.setLineDash([4, 4]);
-                    ctx.beginPath();
+                    ctx.beginPath();    
                     ctx.moveTo(xPos, scales.y.top);
                     ctx.lineTo(xPos, scales.y.bottom);
                     ctx.strokeStyle = 'rgba(0, 0, 0, 0.1)';
@@ -373,16 +379,17 @@
 
        // Hacer una solicitud AJAX para obtener los datos
        fetch('/lead/analitics/' + selectedRange)
-            .then(response => response.json())
-            .then(data => {
-                // Formatear las fechas y actualizar la gráfica con los nuevos datos
-                myChart.data.labels = data.leadsPorDia.map(item => formatDate(item.Fecha, selectedRange));
-                myChart.data.datasets[0].data = data.leadsPorDia.map(item => item.CantidadLeads);
-                myChart.data.datasets[0].label = getLabelText(selectedRange); // Actualizar el label del dataset
-                myChart.options.plugins.tooltip.callbacks.title = function(tooltipItem) {
-                    return getLabelText(selectedRange); // Actualizar el título del tooltip
-                };
-                myChart.update();
-    });
+    .then(response => response.json())
+    .then(data => {
+        // Formatear las fechas y actualizar la gráfica con los nuevos datos
+        myChart.data.labels = data.leadsPerDay.map(lead => formatDate(lead.Fecha, selectedRange));
+        myChart.data.datasets[0].data = data.leadsPerDay.map(lead => lead.CantidadLeads);
+        myChart.data.datasets[0].label = getLabelText(selectedRange); // Actualizar el label del dataset
+        myChart.options.plugins.tooltip.callbacks.title = function(tooltipItem) {
+            return getLabelText(selectedRange); // Actualizar el título del tooltip 
+        };
+        myChart.update();
+    })
+    .catch(error => console.error('Error en la solicitud fetch: ', error));
 });
 </script>

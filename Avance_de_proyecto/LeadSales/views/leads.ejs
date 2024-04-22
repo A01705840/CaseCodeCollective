@@ -225,7 +225,6 @@
       leadId = id;
   console.log('modificar', id);
   $.get(`/lead/modificar/${id}`, function(data) {
-      
       // Aquí, `data` es el lead que se obutvo del servidor. (Un botón de modificar)
       $('#nombre').val(data.NombreLead);
       

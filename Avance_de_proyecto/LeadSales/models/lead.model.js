@@ -144,7 +144,7 @@ module.exports = class Lead {
     
         const query = `
             SELECT DATE_FORMAT(FechaPrimerMensaje, '%Y-%m') AS Fecha, asignado_a AS Agente, COUNT(*) as CantidadLeads 
-            FROM leads 
+            FROM leads
             WHERE FechaPrimerMensaje >= ? AND FechaPrimerMensaje < ?
             GROUP BY Fecha, asignado_a
             ORDER BY Fecha, asignado_a
@@ -165,7 +165,7 @@ module.exports = class Lead {
             });
             return { agente, datos };
         });
-    
+        
         return { startDate, endDate, fechas, datasets };
     }
     
