@@ -16,6 +16,12 @@ exports.calcularRangoFechas = function(seleccion) {
         case 2:
             inicio = new Date(ahora.getFullYear(), ahora.getMonth() - 1, ahora.getDate());
             break;
+        case 3:
+            inicio = new Date(ahora.getFullYear(), ahora.getMonth() - 6, ahora.getDate());
+            break;
+        case 4:
+            inicio = new Date(ahora.getFullYear() - 1, ahora.getMonth(), ahora.getDate());
+            break;
         default:
             inicio = new Date(ahora.getFullYear(), ahora.getMonth(), ahora.getDate() - 7);
     }
