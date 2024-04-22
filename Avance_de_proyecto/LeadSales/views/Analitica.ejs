@@ -27,13 +27,16 @@
                     <option value="2">Un mes</option>
                     <option value="3">Un semestre</option>
                     <option value="4">Un año</option>
-                  </select>
-                  <canvas id="leadsPorAgenteChart"></canvas>
+                </select>
+                <canvas id="leadsPorAgenteChart"></canvas>
             </div>
 
         <div  style="width: 32%; height: 20%; background-color: #ffffff; border: 0px solid #444; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); padding: 20px; border-radius: 15px;">
             <h2 class="text-4xl mb-4">Total de Leads: <span id="totalLeads" class="font-bold"><%= cantidadTotalLeads %></span></h2>
             <h2 class="text-4xl mb-4">El <span id="porcentajeLeadsOrganicos"></span> de los leads son orgánicos.</h2>
+        </div>
+        <div style="width: 32%; height: 20%; background-color: #ffffff; border: 0px solid #444; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); padding: 20px; border-radius: 15px;">
+            <h2 class="text-4xl mb-4">Total de Leads por Agente: <span id="totalLeadsPorAgente" class="font-bold"></span></h2>
         </div>
     </div>
   </div>
@@ -291,9 +294,16 @@
 
     var fechas = <%- JSON.stringify(fechas) %>;
     var datasets = <%- JSON.stringify(datasets) %>;
+
+    // Calcular el total de Leads por Agente
+    const totalLeadsPorAgente = datasets.map(dataset => {
+        const totalLeads = dataset.datos.reduce((a, b) => a + b, 0);
+        return `${dataset.agente}: ${totalLeads}`;
+    });
+
+    // Actualizar el contenido del elemento HTML con el total de Leads por Agente
+    document.getElementById('totalLeadsPorAgente').textContent = totalLeadsPorAgente.join(', ');
    
-    console.log("datasets",datasets);
-    console.log("fechas",fechas);
     // Formatear las fechas antes de usarlas en la gráfica
    
 
@@ -371,6 +381,8 @@
     })
     .catch(error => console.error('Error en la solicitud fetch: ', error));
 });
+
+// -----------  CAMBIO DE RANGO DE LEADS POR DÍA  ------------------ 
 
     document.getElementById('dateRange').addEventListener('change', function(event) {
     event.preventDefault(); // Evitar la recarga de la página
