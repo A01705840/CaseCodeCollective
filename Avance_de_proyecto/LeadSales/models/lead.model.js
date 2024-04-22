@@ -2,6 +2,7 @@ const db = require('../util/database');
 const bcrypt = require('bcryptjs');
 
 
+
 module.exports = class Lead {
     constructor(mi_idLead, mi_asignado_a, mi_telefono, mi_nombreLead, mi_FechaPrimerMensaje, mi_Embudo, mi_Etapa, mi_Status, mi_Archivado, mi_CreadoManual) {
         this.IDLead = mi_idLead;
@@ -112,6 +113,11 @@ module.exports = class Lead {
         console.log(data);
         return db.execute('UPDATE leads SET asignado_a = ?, Telefono = ?, NombreLead = ?, FechaPrimerMensaje = ?, Embudo = ?, Etapa = ?, Status = ?, Archivado = ?, CreadoManual = ? WHERE IDLead = ?',
             [data.asignado_a, data.telefono, data.nombre, data.fecha, data.embudo, data.etapa, data.status, data.archivado, data.creadomanual, data.id]);
+    }
+
+    static crear(data) {
+        return db.execute('INSERT INTO leads (asignado_a, Telefono, NombreLead, FechaPrimerMensaje, Embudo, Etapa, Status, Archivado, CreadoManual) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            [data.asignado_a, data.telefono, data.nombre, data.fecha, data.embudo, data.etapa, data.status, data.archivado, data.creadomanual]);
     }
 
     static async eliminar(id) {
