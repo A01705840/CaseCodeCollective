@@ -1,5 +1,6 @@
 const express = require('express');
 
+
 const router = express.Router();
 const isAuth = require('../util/isAuth');
 const canEdit = require('../util/canEdit');
@@ -23,6 +24,8 @@ router.post('/Leads/eliminar', LeadsController.post_eliminar_lead);
 
 router.get('/modificar/:id', LeadsController.get_modificar_lead);
 router.post('/modificar', LeadsController.post_modificar_lead);
+
+router.post('/crear', LeadsController.post_crear_lead);
 
 
 
