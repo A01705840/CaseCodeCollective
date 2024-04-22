@@ -11,54 +11,41 @@ exports.get_analitica = async (request, response, next) => {
     // Inicializar las fechas
     let fechas = [];
 
+    // Si el rango es un año o un semestre, generar una fecha para cada mes
     if (range === '3' || range === '4') {
-        const hoy = new Date(); // Fecha actual
+        const hoy = new Date(2023, 0, 1);
         const meses = range === '3' ? 6 : 12; // Si el rango es un semestre, generar 6 fechas, si es un año, generar 12
-    
-        // Verificar que hoy es una fecha válida
-        if (isNaN(hoy.getTime())) {
-            console.error('Error: hoy no es una fecha válida');
-            return;
-        }
-    
-        // Verificar que meses es un número
-        if (typeof meses !== 'number') {
-            console.error('Error: meses no es un número');
-            return;
-        }
-    
-        // Número de día fecha actual
-        const numday = hoy.getDate();
-    
-        // Verificar que numday es un número
-        if (typeof numday !== 'number') {
-            console.error('Error: numday no es un número');
-            return;
-        }
-    
+
         for (let i = 0; i < meses; i++) {
-            const fecha = new Date(hoy.getFullYear(), hoy.getMonth() - i, numday);
-            fechas.unshift(fecha); // Añadir la fecha al inicio del array para mantener el orden cronológico
-    
-            // Verificar que fecha es una fecha válida
-            if (isNaN(fecha.getTime())) {
-                console.error('Error: fecha no es una fecha válida');
-                return;
+            let fecha;
+            if (i === 0) {
+                // Para el último mes, obtener el último día del mes
+                fecha = new Date(hoy.getFullYear(), hoy.getMonth() - i, 0);
+            } else {
+                fecha = new Date(hoy.getFullYear(), hoy.getMonth() - i - 1, 1);
             }
+            fechas.unshift(fecha); // Añadir la fecha al inicio del array para mantener el orden cronológico
         }
+        // Generar los leads con meses sin leads
+        let leadsConMesesSinLeads = utils.generarLeadsConMesesSinLeads(result[0], fechas);
+
+        response.json({
+            leadsPerDay: leadsConMesesSinLeads,
+        }); 
         console.log("FECHAS",fechas);
-    } else {
+    } else if (range === '1' || range === '2') {
         // Si el rango es una semana o un mes, calcular el rango de fechas y generar las fechas
         const rangoFechas = utils.calcularRangoFechas(range);
         fechas = utils.generarFechas(rangoFechas.inicio, rangoFechas.fin);
-    }
+    
 
     // Generar los leads con días sin leads
-    let leadsConDiasSinLeads = utils.generarLeadsConDiasSinLeads(result.leadsPerDay, fechas);
+    let leadsConDiasSinLeads = utils.generarLeadsConDiasSinLeads(result[0], fechas);
 
     response.json({
         leadsPerDay: leadsConDiasSinLeads,
     }); 
+    }
 };
 
 exports.get_analitica_agent = async (request, response, next) => {

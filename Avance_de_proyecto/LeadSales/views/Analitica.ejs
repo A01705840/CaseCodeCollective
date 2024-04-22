@@ -377,8 +377,8 @@
     const selectedRange = this.value;
     localStorage.setItem('selectedRange', selectedRange); // Guardar el rango seleccionado
 
-       // Hacer una solicitud AJAX para obtener los datos
-       fetch('/lead/analitics/' + selectedRange)
+    // Hacer una solicitud AJAX para obtener los datos
+    fetch('/lead/analitics/' + selectedRange)
     .then(response => response.json())
     .then(data => {
         // Formatear las fechas y actualizar la gráfica con los nuevos datos

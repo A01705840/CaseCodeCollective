@@ -87,6 +87,7 @@ exports.generarDatasetsPorAgente = function(gruposPorAgente, fechas) {
 
 
 exports.generarLeadsConDiasSinLeads = function(leadsPorDia, fechas) {
+
     // Crear un nuevo array de leads que incluya los días sin leads
     let leadsConDiasSinLeads = fechas.map(fecha => {
         // Buscar el lead para esta fecha
@@ -97,4 +98,25 @@ exports.generarLeadsConDiasSinLeads = function(leadsPorDia, fechas) {
     });
 
     return leadsConDiasSinLeads;
+};
+
+exports.generarLeadsConMesesSinLeads = function(leadsPorMes, fechas) {
+    // Mapear las fechas a un objeto donde la clave es el mes y el valor es la cantidad de leads
+    let leadsPorMesMap = {};
+    leadsPorMes.forEach(lead => {
+        const fecha = new Date(lead.Fecha);
+        const mes = fecha.getFullYear() + '-' + (fecha.getMonth() + 1);
+        leadsPorMesMap[mes] = lead.CantidadLeads;
+    });
+
+    // Mapear las fechas a un array de objetos con la fecha y la cantidad de leads
+    let leadsConMesesSinLeads = fechas.map(fecha => {
+        const mes = fecha.getFullYear() + '-' + (fecha.getMonth() + 1);
+        return {
+            Fecha: fecha,
+            CantidadLeads: leadsPorMesMap[mes] || 0
+        };
+    });
+
+    return leadsConMesesSinLeads;
 };
