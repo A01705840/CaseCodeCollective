@@ -117,322 +117,89 @@
 
                         <div class="container">
                             <table class="text-sm text-left text-gray-500 dark:text-gray-400 w-full">
-                                <thead class=" flex w-full">
-                                    <tr class="flex w-full mb-4">
-                                        <th class="p-4 w-1/4">One</th>
-                                        <th class="p-4 w-1/4">Two</th>
-                                        <th class="p-4 w-1/4">Three</th>
-                                        <th class="p-4 w-1/4">Four</th>
+                                <thead class=" flex w-full text-xs text-gray-700 uppercase bg-gray-100 dark:text-gray-500">
+                                    <tr class="flex w-full">
+                                        <th class="p-4 w-1/5">Lead</th>
+                                        <th class="p-4 w-1/5">Fecha</th>
+                                        <th class="p-4 w-1/5">Creador</th>
+                                        <th class="p-4 w-1/5">Modificar</th>
+                                        <th class="p-4 w-1/5">Eliminar</th>
                                     </tr>
                                 </thead>
                             <!-- Remove the nasty inline CSS fixed height on production and replace it with a CSS class — this is just for demonstration purposes! -->
-                                <tbody class="bg-grey-light flex flex-col items-center justify-between overflow-y-scroll w-full" style="height: 50vh;">
+                                <tbody  id="table_content" class="bg-grey-light flex flex-col items-center justify-between overflow-y-scroll w-full" style="height: 68vh;">
+                                    <% let row=0; for (let lead of leads) { %>
+                                    <% if(row%2==0){%>
                                     <tr class="flex w-full mb-4">
-                                        <td class="p-4 w-1/4">Dogs</td>
-                                        <td class="p-4 w-1/4">Cats</td>
-                                        <td class="p-4 w-1/4">Birds</td>
-                                        <td class="p-4 w-1/4">Fish</td>
+                                        <td class="p-4 w-1/5">
+                                            <% if (lead.NombreLead==""){%>
+                                               <p class="text-gray-400">Lead sin nombre</p>
+                                            <% }else{%>
+                                                <%= lead.NombreLead %>
+                                            <% }%>
+                                        </td>
+                                        <td class="p-4 w-1/5">
+                                            <%  let fechaActual = lead.FechaPrimerMensaje;
+                                            // Convertir la fecha a un objeto Date
+                                            const fecha = new Date(fechaActual);
+                                            // Obtener día, mes y año
+                                            const dia = fecha.getDate().toString().padStart(2, '0');
+                                            const mes = (fecha.getMonth() + 1).toString().padStart(2, '0'); // El mes comienza desde 0
+                                            const año = fecha.getFullYear();
+                                            // Crear la cadena en el formato deseado (dd/mm/yyyy)
+                                            const fechaFormateada = `${dia}/${mes}/${año}`;%>
+                                            <%= fechaFormateada %>
+
+                                        </td>
+                                        <td class="p-4 w-1/5">
+                                            <%= lead.asignado_a %>
+                                        </td>
+                                        <td class="p-4 w-1/5">
+                                            <button onclick="event.preventDefault(); modificar(<%=lead.IDLead%>)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded">
+                                                Modificar
+                                            </button>
+                                        </td>
+                                        <td class="p-4 w-1/5">
+                                        <button id="save-changes" onclick="eliminar(<%=lead.IDLead%>)" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-4 rounded">
+                                            Eliminar
+                                        </button></td>
                                     </tr>
-                                    <tr class="flex w-full mb-4">
-                                        <td class="p-4 w-1/4">Dogs</td>
-                                        <td class="p-4 w-1/4">Cats</td>
-                                        <td class="p-4 w-1/4">Birds</td>
-                                        <td class="p-4 w-1/4">Fish</td>
-                                    </tr>
-                                    <tr class="flex w-full mb-4">
-                                        <td class="p-4 w-1/4">Dogs</td>
-                                        <td class="p-4 w-1/4">Cats</td>
-                                        <td class="p-4 w-1/4">Birds</td>
-                                        <td class="p-4 w-1/4">Fish</td>
-                                    </tr>
-                                    <tr class="flex w-full mb-4">
-                                        <td class="p-4 w-1/4">Dogs</td>
-                                        <td class="p-4 w-1/4">Cats</td>
-                                        <td class="p-4 w-1/4">Birds</td>
-                                        <td class="p-4 w-1/4">Fish</td>
-                                    </tr>
-                                    <tr class="flex w-full mb-4">
-                                        <td class="p-4 w-1/4">Dogs</td>
-                                        <td class="p-4 w-1/4">Cats</td>
-                                        <td class="p-4 w-1/4">Birds</td>
-                                        <td class="p-4 w-1/4">Fish</td>
-                                    </tr>
-                                    <tr class="flex w-full mb-4">
-                                        <td class="p-4 w-1/4">Dogs</td>
-                                        <td class="p-4 w-1/4">Cats</td>
-                                        <td class="p-4 w-1/4">Birds</td>
-                                        <td class="p-4 w-1/4">Fish</td>
-                                    </tr>
-                                    <tr class="flex w-full mb-4">
-                                        <td class="p-4 w-1/4">Dogs</td>
-                                        <td class="p-4 w-1/4">Cats</td>
-                                        <td class="p-4 w-1/4">Birds</td>
-                                        <td class="p-4 w-1/4">Fish</td>
-                                    </tr>
-                                    <tr class="flex w-full mb-4">
-                                        <td class="p-4 w-1/4">Dogs</td>
-                                        <td class="p-4 w-1/4">Cats</td>
-                                        <td class="p-4 w-1/4">Birds</td>
-                                        <td class="p-4 w-1/4">Fish</td>
-                                    </tr>
-                                    <tr class="flex w-full mb-4">
-                                        <td class="p-4 w-1/4">Dogs</td>
-                                        <td class="p-4 w-1/4">Cats</td>
-                                        <td class="p-4 w-1/4">Birds</td>
-                                        <td class="p-4 w-1/4">Fish</td>
-                                    </tr>
-                                    <tr class="flex w-full mb-4">
-                                        <td class="p-4 w-1/4">Dogs</td>
-                                        <td class="p-4 w-1/4">Cats</td>
-                                        <td class="p-4 w-1/4">Birds</td>
-                                        <td class="p-4 w-1/4">Fish</td>
-                                    </tr>
-                                    <tr class="flex w-full mb-4">
-                                        <td class="p-4 w-1/4">Dogs</td>
-                                        <td class="p-4 w-1/4">Cats</td>
-                                        <td class="p-4 w-1/4">Birds</td>
-                                        <td class="p-4 w-1/4">Fish</td>
-                                    </tr>
-                                    <tr class="flex w-full mb-4">
-                                        <td class="p-4 w-1/4">Dogs</td>
-                                        <td class="p-4 w-1/4">Cats</td>
-                                        <td class="p-4 w-1/4">Birds</td>
-                                        <td class="p-4 w-1/4">Fish</td>
-                                    </tr>
-                                    <tr class="flex w-full mb-4">
-                                        <td class="p-4 w-1/4">Dogs</td>
-                                        <td class="p-4 w-1/4">Cats</td>
-                                        <td class="p-4 w-1/4">Birds</td>
-                                        <td class="p-4 w-1/4">Fish</td>
-                                    </tr>
-                                    <tr class="flex w-full mb-4">
-                                        <td class="p-4 w-1/4">Dogs</td>
-                                        <td class="p-4 w-1/4">Cats</td>
-                                        <td class="p-4 w-1/4">Birds</td>
-                                        <td class="p-4 w-1/4">Fish</td>
-                                    </tr>
-                                    <tr class="flex w-full mb-4">
-                                        <td class="p-4 w-1/4">Dogs</td>
-                                        <td class="p-4 w-1/4">Cats</td>
-                                        <td class="p-4 w-1/4">Birds</td>
-                                        <td class="p-4 w-1/4">Fish</td>
-                                    </tr>
-                                    <tr class="flex w-full mb-4">
-                                        <td class="p-4 w-1/4">Dogs</td>
-                                        <td class="p-4 w-1/4">Cats</td>
-                                        <td class="p-4 w-1/4">Birds</td>
-                                        <td class="p-4 w-1/4">Fish</td>
-                                    </tr>
-                                    <tr class="flex w-full mb-4">
-                                        <td class="p-4 w-1/4">Dogs</td>
-                                        <td class="p-4 w-1/4">Cats</td>
-                                        <td class="p-4 w-1/4">Birds</td>
-                                        <td class="p-4 w-1/4">Fish</td>
-                                    </tr>
-                                    <tr class="flex w-full mb-4">
-                                        <td class="p-4 w-1/4">Dogs</td>
-                                        <td class="p-4 w-1/4">Cats</td>
-                                        <td class="p-4 w-1/4">Birds</td>
-                                        <td class="p-4 w-1/4">Fish</td>
-                                    </tr>
-                                    <tr class="flex w-full mb-4">
-                                        <td class="p-4 w-1/4">Dogs</td>
-                                        <td class="p-4 w-1/4">Cats</td>
-                                        <td class="p-4 w-1/4">Birds</td>
-                                        <td class="p-4 w-1/4">Fish</td>
-                                    </tr>
-                                    <tr class="flex w-full mb-4">
-                                        <td class="p-4 w-1/4">Dogs</td>
-                                        <td class="p-4 w-1/4">Cats</td>
-                                        <td class="p-4 w-1/4">Birds</td>
-                                        <td class="p-4 w-1/4">Fish</td>
-                                    </tr>
-                                    <tr class="flex w-full mb-4">
-                                        <td class="p-4 w-1/4">Dogs</td>
-                                        <td class="p-4 w-1/4">Cats</td>
-                                        <td class="p-4 w-1/4">Birds</td>
-                                        <td class="p-4 w-1/4">Fish</td>
-                                    </tr>
-                                    <tr class="flex w-full mb-4">
-                                        <td class="p-4 w-1/4">Dogs</td>
-                                        <td class="p-4 w-1/4">Cats</td>
-                                        <td class="p-4 w-1/4">Birds</td>
-                                        <td class="p-4 w-1/4">Fish</td>
-                                    </tr>
-                                    <tr class="flex w-full mb-4">
-                                        <td class="p-4 w-1/4">Dogs</td>
-                                        <td class="p-4 w-1/4">Cats</td>
-                                        <td class="p-4 w-1/4">Birds</td>
-                                        <td class="p-4 w-1/4">Fish</td>
-                                    </tr>
-                                    <tr class="flex w-full mb-4">
-                                        <td class="p-4 w-1/4">Dogs</td>
-                                        <td class="p-4 w-1/4">Cats</td>
-                                        <td class="p-4 w-1/4">Birds</td>
-                                        <td class="p-4 w-1/4">Fish</td>
-                                    </tr>
-                                    <tr class="flex w-full mb-4">
-                                        <td class="p-4 w-1/4">Dogs</td>
-                                        <td class="p-4 w-1/4">Cats</td>
-                                        <td class="p-4 w-1/4">Birds</td>
-                                        <td class="p-4 w-1/4">Fish</td>
-                                    </tr>
-                                    <tr class="flex w-full mb-4">
-                                        <td class="p-4 w-1/4">Dogs</td>
-                                        <td class="p-4 w-1/4">Cats</td>
-                                        <td class="p-4 w-1/4">Birds</td>
-                                        <td class="p-4 w-1/4">Fish</td>
-                                    </tr>
-                                    <tr class="flex w-full mb-4">
-                                        <td class="p-4 w-1/4">Dogs</td>
-                                        <td class="p-4 w-1/4">Cats</td>
-                                        <td class="p-4 w-1/4">Birds</td>
-                                        <td class="p-4 w-1/4">Fish</td>
-                                    </tr>
-                                    <tr class="flex w-full mb-4">
-                                        <td class="p-4 w-1/4">Dogs</td>
-                                        <td class="p-4 w-1/4">Cats</td>
-                                        <td class="p-4 w-1/4">Birds</td>
-                                        <td class="p-4 w-1/4">Fish</td>
-                                    </tr>
-                                    <tr class="flex w-full mb-4">
-                                        <td class="p-4 w-1/4">Dogs</td>
-                                        <td class="p-4 w-1/4">Cats</td>
-                                        <td class="p-4 w-1/4">Birds</td>
-                                        <td class="p-4 w-1/4">Fish</td>
-                                    </tr>
-                                    <tr class="flex w-full mb-4">
-                                        <td class="p-4 w-1/4">Dogs</td>
-                                        <td class="p-4 w-1/4">Cats</td>
-                                        <td class="p-4 w-1/4">Birds</td>
-                                        <td class="p-4 w-1/4">Fish</td>
-                                    </tr>
-                                    <tr class="flex w-full mb-4">
-                                        <td class="p-4 w-1/4">Dogs</td>
-                                        <td class="p-4 w-1/4">Cats</td>
-                                        <td class="p-4 w-1/4">Birds</td>
-                                        <td class="p-4 w-1/4">Fish</td>
-                                    </tr>
-                                    <tr class="flex w-full mb-4">
-                                        <td class="p-4 w-1/4">Dogs</td>
-                                        <td class="p-4 w-1/4">Cats</td>
-                                        <td class="p-4 w-1/4">Birds</td>
-                                        <td class="p-4 w-1/4">Fish</td>
-                                    </tr>
-                                    <tr class="flex w-full mb-4">
-                                        <td class="p-4 w-1/4">Dogs</td>
-                                        <td class="p-4 w-1/4">Cats</td>
-                                        <td class="p-4 w-1/4">Birds</td>
-                                        <td class="p-4 w-1/4">Fish</td>
-                                    </tr>
-                                    <tr class="flex w-full mb-4">
-                                        <td class="p-4 w-1/4">Dogs</td>
-                                        <td class="p-4 w-1/4">Cats</td>
-                                        <td class="p-4 w-1/4">Birds</td>
-                                        <td class="p-4 w-1/4">Fish</td>
-                                    </tr>
-                                    <tr class="flex w-full mb-4">
-                                        <td class="p-4 w-1/4">Dogs</td>
-                                        <td class="p-4 w-1/4">Cats</td>
-                                        <td class="p-4 w-1/4">Birds</td>
-                                        <td class="p-4 w-1/4">Fish</td>
-                                    </tr>
-                                    <tr class="flex w-full mb-4">
-                                        <td class="p-4 w-1/4">Dogs</td>
-                                        <td class="p-4 w-1/4">Cats</td>
-                                        <td class="p-4 w-1/4">Birds</td>
-                                        <td class="p-4 w-1/4">Fish</td>
-                                    </tr>
-                                    <tr class="flex w-full mb-4">
-                                        <td class="p-4 w-1/4">Dogs</td>
-                                        <td class="p-4 w-1/4">Cats</td>
-                                        <td class="p-4 w-1/4">Birds</td>
-                                        <td class="p-4 w-1/4">Fish</td>
-                                    </tr>
-                                    <tr class="flex w-full mb-4">
-                                        <td class="p-4 w-1/4">Dogs</td>
-                                        <td class="p-4 w-1/4">Cats</td>
-                                        <td class="p-4 w-1/4">Birds</td>
-                                        <td class="p-4 w-1/4">Fish</td>
-                                    </tr>
-                                    <tr class="flex w-full mb-4">
-                                        <td class="p-4 w-1/4">Dogs</td>
-                                        <td class="p-4 w-1/4">Cats</td>
-                                        <td class="p-4 w-1/4">Birds</td>
-                                        <td class="p-4 w-1/4">Fish</td>
-                                    </tr>
-                                    <tr class="flex w-full mb-4">
-                                        <td class="p-4 w-1/4">Dogs</td>
-                                        <td class="p-4 w-1/4">Cats</td>
-                                        <td class="p-4 w-1/4">Birds</td>
-                                        <td class="p-4 w-1/4">Fish</td>
-                                    </tr>
-                                    <tr class="flex w-full mb-4">
-                                        <td class="p-4 w-1/4">Dogs</td>
-                                        <td class="p-4 w-1/4">Cats</td>
-                                        <td class="p-4 w-1/4">Birds</td>
-                                        <td class="p-4 w-1/4">Fish</td>
-                                    </tr>
-                                    <tr class="flex w-full mb-4">
-                                        <td class="p-4 w-1/4">Dogs</td>
-                                        <td class="p-4 w-1/4">Cats</td>
-                                        <td class="p-4 w-1/4">Birds</td>
-                                        <td class="p-4 w-1/4">Fish</td>
-                                    </tr>
-                                    <tr class="flex w-full mb-4">
-                                        <td class="p-4 w-1/4">Dogs</td>
-                                        <td class="p-4 w-1/4">Cats</td>
-                                        <td class="p-4 w-1/4">Birds</td>
-                                        <td class="p-4 w-1/4">Fish</td>
-                                    </tr>
-                                    <tr class="flex w-full mb-4">
-                                        <td class="p-4 w-1/4">Dogs</td>
-                                        <td class="p-4 w-1/4">Cats</td>
-                                        <td class="p-4 w-1/4">Birds</td>
-                                        <td class="p-4 w-1/4">Fish</td>
-                                    </tr>
-                                    <tr class="flex w-full mb-4">
-                                        <td class="p-4 w-1/4">Dogs</td>
-                                        <td class="p-4 w-1/4">Cats</td>
-                                        <td class="p-4 w-1/4">Birds</td>
-                                        <td class="p-4 w-1/4">Fish</td>
-                                    </tr>
-                                    <tr class="flex w-full mb-4">
-                                        <td class="p-4 w-1/4">Dogs</td>
-                                        <td class="p-4 w-1/4">Cats</td>
-                                        <td class="p-4 w-1/4">Birds</td>
-                                        <td class="p-4 w-1/4">Fish</td>
-                                    </tr>
-                                    <tr class="flex w-full mb-4">
-                                        <td class="p-4 w-1/4">Dogs</td>
-                                        <td class="p-4 w-1/4">Cats</td>
-                                        <td class="p-4 w-1/4">Birds</td>
-                                        <td class="p-4 w-1/4">Fish</td>
-                                    </tr>
-                                    <tr class="flex w-full mb-4">
-                                        <td class="p-4 w-1/4">Dogs</td>
-                                        <td class="p-4 w-1/4">Cats</td>
-                                        <td class="p-4 w-1/4">Birds</td>
-                                        <td class="p-4 w-1/4">Fish</td>
-                                    </tr>
-                                      <tr class="flex w-full mb-4">
-                                        <td class="p-4 w-1/4">Dogs</td>
-                                        <td class="p-4 w-1/4">Cats</td>
-                                        <td class="p-4 w-1/4">Birds</td>
-                                        <td class="p-4 w-1/4">Fish</td>
-                                    </tr>
-                                      <tr class="flex w-full mb-4">
-                                        <td class="p-4 w-1/4">Dogs</td>
-                                        <td class="p-4 w-1/4">Cats</td>
-                                        <td class="p-4 w-1/4">Birds</td>
-                                        <td class="p-4 w-1/4">Fish</td>
-                                    </tr>
-                                      <tr class="flex w-full mb-4">
-                                        <td class="p-4 w-1/4">Dogs</td>
-                                        <td class="p-4 w-1/4">Cats</td>
-                                        <td class="p-4 w-1/4">Birds</td>
-                                        <td class="p-4 w-1/4">Fish</td>
-                                    </tr>
+                                    <% } else{%>
+                                        <tr class="flex w-full mb-4 bg-gray-50">
+                                            <td class="p-4 w-1/5">
+                                                <% if (lead.NombreLead==""){%>
+                                                   <p class="text-gray-400">Lead sin nombre</p>
+                                                <% }else{%>
+                                                    <%= lead.NombreLead %>
+                                                <% }%>
+                                            </td>
+                                            <td class="p-4 w-1/5">
+                                                <%  let fechaActual = lead.FechaPrimerMensaje;
+                                                // Convertir la fecha a un objeto Date
+                                                const fecha = new Date(fechaActual);
+                                                // Obtener día, mes y año
+                                                const dia = fecha.getDate().toString().padStart(2, '0');
+                                                const mes = (fecha.getMonth() + 1).toString().padStart(2, '0'); // El mes comienza desde 0
+                                                const año = fecha.getFullYear();
+                                                // Crear la cadena en el formato deseado (dd/mm/yyyy)
+                                                const fechaFormateada = `${dia}/${mes}/${año}`;%>
+                                                <%= fechaFormateada %>
+    
+                                            </td>
+                                            <td class="p-4 w-1/5">
+                                                <%= lead.asignado_a %>
+                                            </td>
+                                            <td class="p-4 w-1/5">
+                                                <button onclick="event.preventDefault(); modificar(<%=lead.IDLead%>)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded">
+                                                    Modificar
+                                                </button>
+                                            </td>
+                                            <td class="p-4 w-1/5">
+                                            <button id="save-changes" onclick="eliminar(<%=lead.IDLead%>)" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-4 rounded">
+                                                Eliminar
+                                            </button></td>
+                                        </tr>
+                                    <% }row++} %>
                                 </tbody>
                             </table>
                         </div>
@@ -459,34 +226,97 @@
     }).then((result) => {
         return result.json()
     }).then((data) => {
+      swal('Lead eliminado', 'El lead se ha eliminado de forma exitosa.', 'success');
 
       let html = "";
+      let row=0;
       for (let lead of data.leads) {
-          html += 
-          `<tr>`;
-          
-              html += 
-              `<th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-gray-800">
-                  ${lead.NombreLead }
-              </th>
-              <td class="px-6 py-4">
-                  ${lead.FechaPrimerMensaje}
-              </td>
-              <td class="px-6 py-4">
-                  ${lead.asignado_a}
-              </td>
-              <td class="px-6 py-4 text-center">
-                  <button onclick="window.location.href='/lead/modificar/${lead.IDLead}'" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded">
-                      Modificar
-                  </button>
-              </td>
-              <td class="px-6 py-4 text-center">
-                  <button onclick="eliminar(${lead.IDLead})" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-4 rounded">
-                      Eliminar
-                  </button>
-              </td>
-          </tr>`;
-      }
+        if(row%2==0){
+        html += `
+        <tr class="flex w-full mb-4">
+            <td class="p-4 w-1/5">`;
+
+            if (lead.NombreLead==""){
+                html += `<p class="text-gray-400">Lead sin nombre</p>`
+            }else{
+                html += `${lead.NombreLead}`
+            }
+        html += `
+            </td>
+            <td class="p-4 w-1/5">`;
+    
+            let fechaActual = lead.FechaPrimerMensaje;
+                    // Convertir la fecha a un objeto Date
+            const fecha = new Date(fechaActual);
+                    // Obtener día, mes y año
+            const dia = fecha.getDate().toString().padStart(2, '0');
+            const mes = (fecha.getMonth() + 1).toString().padStart(2, '0'); // El mes comienza desde 0
+            const año = fecha.getFullYear();
+                    // Crear la cadena en el formato deseado (dd/mm/yyyy)
+            const fechaFormateada = `${dia}/${mes}/${año}`;
+            
+            html += `
+                ${fechaFormateada}
+            </td>
+            <td class="p-4 w-1/5"> 
+                ${lead.asignado_a}
+            </td>
+            <td class="p-4 w-1/5">
+                <button onclick="event.preventDefault(); modificar(${lead.IDLead})" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded">
+                    Modificar
+                </button>
+            </td>
+            <td class="p-4 w-1/5">
+                <button id="save-changes" onclick="eliminar(${lead.IDLead})" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-4 rounded">
+                    Eliminar
+                </button>
+            </td>
+        </tr>`;
+        }
+        else{
+            html += `
+        <tr class="bg-gray-50 flex w-full mb-4">
+            <td class="p-4 w-1/5">`;
+
+            if (lead.NombreLead==""){
+                html += `<p class="text-gray-400">Lead sin nombre</p>`
+            }else{
+                html += `${lead.NombreLead}`
+            }
+        html += `
+            </td>
+            <td class="p-4 w-1/5">`;
+    
+            let fechaActual = lead.FechaPrimerMensaje;
+                    // Convertir la fecha a un objeto Date
+            const fecha = new Date(fechaActual);
+                    // Obtener día, mes y año
+            const dia = fecha.getDate().toString().padStart(2, '0');
+            const mes = (fecha.getMonth() + 1).toString().padStart(2, '0'); // El mes comienza desde 0
+            const año = fecha.getFullYear();
+                    // Crear la cadena en el formato deseado (dd/mm/yyyy)
+            const fechaFormateada = `${dia}/${mes}/${año}`;
+            
+            html += ` ${fechaFormateada}
+            </td>
+            <td class="p-4 w-1/5"> 
+                ${lead.asignado_a}
+            </td>
+            <td class="p-4 w-1/5">
+                <button onclick="event.preventDefault(); modificar(${lead.IDLead})" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded">
+                    Modificar
+                </button>
+            </td>
+            <td class="p-4 w-1/5">
+                <button id="save-changes" onclick="eliminar(${lead.IDLead})" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-4 rounded">
+                    Eliminar
+                </button>
+            </td>
+        </tr>`;
+
+        }
+        row++;
+    };
 
       document.getElementById('table_content').innerHTML = html;
 

@@ -114,7 +114,8 @@ module.exports = class Lead {
             [data.asignado_a, data.telefono, data.nombre, data.fecha, data.embudo, data.etapa, data.status, data.archivado, data.creadomanual, data.id]);
     }
 
-    static eliminar(id) {
+    static async eliminar(id) {
+        await db.execute('DELETE FROM version_almacena_leads WHERE IDLead = ?', [id]);         
         return db.execute('DELETE FROM leads WHERE IDLead = ?', [id]);
     }
 
