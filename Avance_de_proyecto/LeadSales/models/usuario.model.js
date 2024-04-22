@@ -13,8 +13,8 @@ module.exports = class Usuario {
         return bcrypt.hash(this.password, 12)
         .then((password_cifrado) => {
             return db.execute(
-            `INSERT INTO usuario (username, nombre, password) 
-            VALUES (?, ?, ?)`, 
+            `INSERT INTO usuario (username, nombre, password, correo) 
+            VALUES (?, ?, ?, ?)`, 
             [this.username, this.nombre, this.password]);
         })
         .catch((error) => {
@@ -33,7 +33,11 @@ module.exports = class Usuario {
         return db.execute('DELETE FROM usuario WHERE IDUsuario = ?', [id]);
     }
 
-    static establecer_rol(IDRoles,username) {
-        return db.execute('INSERT INTO usuario_tiene_rol (UserName, IDRol) VALUES (?, ?)', [username, IDRoles]);
+    static establecer_rol(IDRoles,idUsuario) {
+        return db.execute('INSERT INTO usuario_tiene_rol (IDUsuario, IDRol) VALUES (?, ?)', [idUsuario, IDRoles]);
+    }
+
+    static fetchOneID(username) {
+        return db.execute('Select IDUsuario from usuario WHERE username = ?', [username]);
     }
 }

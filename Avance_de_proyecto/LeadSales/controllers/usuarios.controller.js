@@ -40,3 +40,4 @@ exports.eliminar_usuario = (request, response, next) => {
         response.redirect ('/Roles/equipo');
     })
 }
+
