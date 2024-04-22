@@ -3,10 +3,11 @@ const bcrypt = require('bcryptjs');
 
 module.exports = class Usuario {
     //Constructor de la clase. Sirve para crear un nuevo objeto, y en él se definen las propiedades del modelo
-    constructor(mi_username, mi_nombre, mi_password) {
+    constructor(mi_username, mi_nombre, mi_password, mi_correo) {
         this.username = mi_username;
         this.nombre = mi_nombre;
         this.password = mi_password;
+        this.correo = mi_correo;
     }
     //Este método servirá para guardar de manera persistente el nuevo objeto. 
     save() {
@@ -15,7 +16,7 @@ module.exports = class Usuario {
             return db.execute(
             `INSERT INTO usuario (username, nombre, password, correo) 
             VALUES (?, ?, ?, ?)`, 
-            [this.username, this.nombre, this.password]);
+            [this.username, this.nombre, password_cifrado, this.correo]);
         })
         .catch((error) => {
             console.log(error);
@@ -34,7 +35,9 @@ module.exports = class Usuario {
     }
 
     static establecer_rol(IDRoles,idUsuario) {
-        return db.execute('INSERT INTO usuario_tiene_rol (IDUsuario, IDRol) VALUES (?, ?)', [idUsuario, IDRoles]);
+        //const fechaCreate = date.now();
+        return db.execute('INSERT INTO `usuario_tiene_rol` (`IDUsuario`, `IDRol`, `FechaUsuarioRol`, `FechaUsuarioRolActualizacion`) VALUES (?, ?, CURRENT_DATE(), CURRENT_DATE());', [IDRoles, idUsuario]);
+        
     }
 
     static fetchOneID(username) {

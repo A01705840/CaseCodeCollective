@@ -138,6 +138,7 @@
       $('#modal').show();
 
     document.getElementById('botonGuardar').addEventListener('click', guardarCambios);
+    console.log('GUARDAR CAMBIOS')
   }
 
   function cerrarModal() {
@@ -145,38 +146,15 @@
   }
 
   function guardarCambios() {
-    console.log('GUARDADO')
-    // Recoge los datos del formulario
-    var UserName = document.getElementById('username').value;
-    var Correo = document.getElementById('correo').value;
-    var Nombre = document.getElementById('nombre').value;
-    var Password = document.getElementById('password').value;
-    var Rol = document.getElementById('rol').value;
+    window.onload = function() {
+    //se muestra un mensaje de confirmacion al guardar los cambios
+    document.getElementById('botonGuardar').addEventListener('click', function() {
+        //se muestra un mensaje de confirmacion al guardar los cambios
+    swal('Guardado', 'Los cambios se han guardado.', 'success')
+    })
+};
 
-    // Crea un objeto con los datos del formulario
-    var datos = {
-      UserName: UserName,
-      Correo: Correo,
-      Nombre: Nombre,
-      Password: Password,
-    };
 
-    // Envía los datos al servidor
-    /*console.log('DATOS GUARDADOS')
-    $.ajax({
-      url: '/equipo/agregarEmpleado',
-      type: 'POST',
-      body: JSON.stringify(datos),
-      contentType: 'application/json',
-      Rol: Rol,
-      success: function(respuesta) {
-        // Aquí puedes manejar la respuesta del servidor
-        console.log(respuesta);
-
-        // Redirige al usuario a la página de leads
-        window.location.href = '/Roles/equipo';
-      }
-    });*/
   }
 </script>
 

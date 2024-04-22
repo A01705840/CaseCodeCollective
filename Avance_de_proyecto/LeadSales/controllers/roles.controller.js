@@ -160,9 +160,11 @@ exports.post_agregarEmpleado = async (request, response, next) => {
         await nuevo_usuario.save(request.body);
         console.log(nuevo_usuario)
         //Rol.fetchAll();
-        console.log('Usuario creado');
         const idusuario = await Usuario.fetchOneID(request.body.username);
-        await nuevo_usuario.establecer_rol(idusuario[0][0].IDUsuario, request.body.IDRol);
+        console.log('Usuario creado');
+        //const idRol = await Rol.fetchOneID(request.body.rol);
+        console.log(request.body.rol);
+        await Usuario.establecer_rol(idusuario[0][0].IDUsuario, request.body.rol);
         return response.status(200).json({ message: 'Lead actualizado con éxito' });
     } catch (error) {
         // Maneja cualquier error que pueda ocurrir
