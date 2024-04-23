@@ -230,12 +230,12 @@
                 label: getLabelText(selectedRange), // Usar la función getLabelText
                 data: leadsPerDay.map(lead => lead.CantidadLeads), // Mapear leadsPerDay a un array de cantidades de leads
                 backgroundColor: 'rgba(23, 16, 198, 0.2)',
-                pointStyle: 'star', // Cambiar la forma de los puntos a triángulos
+                pointStyle: 'circle', // Cambiar la forma de los puntos a triángulos
                 borderColor: 'rgba(23, 16, 198, 0.8)',
                 borderWidth: 5,
                 pointRadius: 5,
                 pointBackgroundColor: 'rgba(23, 16, 198, 0.8)',
-                tension: 0.3,
+                tension: 0.5,
                 fill: true,
                 point: {
                     onHover: (event, point, dataset, context) => {
