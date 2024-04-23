@@ -2,7 +2,6 @@
   username: username,
   permisos: permisos}) %>
 
-
 <!-- -------- -->
 <div id="modal" onclick="cerrarModal()" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.3);" class="flex items-center justify-center">
   <div onclick="event.stopPropagation()" class="relative transform overflow-hidden rounded-lg bg-gray-50 dark:bg-gray-800 text-left shadow-xl transition-all" style="width: 600px; height: 580px;">
@@ -95,7 +94,14 @@
             <tbody id="tabla">
               <% data.forEach(function(item) { %>
               <tr class="hover:bg-gray-100">
-                <td class="py-4 px-6 border-b border-gray-200"><%= item.UserName %></td>
+                <td class="py-4 px-6 border-b border-gray-200">
+                  <%if(item.UserName==null){ %>
+                    <% item.UserName="Usuario no registrado" %>
+                    <p class="text-gray-400">Usuario no registrado</p>
+                  <% } else{%>
+                    <%= item.UserName %>
+                  <% }%>
+                </td>
                 <td class="py-4 border-b border-gray-200" style="padding-right: 40px;">
                   <select id="rol-<%= item.IDUsuario %>" onchange="cambiarRol('<%= item.IDUsuario %>')" class="px-4 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                     <% roles.forEach(function(rol) { %>
