@@ -109,6 +109,7 @@
               </div>
 
             </div>
+            <div class="flex justify-center sm:mt-4 p-1 border-1 border-gray-200 rounded-lg dark:border-gray-200 bg-white">
             <div class="container justify-center border-1 border-gray-200 rounded-lg dark:border-gray-200 bg-white">
                 <% if(leads.length === 0) {%>
                     <p class="text-2xl text-gray-500 mt-48 mb-48">Importa tus primeros leads, en el historial, para comenzar...</p>
@@ -127,8 +128,8 @@
                                     </tr>
                                 </thead>
                             <!-- Remove the nasty inline CSS fixed height on production and replace it with a CSS class — this is just for demonstration purposes! -->
-                                <tbody  id="table_content" class="bg-grey-light flex flex-col items-center justify-between overflow-y-scroll w-full" style="height: 68vh;">
-                                    <% let row=0; for (let lead of leads) { %>
+                                <tbody  id="table_content" class="bg-grey-light flex flex-col items-center justify-between overflow-y-scroll w-full" style="height: 64vh;">
+                                    <% let row=0; for (let lead of leads.reverse()) { %>
                                     <% if(row%2==0){%>
                                     <tr class="flex w-full mb-4">
                                         <td class="p-4 w-1/5">
@@ -207,6 +208,7 @@
 
                 <%  }%> 
             </div>
+        </div>
         </div>
     </div>
    <script src="/scripts/leads.js"></script>

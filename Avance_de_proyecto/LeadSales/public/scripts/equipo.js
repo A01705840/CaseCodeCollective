@@ -22,7 +22,14 @@ function cambiarRol(idUsuario) {
 const buscar = () => {
     const input = document.getElementById('search');
     console.log("Buscando: " + input.value);
-
+    if(input.value=="Usuario no registrado"){
+        input.value=null;
+    }
+    if(input.value==''){
+        input.value=null;
+        console.log("Se cumple");
+    }
+    console.log("Buscando nuevo:"+input.value);
     fetch('/Roles/buscar/' + input.value, {
         method: 'GET',
         headers: {
@@ -63,7 +70,6 @@ const buscar = () => {
             </tr>
             `;
         });
-        console.log(html);
         table.innerHTML = html;
     }).catch((error) => {
         console.log(error);
