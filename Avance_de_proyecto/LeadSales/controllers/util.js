@@ -5,13 +5,13 @@ exports.calcularRangoFechas = function(seleccion) {
     //console.log("SELECCION",seleccion);
     var ahora = new Date(2023, 0, 1); // Fecha actual
     var inicio;
-    var fin = new Date(ahora.getFullYear(), ahora.getMonth(), ahora.getDate() - 1); // Un día antes del último día
+    var fin = new Date(ahora.getFullYear(), ahora.getMonth(), ahora.getDate()); // Un día antes del último día
 
     //Convertir seleccion a entero
     seleccion = parseInt(seleccion);
     switch (seleccion) {
         case 1:
-            inicio = new Date(ahora.getFullYear(), ahora.getMonth(), ahora.getDate() - 7);
+            inicio = new Date(ahora.getFullYear(), ahora.getMonth(), ahora.getDate() - 6);
             break;
         case 2:
             inicio = new Date(ahora.getFullYear(), ahora.getMonth() - 1, ahora.getDate());
@@ -23,7 +23,7 @@ exports.calcularRangoFechas = function(seleccion) {
             inicio = new Date(ahora.getFullYear() - 1, ahora.getMonth(), ahora.getDate());
             break;
         default:
-            inicio = new Date(ahora.getFullYear(), ahora.getMonth(), ahora.getDate() - 7);
+            inicio = new Date(ahora.getFullYear(), ahora.getMonth(), ahora.getDate() - 6);
     }
     //console.log("INICIO",inicio);
     //console.log("FIN",fin);
