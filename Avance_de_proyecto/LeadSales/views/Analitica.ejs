@@ -1,51 +1,62 @@
 <%- include('includes/head.ejs', {username: username}) %>
-<%- include('mx') %>
+<%- include('mx') %>
 <div class="p-4 sm:ml-20 sm:mr-10 font-sans">
     <div class="shadow-lg flex flex-col justify-right p-4 border-2 border-gray-200 rounded-lg dark:border-gray-700 bg-slate-200">
         <div class="inline-flex justify-between items-center">
-            <span style='font-size:30px;'>📊 Analíticas</span>
-        </div>
-        <div class="mt-2 lex flex-col justify-right p-4 border-2 border-gray-200 rounded-lg bg-b bg-white" style="height:970px; overflow-y:visible;">
-            <div class="flex flex-col items-center h-full">
-                <div class="max-w-2x1 justify-center" style="width: 60%; background-color: #ffffff; border: 0px solid #444; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); padding: 20px; border-radius: 15px;">
-                    <div class="mb-8">
-                        <span style='font-size: 30px;'>Nuevos Leads</span>
-                        <select id="dateRange" class="bg-grey-600 rounded-md shadow-sm focus:outline-none text-ellipsis text-bg">
-                            <option value="1">1 Semana</option>
-                            <option value="2">1 Mes</option>
-                            <option value="3">6 Meses</option>
-                            <option value="4">1 Año</option>
-                        </select>
-                    </div>
-
-                    <div class="flex flex-col items-center justify-center">
-
-                        <div class="flex flex-row">
-                            <div class="max-w-2x1 justify-center" style="width: 60%; background-color: #ffffff; border: 0px solid #444; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); padding: 20px; border-radius: 15px;">
-                                <h2 class="text-sm mb-4">Total de Leads: <span id="totalLeads" class="font-bold"><%= cantidadTotalLeads %></span></h2>
-                                <h2 class="text-sm mb-4">El <span id="porcentajeLeadsOrganicos"></span> de los leads son orgánicos.</h2>
-                            </div>
-                            <div>
-                                <canvas id="leadsChart"></canvas>
-                            </div>
-                        </div>
-
-
-                        <div class="flex flex-row mt-16">
-                            <div>
-                                <canvas id="pieChartEmbudo"></canvas>
-                            </div>
-                            <div>
-                                <canvas id="pieChartEstatus"></canvas>
-                            </div>
-                        </div>
-
-                    </div>
-
+          <span style='font-size:30px;'>📊 Analíticas</span>
+        </div>        
+            <div class="flex h-full">
+                <div class="max-w-2x1" style="width: 30%; height: 30%; background-color: #ffffff; border: 0px solid #444; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); padding: 20px; border-radius: 15px;">
+    
+                <canvas id="pieChartEmbudo" style="width: 30%;"></canvas>
+                <canvas id="pieChartEstatus" style="width: 30%;"></canvas>
+                </div>
+    
+                <div  style="width: 32%; height: 20%; background-color: #ffffff; border: 0px solid #444; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); padding: 20px; border-radius: 15px;">
+                    <h2 class="text-2xl mb-4">Total de Leads: <span id="totalLeads" class="font-bold"><%= cantidadTotalLeads %></span></h2>
+                    <h2 class="text-2xl mb-4">El <span id="porcentajeLeadsOrganicos"></span> de los leads son orgánicos.</h2>
                 </div>
             </div>
+
+            <div class="flex h-full">
+                <div class="w-1/2 mr-4 rounded-xl bg-white text-center">
+                    <p class="text-3xl mb-2 mt-4"><b>Total de Leads</b></p>
+                    <div class="flex justify-end mr-10 mb-4">
+                    <p class="mr-4 text-sm">Elige el período de análisis: </p>
+                    <select id="dateRange" class=" bg-grey-600 rounded-md shadow-sm focus:outline-none text-ellipsis">
+                        <option value="1">Última semana</option>
+                        <option value="2">Último mes</option>
+                        <option value="3">Últimos 6 meses</option>
+                        <option value="4">Último año</option>
+                    </select>
+                    </div>
+                    <canvas id="leadsChart" class="ml-8 mr-8 mb-4"></canvas>
+                </div>
+                <div class="w-1/2 rounded-xl bg-white text-center">
+                    <p class="text-3xl mb-2 mt-4"><b>Total de Leads por Agente</b></p>
+                    <div class="flex justify-end mr-10 mb-4">
+                    <p class="mr-4 text-sm">Elige el período de análisis: </p>
+                    <select id="dateRangeLeadsPorAgente" class="border border-grey-100 text-sm bg-grey-600 rounded-md shadow-sm focus:outline-none text-ellipsis">
+                        <option value="1">Última semana</option>
+                        <option value="2">Último mes</option>
+                        <option value="3">Últimos 6 meses</option>
+                        <option value="4">Último año</option>
+                    </select>
+                    </div>
+                    <canvas id="leadsPorAgenteChart" class="ml-8 mr-8 mb-4"></canvas>
+                    <div class="ml-8 mr-8 mb-4 text-sm">
+                        <span id="totalLeadsPorAgente"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="flex h-full">
+                <div class="w-1/2 mr-4 rounded-xl bg-white place-items-end">
+                
+                </div>
+            </div>
+            </div>
         </div>
-    </div>
+  </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -53,6 +64,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
 <script>
+
     // Obtener la cantidad total de leads y la cantidad de leads orgánicos de los elementos HTML
     const cantidadTotalLeads = Number(document.getElementById('totalLeads').textContent);
     const cantidadLeadsOrganicos = <%- JSON.stringify(cantidadLeadsOrganicos) %>;
@@ -70,7 +82,6 @@
         }
     }
 
-    console.log(cantidadTotalLeads, cantidadLeadsOrganicos);
     // Calcular el porcentaje de leads orgánicos y actualizar el texto
     const porcentajeLeadsOrganicos = (cantidadLeadsOrganicos / cantidadTotalLeads) * 100;
     const porcentajeLeadsOrganicosElement = document.getElementById('porcentajeLeadsOrganicos');
@@ -78,7 +89,6 @@
 
     // Asignar una clase de color en función del porcentaje
     porcentajeLeadsOrganicosElement.className = getColorForPercentage(porcentajeLeadsOrganicos);
-
     porcentajeLeadsOrganicosElement.style.fontWeight = 'bold';
 
     // Establecer la opción seleccionada tan pronto como se carga el script
@@ -87,9 +97,14 @@
         document.getElementById('dateRange').value = selectedRange; // Establecer la opción seleccionada
     }
 
+    // Establecer la opción seleccionada de Agente
+    const selectedRangeAgente = localStorage.getItem('selectedRangeAgente') || '1'; // Obtener el rango seleccionado
+    if (selectedRangeAgente) {
+        document.getElementById('dateRangeLeadsPorAgente').value = selectedRangeAgente; // Establecer la opción seleccionada
+    }
+
     // Datos de ejemplo para la gráfica de donut
     const datos = <%- JSON.stringify(cantidadLeadsEmbudos) %>[0];
-    console.log(<%- JSON.stringify(cantidadLeadsEmbudos) %>);
 
     // Crear arrays para almacenar las etiquetas y los totales de leads
     const embudos = [];
@@ -142,7 +157,7 @@
             responsive: true,
             plugins: {
                 datalabels: {
-                    formatter: (value, ctx) => { c   
+                    formatter: (value, ctx) => {
                         const total = ctx.chart.data.datasets[0].data.reduce((acc, curr) => acc + curr, 0);
                         const percentage = ((value / total) * 100).toFixed(2) + '%';
                         return percentage;
@@ -163,18 +178,8 @@
         }
     });
 
-    // -----------------------------------------------------------------------------------------//
+
     
-    // 2 Grafica
-   
-
-
-
-    // Datos de ejemplo
-    const data = <%- JSON.stringify(leadsPerDay) %>.map(item => ({
-        ...item,
-        Fecha: new Date(item.Fecha)
-    }));
     // Obtener el contexto del canvas para después crear la gráfica
     const ctx = document.getElementById('leadsChart').getContext('2d');
 
@@ -208,13 +213,22 @@
         }
     }
 
+
+    // Datos de ejemplo
+    const leadsPerDay = <%- JSON.stringify(leadsPerDay) %>.map(item => ({
+        ...item,
+        Fecha: new Date(item.Fecha)
+    }));
+
+    console.log("LEADSPERDAY",leadsPerDay);
+    
     let myChart = new Chart(ctx, {
     type: 'line',
     data: {
-        labels: data.map(item => formatDate(item.Fecha, selectedRange)), // Usar la función formatDate
-        datasets: [{
-            label: getLabelText(selectedRange), // Usar la función getLabelText
-            data: data.map(item => item.CantidadLeads),
+            labels: leadsPerDay.map(lead => formatDate(lead.Fecha, selectedRange)), // Usar leadsPerDay para las etiquetas
+            datasets: [{
+                label: getLabelText(selectedRange), // Usar la función getLabelText
+                data: leadsPerDay.map(lead => lead.CantidadLeads), // Mapear leadsPerDay a un array de cantidades de leads
                 backgroundColor: 'rgba(23, 16, 198, 0.2)',
                 pointStyle: 'star', // Cambiar la forma de los puntos a triángulos
                 borderColor: 'rgba(23, 16, 198, 0.8)',
@@ -230,9 +244,10 @@
                     onLeave: (event, point, dataset, context) => {
                         event.native.target.style.cursor = 'default';
                     }
-                }
+                }   
             }]
         },
+
         options: {
             scales: {
                 y: {
@@ -282,7 +297,7 @@
                     if (index === 0) return;
                     const xPos = xAxis.getPixelForTick(index);
                     ctx.setLineDash([4, 4]);
-                    ctx.beginPath();
+                    ctx.beginPath();    
                     ctx.moveTo(xPos, scales.y.top);
                     ctx.lineTo(xPos, scales.y.bottom);
                     ctx.strokeStyle = 'rgba(0, 0, 0, 0.1)';
@@ -292,26 +307,126 @@
             }
         }]
     });
+ 
 
+    var fechas = <%- JSON.stringify(fechas) %>;
+    var datasets = <%- JSON.stringify(datasets) %>;
 
+    // Calcular el total de Leads por Agente
+    const totalLeadsPorAgente = datasets.map(dataset => {
+        const totalLeads = dataset.datos.reduce((a, b) => a + b, 0);
+        return `${dataset.agente}: ${totalLeads}`;
+    });
+
+    // Actualizar el contenido del elemento HTML con el total de Leads por Agente
+    document.getElementById('totalLeadsPorAgente').textContent = totalLeadsPorAgente.join(', ');
+   
+    // Formatear las fechas antes de usarlas en la gráfica
+   
+
+    // Obtener el contexto del segundo canvas
+    const ctxAgent = document.getElementById('leadsPorAgenteChart').getContext('2d');
+
+     // Crear la gráfica de Leads por Agente
+     const leadsPorAgenteChart = new Chart(ctxAgent, {
+        type: 'line',
+        data: {
+        labels: fechas.map(fecha => formatDate(fecha, selectedRangeAgente)), // Usar la función formatDate
+        datasets: datasets.map(dataset => ({
+            label: dataset.agente, // Asegurarse de incluir la propiedad label
+            data: dataset.datos, // Asegurarse de incluir la propiedad data
+            tension: 0.4 // Añadir curvas a las líneas
+        }))
+    },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        drawBorder: false,
+                        drawOnChartArea: false
+                    },
+                    title: {
+                        display: true,
+                        text: 'Leads'
+                    }
+                },
+                x: {
+                    grid: {
+                        drawBorder: false,
+                        drawOnChartArea: false
+                    },
+                    title: {
+                        display: true,
+                        text: 'Perido de tiempo'
+                    }
+                }
+            },
+            plugins: {
+                tooltip: {
+                    intersect: false,
+                    mode: 'index',
+                    displayColors: false,
+                    callbacks: {
+                        title: function(tooltipItem) {
+                            return getLabelText(selectedRange); // Actualizar el título del tooltip
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    
+
+    document.getElementById('dateRangeLeadsPorAgente').addEventListener('change', function(event) {
+    event.preventDefault(); // Evitar la recarga de la página
+    const selectedRangeAgent = this.value;
+    localStorage.setItem('selectedRangeAgent', selectedRangeAgent); // Guardar el rango seleccionado
+
+    fetch('/lead/analitics/agent/' + selectedRangeAgent)
+    .then(response => response.json())
+    .then(data => {
+        console.log("CHECARESTO",data);
+
+        // Utilizar los datos ya procesados que recibes del servidor
+        const fechas = data.fechas;
+        const datasets = data.datasets.map(dataset=> {
+            return {
+                label: dataset.agente, // Usar el nombre del agente
+                data: dataset.datos, // Usar los datos del agente
+                tension: 0.4 // Añadir curvas a las líneas
+            };
+        });
+
+        // Actualizar la gráfica con los nuevos datos
+        leadsPorAgenteChart.data.labels = fechas.map(fecha => formatDate(fecha, selectedRangeAgent));
+        leadsPorAgenteChart.data.datasets = datasets;
+        leadsPorAgenteChart.update();
+    })
+    .catch(error => console.error('Error en la solicitud fetch: ', error));
+});
+
+// -----------  CAMBIO DE RANGO DE LEADS POR DÍA  ------------------ 
 
     document.getElementById('dateRange').addEventListener('change', function(event) {
     event.preventDefault(); // Evitar la recarga de la página
     const selectedRange = this.value;
     localStorage.setItem('selectedRange', selectedRange); // Guardar el rango seleccionado
 
-      // Hacer una solicitud AJAX para obtener los datos
-      fetch('/lead/analitics/' + selectedRange)
-            .then(response => response.json())
-            .then(data => {
-                // Formatear las fechas y actualizar la gráfica con los nuevos datos
-                myChart.data.labels = data.leadsPorDia.map(item => formatDate(item.Fecha, selectedRange));
-                myChart.data.datasets[0].data = data.leadsPorDia.map(item => item.CantidadLeads);
-                myChart.data.datasets[0].label = getLabelText(selectedRange); // Actualizar el label del dataset
-                myChart.options.plugins.tooltip.callbacks.title = function(tooltipItem) {
-                    return getLabelText(selectedRange); // Actualizar el título del tooltip
-                };
-                myChart.update();
-            });
-        });
+    // Hacer una solicitud AJAX para obtener los datos
+    fetch('/lead/analitics/' + selectedRange)
+    .then(response => response.json())
+    .then(data => {
+        // Formatear las fechas y actualizar la gráfica con los nuevos datos
+        myChart.data.labels = data.leadsPerDay.map(lead => formatDate(lead.Fecha, selectedRange));
+        myChart.data.datasets[0].data = data.leadsPerDay.map(lead => lead.CantidadLeads);
+        myChart.data.datasets[0].label = getLabelText(selectedRange); // Actualizar el label del dataset
+        myChart.options.plugins.tooltip.callbacks.title = function(tooltipItem) {
+            return getLabelText(selectedRange); // Actualizar el título del tooltip 
+        };
+        myChart.update();
+    })
+    .catch(error => console.error('Error en la solicitud fetch: ', error));
+});
 </script>
