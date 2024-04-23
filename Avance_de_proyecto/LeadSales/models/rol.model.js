@@ -111,5 +111,8 @@ module.exports = class Rol {
             console.log(error);
         });
     }
+    static fetchOneID(Rol) {
+        return db.execute('Select IDRol from rol WHERE TipoRol = ?', [Rol]);
+    }
 }
     
