@@ -101,7 +101,7 @@ exports.get_analiticaPRESET = async (request, response, next) => {
     const gruposPorAgente = utils.agruparLeadsPorAgente(leadsPorAgente);
     const datasetsPorAgente = utils.generarDatasetsPorAgente(gruposPorAgente, fechas);
 
-    response.render('analitica', {
+    response.render('Analitica', {
         username: request.session.username || '',
         leadsPerDay: leadsConDiasSinLeads, 
         cantidadTotalLeads: cantidadLeads,
