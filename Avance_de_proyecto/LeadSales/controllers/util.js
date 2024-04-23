@@ -65,6 +65,7 @@ exports.agruparLeadsPorAgente = function(leadsPorAgente) {
         grupos[item.Agente] = grupo;
         return grupos;
     }, {});
+    
 };
 
 // Función para crear un conjunto de datos para cada agente
