@@ -399,6 +399,15 @@
             };
         });
 
+            // Calcular el total de Leads por Agente
+            const totalLeadsPorAgente = datasets.map(dataset => {
+            const totalLeads = dataset.data.reduce((a, b) => a + b, 0);
+            return `${dataset.label}: ${totalLeads}`;
+        });
+
+        // Actualizar el contenido del elemento HTML con el total de Leads por Agente
+        document.getElementById('totalLeadsPorAgente').textContent = totalLeadsPorAgente.join(', ');
+
         // Actualizar la gráfica con los nuevos datos
         leadsPorAgenteChart.data.labels = fechas.map(fecha => formatDate(fecha, selectedRangeAgent));
         leadsPorAgenteChart.data.datasets = datasets;
